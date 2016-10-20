@@ -1,2 +1,8 @@
-# Ignore all the data
+# Ignore all data
 *.csv
+# Ignore all images
+*.png
+*.jpg
+*.gif
+# Ignore IDE files
+.idea/
