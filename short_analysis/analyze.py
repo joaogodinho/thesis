@@ -73,7 +73,7 @@ if __name__ == '__main__':
     anal_unique_duplicates = anal_unique_duplicates.divide(anal_unique_duplicates.sum(axis=1), axis=0)
 
     # Plot
-    plotAnalysesByMonth(anal_classification, 'classifcation', 'Analyses classification')
+    plotAnalysesByMonth(anal_classification, 'classification', 'Analyses classification')
     plotAnalysesByMonth(anal_unique_duplicates, 'unique_dups', 'Duplicate samples')
 
 
