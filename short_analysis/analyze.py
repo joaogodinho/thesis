@@ -5,6 +5,8 @@ import pandas as pd
 
 FILENAME = 'analyses.csv'
 DATE_FMT = '%d/%m/%Y'
+DATE_FMT_OUT = '%d-%m-%Y'
+OUT_URL = 'urls'
 
 
 def loadCSV():
@@ -27,10 +29,7 @@ def plotAnalysesByMonth(df, name, title):
     plt.show()
 
 
-
-if __name__ == '__main__':
-    df = loadCSV()
-
+def analyze(df):
     # Criterions
     crit_malware = df.antivirus.map(lambda x: x != 'n/a' and (
         x.startswith('1/') or
@@ -48,6 +47,7 @@ if __name__ == '__main__':
     crit_na = df.antivirus.map(lambda x: x == 'n/a')
     crit_notmalware = df.antivirus.map(lambda x: x.startswith('0/'))
     crit_duplicated = df.md5.duplicated()
+    crit_pe32 = df.file_type.map(lambda x: str(x).startswith('PE32'))
 
     # Split analyses by malware, no scan at time or not malware
     anal_malware = df.md5[crit_malware].resample('M').count()
@@ -73,8 +73,19 @@ if __name__ == '__main__':
     anal_unique_duplicates = anal_unique_duplicates.divide(anal_unique_duplicates.sum(axis=1), axis=0)
 
     # Plot
-    plotAnalysesByMonth(anal_classification, 'classification', 'Analyses classification')
-    plotAnalysesByMonth(anal_unique_duplicates, 'unique_dups', 'Duplicate samples')
+    plotAnalysesByMonth(anal_classification, 'classification_pe32', 'Analyses classification')
+    plotAnalysesByMonth(anal_unique_duplicates, 'unique_dups_pe32', 'Duplicate samples')
 
+
+def generate_urls(df):
+    df = df.link
+    for index in df.index.unique():
+        df[df.index == index].to_csv(OUT_URL + '/' + index.strftime(DATE_FMT_OUT), index=False)
+
+
+if __name__ == '__main__':
+    df = loadCSV()
+
+    generate_urls(df)
 
 
