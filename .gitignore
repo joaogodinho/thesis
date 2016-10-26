@@ -4,3 +4,5 @@
 .idea/
 # Ignore pycache
 __pycache__/
+# Ignore generated URLS
+urls/
