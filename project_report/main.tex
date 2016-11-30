@@ -1,0 +1,205 @@
+\documentclass{llncs}
+\usepackage[utf8]{inputenc}
+\usepackage{todonotes}
+\usepackage{makeidx}  % allows for indexgeneration
+\usepackage{dirtytalk}
+\usepackage{color}
+
+\begin{document}
+\frontmatter
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%  HEADER  %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Malware Detection Via Machine Learning}
+\subtitle{Some Clever Subtitle?}
+\titlerunning{Malware Detection Via ML}
+\author{João F. Godinho\inst{1} \and Pedro Adão\inst{2}}
+\institute{Instituto Superior Técnico\\
+\email{enter email}\and
+Instituto Superior Técnico\\
+\email{enter email}}
+\maketitle
+\todo[inline]{Validate the title, subtitle, authors, email}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% ABSTRACT %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+The abstract should summarize the contents of the paper
+using at least 70 and at most 150 words.
+\end{abstract}
+
+
+
+\clearpage
+\todo[inline]{Table of contents?}
+
+
+
+\mainmatter
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%  INTRO   %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}\label{sec_introduction}
+\todo[inline]{Motivation}
+\begin{itemize}
+	\item Define Malware, problem with that, subjectivity
+	\item Quantify malware in recent years (quote vendors/get stats from header analysis)
+	\item What is being done about malware?
+	\item How is malware identified?
+	\begin{itemize}
+		\item Types of strategies
+		\item Is it effective? efficient?
+	\end{itemize}
+	\item Being able to identify malware as early as possible would help?
+	\item Introduce services like malwr.com/virustotal.com
+	\item Introduce Machine Learning capabilites
+	\item Automation of detection/classification
+\end{itemize}
+
+Malware, short for malicious software, is any type of software developed with the intent of performing some unwanted or unexpected behavior on a computer system, meaning (that) it acts against the user expectancy, knowingly or unknowingly. \todo{quote this, Malware, Rootkits \& Botnets A Beginner's Guide pp.10}The term malware was first introduced in 1990 by Yisrael Radai. Before then most malicious software were known as computer viruses given their ability to self-replicate, similar to their biological counterparts.
+
+
+
+\todo[inline]{Maybe use the following as in intro on how to detect malware, followed by the usage of ML for such purpose}
+Nowadays, malware comprehends a great variety of types, such as spywares, adwares, rootkits, ransomwares and, like previously mentioned, viruses, to name but a few. Each type will behave differently, both from an internal and external view.
+
+From an external view, adware and ransomware will provide a noisy output to the user, given their function to deliver unwanted advertisements (for adware) and request data ransom (for ransomware). Spyware and rootkit types, on the other hand, will provide little to no user interaction, given their function to spy on user activity (for spyware) and conceal processes, files or system data (for rootkit).
+
+From an internal view, adware and ransomware will behave similarly, since both need interfaces that facilitate user interaction (e.g. create and show dialogs), in contrast to spyware and and rootkit, which thrive on concealing actions (e.g. run hidden processes).
+
+\hfill \break
+Nowadays, computer viruses are seen as a type of malware. Other subsets of malware include \textit{spyware}, which monitor on user activity without their knowledge; \textit{adware}, which deliver automatic and mainly unwanted and unexpected advertisements; \textit{rootkit}, which are designed to be invisible and are used to conceal running processes, files or system data; \textit{ransomware}, which holds a computer system, or part of it, captive (usually through encryption) demanding a ransom for a user to regain control. These are but a few types of malware (\todo{Quote this, check comment}more can be seen at [])
+
+Nowadays, computer viruses are seen as a type of malware, the term malware comprehends a great variety of types, such as: spyware, adware, rookit, ransomware, 
+
+% Quote this for more types of malware
+% https://support.symantec.com/en_US/article.HOWTO54185.html
+
+\todo[inline]{Problem}
+\begin{itemize}
+	\item Remove the human factor from detection/classification to speed up process.
+	\item Introduce lack of temporal consistency here?
+	\item Talk how related work creates own corpus and low corpus size/variation?
+	\item Refer stats from header analysis? Time vendors take to take knowledge of samples/Time until new malware is detected in most vendors
+	\item Reinforce time to classify malware?
+\end{itemize}
+
+\todo[inline]{Hypothesis}
+\begin{itemize}
+	\item Would a more automated approach, based on ML, facilitate malware detection/classification?
+	\item Dynamic/Static analysis to detect and classify malware
+	\item Temporal consistency is a factor that should be taken into account?
+	
+\end{itemize}
+\todo[inline]{Objectives/Contributions}
+\begin{itemize}
+	\item Usage of real world analysis
+	\item Try to apply ML to PE32 analysis from malwr.com (Talk about this here?)
+	\item Contribute with a corpus of analysis from malwr.com
+	\item Maintain a temporal consistency
+		
+	
+\end{itemize}
+\todo[inline]{Document outline}
+The following sections are organized as follows. Section \ref{sec_related_work} describes related work and its influence on the current work. Section \ref{sec_solution} describes the planned approach for solving the problem at hand. Section \ref{sec_conclusions} closes the report and references the work done so far.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% RELATED  %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}\label{sec_related_work}
+
+\todo[inline]{Talk about the state of the art}
+\todo[inline]{Talk about the related work}
+\begin{itemize}
+	\item Talk about products that facilitate analysis?
+	\item How detailed should we go? Talk about first detection techniques? Only talk about ML techniques?
+\end{itemize}
+
+% explicar as tecnicas e porque, como usa-las, vantagens, what's short
+% 
+
+\todo[inline]{Explain what is malware, get quotes from different articles}
+\todo[inline]{Explain different malware types, get quotes}
+\todo[inline]{Explain malware detection techniques}
+
+% #1 Semantics-Aware Malware Detection
+% #2 Attacking Malicious Code: A report to the Infosec Research Council
+% #3 Malware, Rootkits & Botnets A Beginner's Guide pp.10
+% #4 Computer viruses: theory and experiments
+% #5 Theory of self-reproducing automata
+% #6 The Evolution of Viruses and Worms
+% #7 The art of computer virus research and defense
+% #8 https://www.av-test.org/en/
+% #9 http://www.caro.org/articles/naming.html
+% #10 http://members.chello.at/erikajo/vnc99b2.txt
+
+Malware, which can be referred to by other names like malicious software or malicious code, is not easily described by a single definition. For example, Christodorescu et al.[quote 1] simply describe malware as \say{a program that has malicious intent}, which in turn begs the question, what is malicious intent? McGraw and Morrisett[quote 2] give a more concrete definition by saying \say{Malicious code is any code added, changed, or removed from a software system in order to
+intentionally cause harm or subvert the intended function of the system}. Both definitions give an overall understanding of \textcolor{red}{(on?)} what is malware, but to better understand the definition, one can briefly look at the history of malware.
+
+The term malware was first used by Yisrael Radai in 1990[quote 3], before then malicious software was referred to as computer viruses, a notion which was first formalized by Cohen in 1983[quote 4]. Before Cohen, John Von Neumann had already done some similar academic work that closely relates to computer viruses, namely \say{Theory of self-reproducing automata}, published in 1699[quote 5]. The term computer virus is one of the many types of malicious software, but given that it predates the term malware, it is not uncommon to see use both terms used as interchangeably.
+
+Even before the formalization of computer virus by Cohen in 1983, one of the first documented computer virus, although experimental, was developed by Bob Thomas at BBN in 1971[quote 6]. The program was named Creeper and consisted of a self-replicating program that would print a message and move between the nodes of ARPANET.
+
+Another malicious software worth mentioning, given it was one of the first known virus that spread \say{in the wild} (i.e. outside the computer system or laboratory in which it was developed), is Elk Cloner. Created by Rich Skrenta in 1982[quote 7], Elk Cloner spread by floppy disk and had a payload that displayed Skrenta's poem after every 50th use of the infected system.
+
+Since then, the amount of malware has grown at an alarming rate. According to AV-TEST[quote 8], an independent security software group, up to 2012 the amount of total malware per year would not surpass 100 million, whereas 2013 almost reached 200 million, followed by more than 100 million increase per year, with almost 600 million total malware before the end of 2016.
+
+
+Even though the term malware generalizes the malicious intent of a piece of software, one can classify malware further based on its purpose and behavior. Given the high amount of malware, there is also a high variety of malware, based on purpose and behavior.
+
+From the general purpose and behavior of a malware sample, it can be classified as belonging to one or more malware categories (or classes). Examples of categories are virus, worms, trojans and adware, to name a few. Having the ability to classify malware into a more restrict subset is helpful, but there is still a need to distinguish between samples of the same category.
+
+One attempt at creating a naming convention was made in 1991, by the Computer Antivirus Research Organization (CARO). The convention states the name should consist of four parts, separated by a dot. The four constituents are the family name, group name, major variant name and minor variant name, displayed in that order. An optional modifier could also be appended to the name with a colon. The problem with the aforementioned convention is that it only covered computer viruses, which were more prominent at the time.
+
+An attempt at improving CARO's naming convention was made in 1999, by Gerald Scheidl[quote 10]. His proposal added two other constituents, platform and type, as a prefix to CARO's naming.
+
+Later attempts to standardize malware naming were made, none of which resulted in a standard widely adopted. Due to this, antivirus vendors use their own naming scheme, which are variants of the mentioned schemes.
+
+Since the malware naming scheme is not standardized, and given the amount and variety of malware, different families names with the same behavior emerge from different antivirus vendors. The name redundancy is worsen by how different vendors detect and classify malware.
+
+\todo[inline]{start how detection/classification is made}
+
+
+\todo[inline]{Is this okay? Use own definition of malware? Based on the previous paragraphs}
+Given the subjectivity on the definition of malware, this work accepts the term malware as any type of software developed with the intent of performing some unwanted or unexpected behavior on a computer system, acting against the user expectancy, knowingly or unknowingly.
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% SOLUTION %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Solution}\label{sec_solution}
+
+\todo[inline]{Start by the approach?}
+\todo[inline]{Talk about the architecture}
+\todo[inline]{Should evaluation and planning go inside this section?}
+\todo[inline]{Talk about the stats of header analysis here?}
+\todo[inline]{Talk about what has already been/being done?}
+\begin{itemize}
+	\item Begin with extraction from malwr.com
+	\item Talk about why use of PE32?
+	\item Create a corpus from the analysis
+	\item How to classify samples as malware? How to define the threshold?
+	\item How to do feature selection? Measure multiple features?
+	\item Create a baseline to evaluate against, validate other's work? Ignore temporal consistency?
+	\item Introduce temporal consistency in samples, how well one can detect/classify with limited samples
+	\item Try to classify/detect samples that were taken after the training samples.
+\end{itemize}
+
+% tools existentes q vao ser usadas
+
+% \section{•} % Metodologia de Avaliação do Trabalho
+% \section{•} % Calendarização do Trabalho
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%CONCLUSION%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}\label{sec_conclusions}
+
+
+\begin{thebibliography}{}
+
+\end{thebibliography}
+
+\end{document}
