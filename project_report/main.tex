@@ -42,6 +42,57 @@ using at least 70 and at most 150 words.
 %%%%%%%  INTRO   %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec_introduction}
+% #1 Semantics-Aware Malware Detection
+% #2 Attacking Malicious Code: A report to the Infosec Research Council
+% #3 Malware, Rootkits & Botnets A Beginner's Guide pp.10
+% #4 Computer viruses: theory and experiments
+% #5 Theory of self-reproducing automata
+% #6 The Evolution of Viruses and Worms
+% #7 The art of computer virus research and defense
+% #8 https://www.av-test.org/en/
+% #9 http://www.caro.org/articles/naming.html
+% #10 http://members.chello.at/erikajo/vnc99b2.txt
+Malware, which can be referred to by other names like malicious software or malicious code, is not easily described by a single definition. For example, Christodorescu et al.[quote 1] simply describe malware as \say{a program that has malicious intent}, which in turn begs the question, what is malicious intent? McGraw and Morrisett[quote 2] give a more concrete definition by saying \say{Malicious code is any code added, changed, or removed from a software system in order to
+intentionally cause harm or subvert the intended function of the system}. Both definitions give an overall understanding of \textcolor{red}{(on?)} what is malware, but to better understand the definition, one can briefly look at the history of malware.
+
+The term malware was first used by Yisrael Radai in 1990[quote 3], before then malicious software was referred to as computer viruses, a notion which was first formalized by Cohen in 1983[quote 4]. Before Cohen, John Von Neumann had already done some similar academic work that closely relates to computer viruses, namely \say{Theory of self-reproducing automata}, published in 1699[quote 5]. The term computer virus is one of the many types of malicious software, but given that it predates the term malware, it is not uncommon to see both terms used as interchangeably.
+
+Even before the formalization of computer virus by Cohen in 1983, one of the first documented computer virus, although experimental, was developed by Bob Thomas at BBN in 1971[quote 6]. The program was named Creeper and consisted of a self-replicating program that would print a message and move between the nodes of ARPANET.
+
+Another malicious software worth mentioning, given it was one of the first known virus that spread \say{in the wild} (i.e. outside the computer system or laboratory in which it was developed), is Elk Cloner. Created by Rich Skrenta in 1982[quote 7], Elk Cloner spread by floppy disk and had a payload that displayed Skrenta's poem after every 50th use of the infected system.
+
+Since then, the amount of malware has grown at an alarming rate. According to AV-TEST[quote 8], an independent security software group, up to 2012 the amount of total malware per year would not surpass 100 million, whereas 2013 almost reached 200 million, followed by more than 100 million increase per year, with almost 600 million total malware before the end of 2016.
+
+
+Even though the term malware generalizes the malicious intent of a piece of software, one can classify malware further based on its purpose and behavior. Given the high amount of malware, there is also a high variety of malware, based on purpose and behavior.
+
+From the general purpose and behavior of a malware sample, it can be classified as belonging to one or more malware categories (or classes). Examples of categories are virus, worms, trojans and adware, to name a few. Having the ability to classify malware into a more restrict subset is helpful, but there is still a need to distinguish between samples of the same category, by giving more detailed names to malware.
+
+One attempt at creating a naming convention was made in 1991, by the Computer Antivirus Research Organization (CARO). The convention states the name should consist of four parts, separated by a dot. The four constituents are the family name, group name, major variant name and minor variant name, displayed in that order. An optional modifier could also be appended to the name with a colon. The problem with the aforementioned convention is that it only covered computer viruses, which were more prominent at the time.
+
+An attempt at improving CARO's naming convention was made in 1999, by Gerald Scheidl[quote 10]. His proposal added two other constituents, platform and type, as a prefix to CARO's naming.
+
+Later attempts to standardize malware naming were made, none of which resulted in a standard widely adopted. Due to this, antivirus vendors use their own naming scheme, which are variants of the mentioned schemes.
+
+Since the malware naming scheme is not standardized, and given the amount and variety of malware, different family names with the same behavior emerge from different antivirus vendors. The name redundancy is worsen by how different vendors detect and classify malware.
+
+With the raise of malware amount and diversity, being able to identify and classify malware becomes essential in order to protect systems.
+
+Before the late eighties, given the low amount of malware, the first antivirus programs were designed to find and remove a handful of malware, mainly through signature based methods, which detect malware by looking for specific patterns that appear in known malware.
+
+In the late eighties and nineties the first antivirus were released, along with more sophisticated detection methods that make use of heuristics, which also detect malware by also looking for patterns, but at a higher level of abstraction.
+
+In more recent years, and given the increment of malware amount and variety, signature and heuristic methods fall short when keeping up with new types of malware. The mentioned methods work best for samples of known malware or new malware with small variants of known malware. This is because these methods look for known patterns. If a new type emerges, which pattern's are not known, it is not flagged as malicious.
+
+Given this limitation, more advanced methods like behavioral analysis are applied together with the previous mentioned methods. Behavioral analysis takes into account the actions performed by the malware, introducing dynamic information, from which patterns can be extracted and again matched against known patterns. 
+
+% VirusScan (from McAfee) and NOD (from ESET) were first released in 1987; AntiVir (from Avira) and Avast Antivirus were released in 1988. Norton Anti-Virus (from Symantec) and F-Secure antivirus were released in 1991. 
+
+
+\todo[inline]{talk about machine learning, how it can be applied with behavioral analysis}
+\hfill \break
+
+
 \todo[inline]{Motivation}
 \begin{itemize}
 	\item Define Malware, problem with that, subjectivity
@@ -58,24 +109,14 @@ using at least 70 and at most 150 words.
 	\item Automation of detection/classification
 \end{itemize}
 
-Malware, short for malicious software, is any type of software developed with the intent of performing some unwanted or unexpected behavior on a computer system, meaning (that) it acts against the user expectancy, knowingly or unknowingly. \todo{quote this, Malware, Rootkits \& Botnets A Beginner's Guide pp.10}The term malware was first introduced in 1990 by Yisrael Radai. Before then most malicious software were known as computer viruses given their ability to self-replicate, similar to their biological counterparts.
-
-
-
-\todo[inline]{Maybe use the following as in intro on how to detect malware, followed by the usage of ML for such purpose}
-Nowadays, malware comprehends a great variety of types, such as spywares, adwares, rootkits, ransomwares and, like previously mentioned, viruses, to name but a few. Each type will behave differently, both from an internal and external view.
-
-From an external view, adware and ransomware will provide a noisy output to the user, given their function to deliver unwanted advertisements (for adware) and request data ransom (for ransomware). Spyware and rootkit types, on the other hand, will provide little to no user interaction, given their function to spy on user activity (for spyware) and conceal processes, files or system data (for rootkit).
-
-From an internal view, adware and ransomware will behave similarly, since both need interfaces that facilitate user interaction (e.g. create and show dialogs), in contrast to spyware and and rootkit, which thrive on concealing actions (e.g. run hidden processes).
-
-\hfill \break
-Nowadays, computer viruses are seen as a type of malware. Other subsets of malware include \textit{spyware}, which monitor on user activity without their knowledge; \textit{adware}, which deliver automatic and mainly unwanted and unexpected advertisements; \textit{rootkit}, which are designed to be invisible and are used to conceal running processes, files or system data; \textit{ransomware}, which holds a computer system, or part of it, captive (usually through encryption) demanding a ransom for a user to regain control. These are but a few types of malware (\todo{Quote this, check comment}more can be seen at [])
-
-Nowadays, computer viruses are seen as a type of malware, the term malware comprehends a great variety of types, such as: spyware, adware, rookit, ransomware, 
+%From an external view, adware and ransomware will provide a noisy output to the user, given their function to deliver unwanted advertisements (for adware) and request data ransom (for ransomware). Spyware and rootkit types, on the other hand, will provide little to no user interaction, given their function to spy on user activity (for spyware) and conceal processes, files or system data (for rootkit).
+%
+%From an internal view, adware and ransomware will behave similarly, since both need interfaces that facilitate user interaction (e.g. create and show dialogs), in contrast to spyware and and rootkit, which thrive on concealing actions (e.g. run hidden processes).
 
 % Quote this for more types of malware
 % https://support.symantec.com/en_US/article.HOWTO54185.html
+
+
 
 \todo[inline]{Problem}
 \begin{itemize}
@@ -121,50 +162,15 @@ The following sections are organized as follows. Section \ref{sec_related_work} 
 % explicar as tecnicas e porque, como usa-las, vantagens, what's short
 % 
 
-\todo[inline]{Explain what is malware, get quotes from different articles}
-\todo[inline]{Explain different malware types, get quotes}
-\todo[inline]{Explain malware detection techniques}
-
-% #1 Semantics-Aware Malware Detection
-% #2 Attacking Malicious Code: A report to the Infosec Research Council
-% #3 Malware, Rootkits & Botnets A Beginner's Guide pp.10
-% #4 Computer viruses: theory and experiments
-% #5 Theory of self-reproducing automata
-% #6 The Evolution of Viruses and Worms
-% #7 The art of computer virus research and defense
-% #8 https://www.av-test.org/en/
-% #9 http://www.caro.org/articles/naming.html
-% #10 http://members.chello.at/erikajo/vnc99b2.txt
-
-Malware, which can be referred to by other names like malicious software or malicious code, is not easily described by a single definition. For example, Christodorescu et al.[quote 1] simply describe malware as \say{a program that has malicious intent}, which in turn begs the question, what is malicious intent? McGraw and Morrisett[quote 2] give a more concrete definition by saying \say{Malicious code is any code added, changed, or removed from a software system in order to
-intentionally cause harm or subvert the intended function of the system}. Both definitions give an overall understanding of \textcolor{red}{(on?)} what is malware, but to better understand the definition, one can briefly look at the history of malware.
-
-The term malware was first used by Yisrael Radai in 1990[quote 3], before then malicious software was referred to as computer viruses, a notion which was first formalized by Cohen in 1983[quote 4]. Before Cohen, John Von Neumann had already done some similar academic work that closely relates to computer viruses, namely \say{Theory of self-reproducing automata}, published in 1699[quote 5]. The term computer virus is one of the many types of malicious software, but given that it predates the term malware, it is not uncommon to see use both terms used as interchangeably.
-
-Even before the formalization of computer virus by Cohen in 1983, one of the first documented computer virus, although experimental, was developed by Bob Thomas at BBN in 1971[quote 6]. The program was named Creeper and consisted of a self-replicating program that would print a message and move between the nodes of ARPANET.
-
-Another malicious software worth mentioning, given it was one of the first known virus that spread \say{in the wild} (i.e. outside the computer system or laboratory in which it was developed), is Elk Cloner. Created by Rich Skrenta in 1982[quote 7], Elk Cloner spread by floppy disk and had a payload that displayed Skrenta's poem after every 50th use of the infected system.
-
-Since then, the amount of malware has grown at an alarming rate. According to AV-TEST[quote 8], an independent security software group, up to 2012 the amount of total malware per year would not surpass 100 million, whereas 2013 almost reached 200 million, followed by more than 100 million increase per year, with almost 600 million total malware before the end of 2016.
+%\todo[inline]{Explain what is malware, get quotes from different articles}
+%\todo[inline]{Explain different malware types, get quotes}
+%\todo[inline]{Explain malware detection techniques}
 
 
-Even though the term malware generalizes the malicious intent of a piece of software, one can classify malware further based on its purpose and behavior. Given the high amount of malware, there is also a high variety of malware, based on purpose and behavior.
-
-From the general purpose and behavior of a malware sample, it can be classified as belonging to one or more malware categories (or classes). Examples of categories are virus, worms, trojans and adware, to name a few. Having the ability to classify malware into a more restrict subset is helpful, but there is still a need to distinguish between samples of the same category.
-
-One attempt at creating a naming convention was made in 1991, by the Computer Antivirus Research Organization (CARO). The convention states the name should consist of four parts, separated by a dot. The four constituents are the family name, group name, major variant name and minor variant name, displayed in that order. An optional modifier could also be appended to the name with a colon. The problem with the aforementioned convention is that it only covered computer viruses, which were more prominent at the time.
-
-An attempt at improving CARO's naming convention was made in 1999, by Gerald Scheidl[quote 10]. His proposal added two other constituents, platform and type, as a prefix to CARO's naming.
-
-Later attempts to standardize malware naming were made, none of which resulted in a standard widely adopted. Due to this, antivirus vendors use their own naming scheme, which are variants of the mentioned schemes.
-
-Since the malware naming scheme is not standardized, and given the amount and variety of malware, different families names with the same behavior emerge from different antivirus vendors. The name redundancy is worsen by how different vendors detect and classify malware.
-
-\todo[inline]{start how detection/classification is made}
 
 
-\todo[inline]{Is this okay? Use own definition of malware? Based on the previous paragraphs}
-Given the subjectivity on the definition of malware, this work accepts the term malware as any type of software developed with the intent of performing some unwanted or unexpected behavior on a computer system, acting against the user expectancy, knowingly or unknowingly.
+%\todo[inline]{Is this okay? Use own definition of malware? Based on the previous paragraphs}
+%Given the subjectivity on the definition of malware, this work accepts the term malware as any type of software developed with the intent of performing some unwanted or unexpected behavior on a computer system, acting against the user expectancy, knowingly or unknowingly.
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%% SOLUTION %%%%%%%
