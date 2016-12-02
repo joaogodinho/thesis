@@ -84,12 +84,20 @@ In the late eighties and nineties the first antivirus were released, along with 
 
 In more recent years, and given the increment of malware amount and variety, signature and heuristic methods fall short when keeping up with new types of malware. The mentioned methods work best for samples of known malware or new malware with small variants of known malware. This is because these methods look for known patterns. If a new type emerges, which pattern's are not known, it is not flagged as malicious.
 
-Given this limitation, more advanced methods like behavioral analysis are applied together with the previous mentioned methods. Behavioral analysis takes into account the actions performed by the malware, introducing dynamic information, from which patterns can be extracted and again matched against known patterns. 
+Given this limitation, more advanced methods like behavioral analysis are applied together with the previous mentioned methods. Behavioral analysis takes into account the actions performed by the malware, introducing dynamic information, from which patterns can be extracted and again matched against known patterns.
+
+Having to run samples in order to extract dynamic information poses the problem of infecting the system running the samples. One way to prevent this is to use a sandbox environment, which is a security mechanism to isolate running programs. Using a sandbox environment closely relates to computer virtualization.
+
+To provide users the possibility to check files without running the risk of being infected, online services allow users to submit files which are then run in a sandbox environment.
+
+An example of such service is malwr. Malwr takes user submissions and runs them in a sandbox environment, specifically Cuckoo Sandbox, providing static and dynamic information about the sample, as well as checking if the file is known in VirusTotal, a similar service that also checks if the submission is known in different antivirus solutions. Malwr was first launched in April 2013 and contains nearly 700 000 analyses.
 
 % VirusScan (from McAfee) and NOD (from ESET) were first released in 1987; AntiVir (from Avira) and Avast Antivirus were released in 1988. Norton Anti-Virus (from Symantec) and F-Secure antivirus were released in 1991. 
 
 
-\todo[inline]{talk about machine learning, how it can be applied with behavioral analysis}
+\todo[inline]{brief look on what malwr does and provides}
+\todo[inline]{re-focus on high amount of malware, difficulty of having to run all samples and check}
+\todo[inline]{propose machine learning as a solution to deal with the high amounts of data}
 \hfill \break
 
 
