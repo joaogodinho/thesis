@@ -4,6 +4,11 @@
 \usepackage{makeidx}  % allows for indexgeneration
 \usepackage{dirtytalk}
 \usepackage{color}
+\usepackage{glossaries}
+
+% Reset footnotes every page
+%\usepackage{perpage}
+%\MakePerPage{footnote}
 
 \begin{document}
 \frontmatter
@@ -21,6 +26,12 @@ Instituto Superior Técnico\\
 \email{enter email}}
 \maketitle
 \todo[inline]{Validate the title, subtitle, authors, email}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% ACRONYMS %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\newacronym{caro}{CARO}{Computer Antivirus Research Organization}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%% ABSTRACT %%%%%%%
@@ -41,7 +52,7 @@ using at least 70 and at most 150 words.
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%  INTRO   %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}\label{sec_introduction}
+\section{Introduction}\label{sec:introduction}
 % #1 Semantics-Aware Malware Detection
 % #2 Attacking Malicious Code: A report to the Infosec Research Council
 % #3 Malware, Rootkits & Botnets A Beginner's Guide pp.10
@@ -55,14 +66,19 @@ using at least 70 and at most 150 words.
 Malware, which can be referred to by other names like malicious software or malicious code, is not easily described by a single definition. For example, Christodorescu et al.[quote 1] simply describe malware as \say{a program that has malicious intent}, which in turn begs the question, what is malicious intent? McGraw and Morrisett[quote 2] give a more concrete definition by saying \say{Malicious code is any code added, changed, or removed from a software system in order to
 intentionally cause harm or subvert the intended function of the system}. Both definitions give an overall understanding of \textcolor{red}{(on?)} what is malware, but to better understand the definition, one can briefly look at the history of malware.
 
+\todo[inline]{Clean previous paragraph. Remove bellow}
+
 The term malware was first used by Yisrael Radai in 1990[quote 3], before then malicious software was referred to as computer viruses, a notion which was first formalized by Cohen in 1983[quote 4]. Before Cohen, John Von Neumann had already done some similar academic work that closely relates to computer viruses, namely \say{Theory of self-reproducing automata}, published in 1699[quote 5]. The term computer virus is one of the many types of malicious software, but given that it predates the term malware, it is not uncommon to see both terms used as interchangeably.
 
 Even before the formalization of computer virus by Cohen in 1983, one of the first documented computer virus, although experimental, was developed by Bob Thomas at BBN in 1971[quote 6]. The program was named Creeper and consisted of a self-replicating program that would print a message and move between the nodes of ARPANET.
 
 Another malicious software worth mentioning, given it was one of the first known virus that spread \say{in the wild} (i.e. outside the computer system or laboratory in which it was developed), is Elk Cloner. Created by Rich Skrenta in 1982[quote 7], Elk Cloner spread by floppy disk and had a payload that displayed Skrenta's poem after every 50th use of the infected system.
 
+\todo[inline]{Up to here}
+
 Since then, the amount of malware has grown at an alarming rate. According to AV-TEST[quote 8], an independent security software group, up to 2012 the amount of total malware per year would not surpass 100 million, whereas 2013 almost reached 200 million, followed by more than 100 million increase per year, with almost 600 million total malware before the end of 2016.
 
+\todo[inline]{Clean previous paragraph. Remove bellow}
 
 Even though the term malware generalizes the malicious intent of a piece of software, one can classify malware further based on its purpose and behavior. Given the high amount of malware, there is also a high variety of malware, based on purpose and behavior.
 
@@ -150,13 +166,90 @@ An example of such service is malwr. Malwr takes user submissions and runs them 
 	
 \end{itemize}
 \todo[inline]{Document outline}
-The following sections are organized as follows. Section \ref{sec_related_work} describes related work and its influence on the current work. Section \ref{sec_solution} describes the planned approach for solving the problem at hand. Section \ref{sec_conclusions} closes the report and references the work done so far.
+The following sections are organized as follows. Section \ref{sec:related_work} describes related work and its influence on the current work. Section \ref{sec:solution} describes the planned approach for solving the problem at hand. Section \ref{sec:conclusion} closes the report and references the work done so far.
 
-
+\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%% RELATED  %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{Related Work}\label{sec_related_work}
+\section{Related Work}\label{sec:related_work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Background
+\subsection{Background}\label{subsec:background}
+The term malware was first used by Yisrael Radai in 1990[quote 3], before then malicious software was referred to as computer viruses, a notion which was first formalized by Cohen in 1983[quote 4]. Before Cohen, John Von Neumann had already done some similar academic work that closely relates to computer viruses, namely \say{Theory of self-reproducing automata}, published in 1699[quote 5]. The term computer virus is one of the many types of malicious software, but given that it predates the term malware, it is not uncommon to see both terms used as interchangeably.
+
+Even before the formalization of computer virus by Cohen in 1983, one of the first documented computer virus, although experimental, was developed by Bob Thomas at BBN in 1971[quote 6]. The program was named Creeper and consisted of a self-replicating program that would print a message and move between the nodes of ARPANET.
+
+Another malicious software worth mentioning, given it was one of the first known virus that spread \say{in the wild} (i.e. outside the computer system or laboratory in which it was developed), is Elk Cloner. Created by Rich Skrenta in 1982[quote 7], Elk Cloner spread by floppy disk and had a payload that displayed Skrenta's poem after every 50th use of the infected system.
+
+Over the years, malware has grown in size and diversity, which introduces the need to be able to distinguish malware, not only to facilitate its removal, but also to provide safer mechanisms of defense.
+
+Based on the malware general purpose and behavior, a high level classification of the malware can be made by splitting malware into one or more categories (or classes). Examples of such classes are viruses, worms, trojans and adware, to name a few. This high level classification is helpful, but lacks detail, like target platform, origin or version. In order solve this issue, attempts have been made to create a naming convention for malware.
+
+One of the first attempts was made in 1991, by the \gls{caro}\footnote{http://www.caro.org/articles/naming.html}, which states the name should consist of four  obligatory parts, separated by a dot, and an optional fifth part. The four main constituents are the family name, group name, major variant and minor variant name. The optional fifth part is a modifier and could be appended to the name with a colon.
+\todo[inline]{Describe the parts?}
+
+Although the aforementioned naming convention is well defined, it is aimed at naming viruses, lacking differentiation for other classes as well as target platform. In order to solve this, an improvement was proposed in 1999 by Gerald Scheidl\footnote{http://members.chello.at/erikajo/vnc99b2.txt} that suggested the addition of a prefix that consisted of the platform and type.
+
+A more recent attempt at creating a naming convention was made during the Virus Bulletin Conference in 2001\footnote{https://www.virusbulletin.com/uploads/pdf/magazine/2002/200201.pdf}, with the idea that malware naming should consist on three levels of information: malware name, classification and full text description.
+\todo[inline]{Again, describe parts?}
+
+None of the referenced naming conventions is widely adopted, with antivirus vendors having their own naming conventions, that although similar, vary in some way or another. For example, Trend Micro\footnote{http://docs.trendmicro.com/all/ent/smex/v11.0/en-us/smex\_11.0\_olh/secrisk\_malware\_name.html} and Symantec\footnote{https://www.symantec.com/security\_response/virusnaming.jsp} use a prefix (which identifies the malware class), threat name (i.e. family) and suffix (which indicates a variant of the threat). Whereas Microsoft\footnote{https://www.microsoft.com/security/portal/mmpc/shared/malwarenaming.aspx} tries to follow the \gls{caro}'s convention, by using a type, platform, family, variant and information. Avira\footnote{https://www.avira.com/en/support-malware-naming-conventions} on the other hand, takes a more simplistic approach by using a prefix (which identifies the malware type) and a threat name.
+
+Although the naming and its constituents are similar between vendors, no convention is set, hence the threat names given to malware varies, increasing the redundancy for the same malware. According to an article published by Symantec in 2002\footnote{https://www.symantec.com/connect/articles/virus-any-other-name-virus-naming-practices}, based on a list of 300,000 unique names, the name redundancy is quantified as an average of four different names for the same malware.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Malware detection
+\subsection{Malware Detection}\label{subsec:malware_detection}
+In the early days of malware, due to low amount and variety, antivirus could target malware specifically (e.g. Reaper was created to remove Creeper), but with an estimate of more than 600 million total malware by the end of 2016, targeting specific malware becomes increasingly more difficult, hence being able to identify and classify malware efficiently is crucial to protect systems.
+
+What follows is a quick rundown on different detection techniques developed over the years[quote 7].
+
+\subsubsection{First-Generation Scanners.} These methods of detection work at a fairly simple level and use static methods of detection. The applied principles include:
+\begin{itemize}
+	\item String scanning, where a sequence of bytes that is common in a malicious program but not in a regular program is matched against the suspicious file.
+	\item Wildcards, similar to string scanning, but instead of a fixed sequence of bytes, regular expressions can be used in the sequence of bytes, this allows variation and byte skipping when matching.
+	\item Mismatches, also similar to string scanning, in which a sequence of bytes is taken as reference, but a number of bytes $N$ is given allowing up to $N$ bytes to vary in any position of the string (e.g. the string \say{\texttt{01 02}} with $N=1$ will match \say{\texttt{XX 02}} or \say{\texttt{01 XX}}).
+\end{itemize}
+
+The described principles can be applied with slight variations that improve the performance of the scanner, such as matching on the beginning and end of the file (top-and-tail scanning) or matching at a certain offset (bookmarks).
+
+They all require a knowledge base with known patterns that must be kept up-to-date in order to detect newer malware.
+
+\subsubsection{Second-Generation Scanners.} These methods improve on the previous generation by doing a static analysis at a higher level of abstraction. Where first-generation scanners would match sequence of bytes, second-generation scanners also look at the representation of the bytes. The applied principles include:
+\begin{itemize}
+	\item Smart scanning, where the Assembly representation of the bytes is taken into account and instructions that have no effect (e.g. \texttt{NOP}) can be skipped. The resulting signature is smaller and more easily detects mutations. The same principle could be applied to textual malware (e.g. scripts), where extra white spaces have no effect.
+	\item Nearly exact identification, where instead of relying on a single string for detection, double-string detection can be used. An alternative to double-string detection could also be based on a checksum range selected from the malware body, giving a higher accuracy by taking into account a larger portion of the malicious file.
+	\item Exact identification, which can exactly identify malware variants, is usually used in combination with first-generation methods and instead of using a single range like nearly exact, uses multiple ranges to calculate checksums. To be accurate, this method must only take into account constant bits of the malicious file, and given that more ranges are used it is slower then the previous ones.
+\end{itemize}
+
+Like in the previous generation, a knowledge base must be used and kept up-to-date to identify newer malware.
+
+\subsubsection{Algorithmic Scanning Methods.} These methods are not so focused on direct matching of signatures, but on the routines implemented in the scanner that allow the detection of malware. Early implementations of algorithmic scanning were hard-coded in the antivirus, but with different types and families emerging, the hard-coded algorithms could easily become obsolete as such. To overcome this, vendors would introduce more specific routines for malicious programs when updating the antivirus.
+
+Being able to update the antivirus algorithms frequently enables the vendors to have a faster response to new malware by developing detection routines for new malware and pushing them to end users.
+
+\subsubsection{Code Emulation.} This detection technique uses dynamic analysis to detect malware by simulating code execution. A virtual machine is used to simulate the system's components, thus the malicious files are encapsulated and no code is executed by the real processor.
+
+Code emulation can be faster than using algorithmic scanning methods when dealing with encrypted/obfuscated malware, as the code can be emulated and the decrypted/deobfuscated code is much easier obtained.
+
+\subsubsection{Heuristic Analysis.} Weights different "features" to assert if a suspicious file is malware or not, which allows to detect never seen malware types.
+
+\subsubsection{Integrity Checking.}
+
+\subsubsection{Sand-Boxing.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Machine Learning
+\subsection{Machine Learning}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Machine Learning in malware detection
+\subsection{Machine Learning in Malware Detection}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
 
 \todo[inline]{Talk about the state of the art}
 \todo[inline]{Talk about the related work}
@@ -181,7 +274,7 @@ The following sections are organized as follows. Section \ref{sec_related_work} 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%% SOLUTION %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{Solution}\label{sec_solution}
+\section{Solution}\label{sec:solution}
 
 \todo[inline]{Start by the approach?}
 \todo[inline]{Talk about the architecture}
@@ -207,7 +300,7 @@ The following sections are organized as follows. Section \ref{sec_related_work} 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%CONCLUSION%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusions}\label{sec_conclusions}
+\section{Conclusion}\label{sec:conclusion}
 
 
 \begin{thebibliography}{}
