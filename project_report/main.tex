@@ -233,48 +233,84 @@ Being able to update the antivirus algorithms frequently enables the vendors to 
 
 Code emulation can be faster than using algorithmic scanning methods when dealing with encrypted/obfuscated malware, as the code can be emulated and the decrypted/deobfuscated code is much easier obtained.
 
-\subsubsection{Heuristic Analysis.} Weights different "features" to assert if a suspicious file is malware or not, which allows to detect never seen malware types.
+\subsubsection{Heuristic Analysis.} This detection technique takes into account several characteristics of malicious software, both static and dynamic. Examples of such characteristics are code execution starting in uncommon sections, suspicious code redirection or incorrect size of code in header.
 
-\subsubsection{Integrity Checking.}
+When checking a suspicious file, the presence or absence of multiple characteristics is weighted to assert if the file is deemed malicious or not. The upside of this technique is that it allows for never seen malware to be correctly flagged, but brings the downside of a higher amount of false positives.
 
-\subsubsection{Sand-Boxing.}
+\subsubsection{Sand-Boxing.} This detection technique builds on the already mentioned code emulation, but with a higher level of complexity. With sand-boxing the whole system is emulated (i.e. virtualized) and suspicious or malicious programs have access to a copy of the real resources, effectively limiting the effects of the program and consequently protecting the system.
+
+This technique allows to extract dynamic information without compromising the real system, which can then be used to both detect if a suspicious program is malware, by applying the aforementioned techniques, and to help analyze new types of malware.
+
+The downside of using sand-boxing comes in the form of compatibility issues and in the possibility of malware breaking out of the sand-box due to vulnerabilities in the virtualization software.\\
+
+Detecting malware is not as simple as applying one of the mentioned techniques, different methods work best in different scenarios, hence antivirus need to balance the usage of these techniques to keep systems protected.
+
+\todo[inline]{Talk about cuckoo here?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Machine Learning
 \subsection{Machine Learning}
 
+\todo[inline]{Paragraph introducing ML?}
+\todo[inline]{quick rundown on supervised/unsupervised/semi-supervised}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Machine Learning in malware detection
 \subsection{Machine Learning in Malware Detection}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% #11 Reviewer Integration and Performance Measurement for Malware Detection
 
-\clearpage
-
-\todo[inline]{Talk about the state of the art}
-\todo[inline]{Talk about the related work}
-\begin{itemize}
-	\item Talk about products that facilitate analysis?
-	\item How detailed should we go? Talk about first detection techniques? Only talk about ML techniques?
-\end{itemize}
+Miller et al provide an interesting work on combining machine learning techniques with manual review of samples[quote 11]. They extract both static and dynamic features from binaries and apply logistic regression to achieve a 72\% detection rate with a 0.5\% false positive rate. They also note that performance measurement can easily be inflated when ignoring temporal consistency in both binary samples and labels. Such can happen when using methods like \textit{cross-validation} for performance measurement, which implies that all types of malware are both seen in evaluation and in training, consequently the notion of unseen malware is not present.
 
 % explicar as tecnicas e porque, como usa-las, vantagens, what's short
 % 
-
-%\todo[inline]{Explain what is malware, get quotes from different articles}
-%\todo[inline]{Explain different malware types, get quotes}
-%\todo[inline]{Explain malware detection techniques}
-
-
-
-
-%\todo[inline]{Is this okay? Use own definition of malware? Based on the previous paragraphs}
-%Given the subjectivity on the definition of malware, this work accepts the term malware as any type of software developed with the intent of performing some unwanted or unexpected behavior on a computer system, acting against the user expectancy, knowingly or unknowingly.
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%% SOLUTION %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Solution}\label{sec:solution}
+
+With the rate at which malware is discovered, having the ability to automatically detect both known and new samples of malware facilitates the protection of systems, while reducing human interaction. As such, the current section proposes a solution that takes advantage of machine learning capabilities to detect malware, based on static and dynamic information that can be extract from malware samples.
+
+The solution is divided into four sequential stages, where each stage directly depends on the previous one. The four parts are: collecting; parsing; training and validation. More details about each stage is described in the corresponding subsection.
+
+With an implemented solution, it is expected to have a comparison on how different models predict a sample class (i.e. malware, not malware, what kind of malware), as well as benchmarks on the accuracy of the models.
+
+\subsection{Collecting}
+The first stage of the proposed solution, which consists on obtaining a corpus from which information about the malware can be extracted. For the purpose of this work, the obtained dataset consists on reports of static and dynamic information about binaries. Working with available reports instead of generating from samples saves the time overhead from both sample obtainment and report generation, allowing for more time better spent in the remaining stages, which are more related to the presented work.
+\todo[inline]{Talk about using malwr reports}
+
+\subsection{Parsing}
+The second state of the proposed solution, that consists on parsing the previously obtained data. The reports must be parsed not only to filter relevant information, but also to guarantee data canonicalization. Having a well structured dataset eases feature extraction and posterior application of machine learning techniques, hence this stage is of extreme importance for the upcoming stage.
+\todo[inline]{Talk about what can be extracted from this stage (metawise), like percentages, dups, etc}
+
+\subsection{Training}
+The third stage of the proposed solution, in which machine learning techniques are applied to obtain a model that can predict if a given sample is malicious and if so, what kind of malware is it. Before applying any machine learning techniques, a set of features must be selected from the dataset. Since the model will be trained based on the selected features, it is of uttermost importance that feature selection is done correctly, otherwise poorly chosen features will not be able to provide a good segregation between samples and consequently the final model will not as accurate.
+
+\todo[inline]{talk about unsupervised methods to facilitate feature selection}
+\todo[inline]{talk about thresholds for supervised methods to classify samples}
+
+\subsection{Validation}
+The fourth and last stage of the proposed solution, that consists on measuring how good the previously obtained model is. The validation of the model is done by taking a set of samples which were not used for training and predict to what class the sample belongs (i.e. malware, not malware, malware type). With the model prediction, and since the validation set is labeled, the true positive, true negative, false positive and false negative can be taken into account to assert how accurate the model is with regards to the correct labels.
+
+\todo[inline]{Talk about using cross-validation as a baseline}
+\todo[inline]{move to temporal consistency and how it performs vs cross}
+
+\subsection{Tools (or some more relevant name?)}
+Being able to easily modify and rerun each stage is one of the main concerns, as more time can be spent trying different techniques without spending much time on implementation. As such, Python 3 was chosen as the base language for development.
+
+There are a large number of libraries in Python that provide easy access to machine learning capabilities, information retrieval and plotting and statistics. The ones that are of main interest for this work are: SciKit-Learn, Scrapy, Numpy, Pandas and MatPlotLib.
+
+\todo[inline]{Talk here about INOV's machine?}
+
+\subsection{Developed work}
+The stages on which most time should be spent are training and validation. As such, some work as already been done in the previous stages, specifically in the collecting and parsing stage, so that more time can be dedicated to training and validation.
+
+With regards to the collecting stage, ...
+
+Regarding the parsing stage, ...
+
+\clearpage
 
 \todo[inline]{Start by the approach?}
 \todo[inline]{Talk about the architecture}
