@@ -31,6 +31,8 @@ Instituto Superior Técnico\\
 %%%%%%% ACRONYMS %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%
 \newacronym{caro}{CARO}{Computer Antivirus Research Organization}
+\newacronym{ai}{AI}{Artificial Intelligence}
+\newacronym{ml}{ML}{Machine Learning}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -247,12 +249,35 @@ Detecting malware is not as simple as applying one of the mentioned techniques, 
 
 \todo[inline]{Talk about cuckoo here?}
 
+\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Machine Learning
 \subsection{Machine Learning}
 
-\todo[inline]{Paragraph introducing ML?}
-\todo[inline]{quick rundown on supervised/unsupervised/semi-supervised}
+Even before the modern concept of computer proposed by Alan Turing, mankind has always searched for ways to either automate or facilitate more complex tasks. With the technological advances that provide higher computation power, computer science fields like \gls{ai} have greatly improved in recent years. One of the \gls{ai} fields that as benefit from the technological advances is \gls{ml}.
+
+\gls{ml} is a subset of \gls{ai} in which algorithms are applied to learn and make predictions on data, or more formally defined by Thomas Mitchell\cite{mitchell:ml}:\\
+\say{\emph{A computer program is said to learn from experience E with respect
+to some class of tasks T and performance measure P, if its performance at tasks in
+T, as measured by P, improves with experience E.}}
+
+A noteworthy nuance about the given definition, and the \gls{ml} field in general, is that algorithms are not designed to deal with specific problems. Meaning that as long as a learning problem is well defined through $T$, $P$ and $E$, an algorithm based on these three features is able to learn, but not necessarily solve, a problem.
+
+After defining a learning problem, to obtain an useful outcome (i.e. model) one or more learning algorithms are applied. Learning algorithms fall within one of the following classes: supervised learning; unsupervised learning; semi-supervised learning or reinforcement learning. Each of the categories is defined on how the program learns the problem. A more detailed description, as seen in \cite{norvig:ai} is as follows:
+
+\subsubsection{Supervised Learning.} In this category the program is given a corpus (i.e. experience) with input-output pairs and it must learn how to map a never seen input into the correct output. Within supervised learning, a learning problem can be further classified into a classification problem, if the output is set of finite values (e.g. is it going to rain tomorrow?), or into a regression problem, if the output is continuous (e.g. how likely is it to rain tomorrow?).
+
+\subsubsection{Unsupervised Learning.} In this category the program is given a corpus and it must learn patterns from the input, hence no correct or wrong output is expected, only how different input relates. The most common task in unsupervised learning is clustering, where input is grouped based on similar characteristics.
+
+\subsubsection{Semi-supervised Learning.} This category is a combination of the previous ones and exists because sometimes the learning problem is based on a dataset that combines both labeled and unlabeled inputs or on a dataset that contains noisy data. The combination of supervised and unsupervised learning provides a better overall result in such scenarios.
+
+\subsubsection{Reinforcement Learning.} In this category the program is given a problem through a set of states and a set of actions it can perform. At any given state the program performs an action which results in a reward or punishment. The cumulative reinforcement at each state teaches the program the best and worse actions for each state.\\
+
+Another important part of \gls{ml} is the performance measure $P$, which dictates how well the program learned the problem. Performance measuring is related to the task $T$, meaning the measurement must clearly reflect on the task (e.g. if the task is playing checkers, performance should be percent of games won against opponents).
+
+For the purpose of this work, the \gls{ml} categories that fit the problem are supervised and unsupervised learning, as the problem can be seen as a classification problem (i.e. to which class a malware belongs) and a clustering problem (i.e. how similar is this malware type to known types).
+
+\clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Machine Learning in malware detection
@@ -340,6 +365,15 @@ Regarding the parsing stage, ...
 
 
 \begin{thebibliography}{}
+
+\bibitem{mitchell:ml}
+Mitchell, T.:
+Machine Learning
+
+\bibitem{norvig:ai}
+Norvig, P., Russell, S.:
+Artificial Intelligence: A Modern Approach
+
 
 \end{thebibliography}
 
