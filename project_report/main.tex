@@ -256,7 +256,7 @@ Detecting malware is not as simple as applying one of the mentioned techniques, 
 
 Even before the modern concept of computer proposed by Alan Turing, mankind has always searched for ways to either automate or facilitate more complex tasks. With the technological advances that provide higher computation power, computer science fields like \gls{ai} have greatly improved in recent years. One of the \gls{ai} fields that as benefit from the technological advances is \gls{ml}.
 
-\gls{ml} is a subset of \gls{ai} in which algorithms are applied to learn and make predictions on data, or more formally defined by Thomas Mitchell\cite{mitchell:ml}:\\
+\gls{ml} is a subset of \gls{ai} in which algorithms are applied to learn and make predictions on data, or more formally defined by Tom Mitchell\cite{mitchell:ml}:\\
 \say{\emph{A computer program is said to learn from experience E with respect
 to some class of tasks T and performance measure P, if its performance at tasks in
 T, as measured by P, improves with experience E.}}
@@ -283,9 +283,23 @@ For the purpose of this work, the \gls{ml} categories that fit the problem are s
 %%% Machine Learning in malware detection
 \subsection{Machine Learning in Malware Detection}
 
-% #11 Reviewer Integration and Performance Measurement for Malware Detection
+Even though the current work is not aimed at dealing with malicious binaries directly, but with a dataset derived from malware, prudence and methodological rigor must be taken into consideration. Rossow et al \cite{rossow:practices} present some guidelines for dealing with malware experiments, including malware datasets. Their work surveys 36 academic publications from 2006 to 2011 that rely on malware execution. From the guidelines they describe, failures are found regarding problematic assumptions on the use of execution-driven datasets, absence of security precautions taken during experiments and insufficient description of the experimental setup. The provided guidelines are split into groups:
+\begin{itemize}
+	\item Correct Datasets
+	\item Transparency
+	\item Realism
+	\item Safety guidelines are not relevant for the current work, since they are aimed at running malware.
+\end{itemize}
 
-Miller et al provide an interesting work on combining machine learning techniques with manual review of samples[quote 11]. They extract both static and dynamic features from binaries and apply logistic regression to achieve a 72\% detection rate with a 0.5\% false positive rate. They also note that performance measurement can easily be inflated when ignoring temporal consistency in both binary samples and labels. Such can happen when using methods like \textit{cross-validation} for performance measurement, which implies that all types of malware are both seen in evaluation and in training, consequently the notion of unseen malware is not present.
+
+
+The provided guidelines are split into four groups: correct datasets; transparency; realism and safety.
+
+The mentioned groups are further detailed as follows:
+
+\paragraph{Correct Datasets.} This group include 6 guidelines which are: check if goodware samples should be removed from datasets
+
+Miller et al provide an interesting work on combining machine learning techniques with manual review of samples\cite{miller:rev_int}. They extract both static and dynamic features from binaries and apply logistic regression to achieve a 72\% detection rate with a 0.5\% false positive rate. They also note that performance measurement can easily be inflated when ignoring temporal consistency in both binary samples and labels. Such can happen when using methods like \textit{cross-validation} for performance measurement, which implies that all types of malware are both seen in evaluation and in training, consequently the notion of unseen malware is not present.
 
 % explicar as tecnicas e porque, como usa-las, vantagens, what's short
 % 
@@ -368,11 +382,21 @@ Regarding the parsing stage, ...
 
 \bibitem{mitchell:ml}
 Mitchell, T.:
-Machine Learning
+\say{Machine Learning}.
+McGraw Hill, 1997
 
 \bibitem{norvig:ai}
-Norvig, P., Russell, S.:
-Artificial Intelligence: A Modern Approach
+Norvig, P. and Russell, S.:
+\say{Artificial Intelligence: A Modern Approach 3rd Edition}.
+Prentice Hall, 2010
+
+\bibitem{rossow:practices}
+Rossow C., Dietrich C., Grier C., Kreibich C., Paxson V., Pohlmann N., Bos H. and Steen M.:
+\say{Prudent Pratices for Designing Malware Experiments: Status Quo and Outlook} in IEEE Symposium on Security and Privacy, 2012
+
+\bibitem{miller:rev_int}
+Miller, B., Kantchelian, A., Tschantz, M., Afroz S., Bachwani R., Faizullabhoy R., Huang L., Shankar V., Wu T., Yiu G., Joseph A. and Tygar J.:
+\say{Reviewer Integration and Performance Measurement for Malware Detection} in DIMVA, 2016
 
 
 \end{thebibliography}
