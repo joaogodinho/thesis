@@ -1,6 +1,8 @@
 cycler==0.10.0
 decorator==4.0.10
 entrypoints==0.2.2
+gevent==1.1.2
+greenlet==0.4.10
 ipykernel==4.5.0
 ipython==5.1.0
 ipython-genutils==0.1.0
@@ -29,6 +31,7 @@ python-dateutil==2.5.3
 pytz==2016.7
 pyzmq==16.0.1
 qtconsole==4.2.1
+scipy==0.18.1
 simplegeneric==0.8.1
 six==1.10.0
 terminado==0.6
