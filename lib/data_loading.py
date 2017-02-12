@@ -13,3 +13,41 @@ def loadHeadersCSV(filename):
     # Set date as index
     df = df.set_index('date')
     return df
+
+
+# Takes a CSV file with links and a data dir
+# and returns a list with the missing links in the dir
+def check_link(submissions, data_dir='data/analyses_gz'):
+    from os import walk
+    
+    files = []
+    for dirpath, dirname, filenames in walk(data_dir):
+        files.extend(filenames)
+        break
+        
+    missing = []
+    for s in submissions:
+        if s not in files:
+            missing.append(s)
+    return missing
+
+
+# Parses the static imports from raw html
+# submission given on input
+# Returns a list with unique imports
+def parse_static_imports(submission, data_dir='data/analyses_gz'):
+    from lxml import etree
+    import gzip
+    with gzip.open(data_dir + '/' + submission, 'rb') as gz_file:
+        content = gz_file.read()
+        doc = etree.HTML(content)
+        imports = set()
+        for x in doc.xpath('//div[@id="pe_imports"]//a/text()'):
+            # Some have 'None' on the imports, weird but need to be removed
+            if x != 'None':
+                # Ignore unicode/ansi names
+                if x[-1] == 'W' or x[-1] == 'A':
+                    imports.add(x[:-1].lower())
+                else:
+                    imports.add(x.lower())
+        return list(imports)
