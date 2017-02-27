@@ -38,16 +38,17 @@ def check_link(submissions, data_dir='data/analyses_gz'):
 def parse_static_imports(submission, data_dir='data/analyses_gz'):
     from lxml import etree
     import gzip
+    # Spend as little time as possible with the file open
     with gzip.open(data_dir + '/' + submission, 'rb') as gz_file:
         content = gz_file.read()
-        doc = etree.HTML(content)
-        imports = set()
-        for x in doc.xpath('//div[@id="pe_imports"]//a/text()'):
-            # Some have 'None' on the imports, weird but need to be removed
-            if x != 'None':
-                # Ignore unicode/ansi names
-                if x[-1] == 'W' or x[-1] == 'A':
-                    imports.add(x[:-1].lower())
-                else:
-                    imports.add(x.lower())
-        return list(imports)
+    doc = etree.HTML(content)
+    imports = set()
+    for x in doc.xpath('//div[@id="pe_imports"]//a/text()'):
+        # Some have 'None' on the imports, weird but need to be removed
+        if x != 'None':
+            # Ignore unicode/ansi names
+            if x[-1] == 'W' or x[-1] == 'A':
+                imports.add(x[:-1].lower().strip())
+            else:
+                imports.add(x.lower().strip())
+    return list(imports)
