@@ -52,3 +52,20 @@ def parse_static_imports(submission, data_dir='data/analyses_gz'):
             else:
                 imports.add(x.lower().strip())
     return list(imports)
+
+
+# Parses the malware classification from raw html
+# submission given on input
+# Returns dict with vendors and their classification
+def parse_av_classification(submission, data_dir='data/analyses_gz'):
+    from lxml import etree
+    import gzip
+    # Spend as little time as possible with the file open
+    with gzip.open(data_dir + '/' + submission, 'rb') as gz_file:
+        content = gz_file.read()
+    doc = etree.HTML(content)
+    classification = dict()
+    # [1:] to skip th
+    for x in doc.xpath('//section[@id="static_antivirus"]//table/tr')[1:]:
+        classification[x[0].xpath('text()')[0].lower()] = x[1].xpath('span/text()')[0].lower()
+    return classification
