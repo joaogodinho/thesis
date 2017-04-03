@@ -51,7 +51,7 @@ def parse_static_imports(submission, data_dir='data/analyses_gz'):
                 imports.add(x[:-1].lower().strip())
             else:
                 imports.add(x.lower().strip())
-    return list(imports)
+    return imports
 
 
 # Parses the malware classification from raw html
