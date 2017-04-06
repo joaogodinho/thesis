@@ -54,3 +54,38 @@ def NCD(a, b):
     print(amin)
     print(amax)
     return (concat - amin) / amax
+
+
+def train_test_split(samples, validation_size=0.1, balanced=True, malware_downscale=1):
+    import pandas as pd
+    
+    goodware = samples[samples.malware == 0]
+    malware = samples[samples.malware == 1]
+    training_size = 1 - validation_size
+    
+    if balanced:
+        # Limit the datasets by the smaller one
+        lim = min(len(goodware), len(malware))
+        
+        g_train_len = m_train_len = int(lim * training_size)
+        m_train_len = int(m_train_len * malware_downscale)
+        g_val_len = m_val_len = int(lim * validation_size)
+        m_val_len = int(m_val_len * malware_downscale)
+    else:
+        g_train_len = int(len(goodware) * training_size)
+        m_train_len = int(len(malware) * training_size * malware_downscale)
+        
+        g_val_len = int(len(goodware) * validation_size)
+        m_val_len = int(len(malware) * validation_size * malware_downscale)
+
+    training = pd.concat([
+        goodware[:g_train_len],
+        malware[:m_train_len]
+    ])
+    validation = pd.concat([
+        goodware[g_train_len:g_train_len + g_val_len],
+        malware[m_train_len:m_train_len + m_val_len]
+    ])
+    
+    return (training, validation)
+        
