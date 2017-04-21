@@ -7,8 +7,57 @@ import lib.helpers as jcfg_helpers
 
 app = Celery('tasks', backend='rpc://')
 
+
 @app.task
-def extract_av_classification(submissions):
+def extract_av_classification(submission, data_dir='data/analyses_gz'):
+    """
+        Takes the submission ID and returns a dictionary
+        with each Antivirus and its classification
+    """
+    import gzip
+    from lxml import etree
+
+    with gzip.open(data_dir + '/' + submission, 'rb') as gz_file:
+            content = gz_file.read()
+
+    doc = etree.HTML(content)
+    classification = dict()
+    # [1:] to skip th
+    for x in doc.xpath('//section[@id="static_antivirus"]//table/tr')[1:]:
+        classification[x[0].xpath('text()')[0].lower()] = x[1].xpath('span/text()')[0].lower()
+    return classification
+
+
+@app.task
+def extract_imports(submission, data_dir='data/analyses_gz'):
+    """
+        Takes the submission ID and returns a string with
+        the imports separated by a semicolon
+    """
+    from lxml import etree
+    import gzip
+    
+    with gzip.open(data_dir + '/' + submission, 'rb') as gz_file:
+        content = gz_file.read()
+        
+    doc = etree.HTML(content)
+    imports = set()
+    for x in doc.xpath('//div[@id="pe_imports"]//a/text()'):
+        # Some have 'None' on the imports, weird but need to be removed
+        if x != 'None':
+            # Ignore unicode/ansi names
+            if x[-1] == 'W' or x[-1] == 'A':
+                imports.add(x[:-1].lower().strip())
+            else:
+                imports.add(x.lower().strip())
+    return ';'.join(imports)
+
+
+#################################################
+
+
+@app.task
+def extract_av_classification2(submissions):
     result = []
     for link in submissions:
         result.append([link, jcfg_data_loading.parse_av_classification(link)])
@@ -18,7 +67,7 @@ def extract_av_classification(submissions):
 
 
 @app.task
-def extract_imports(submissions):
+def extract_imports2(submissions):
     result = []
     for link in submissions:
         result.append([link, ';'.join(jcfg_data_loading.parse_static_imports(link))])

@@ -1,6 +1,23 @@
 import pandas as pd
 
 
+def set_pd_datetime_index(df):
+    """
+        Takes a dataframe and sets the date column as index
+    """
+    import pandas as pd
+    # Convert from string to date
+    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+    # Convert file type to string
+    df['file_type'] = df['file_type'].astype(str)
+    # Set date as index
+    df = df.set_index('date')
+    return df
+
+
+###################################################
+
+
 # Load the Headers CSV file into a Pandas dataframe
 # and set the date column as the index
 def loadHeadersCSV(filename):
