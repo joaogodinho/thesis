@@ -10,3 +10,12 @@ urls/
 data/
 # IPython checkpoints
 .ipynb_checkpoints/
+# Ignore latex stuff
+*.aux
+*.bbl
+*.blg
+*.glsdefs
+*.log
+*.synctex.gz
+*.toc
+*.pdf
