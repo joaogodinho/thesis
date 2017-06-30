@@ -60,11 +60,14 @@ def extract_domains(doc):
     domains = dict()
     for row in doc.xpath('//div[@id="network_domains_tab"]/section[@id="domains"]/table/tr[position()>1]'):
         host = row.xpath('td[2]/text()')
+        domain = row.xpath('td[1]/text()')
+        if not domain:
+            continue
         if not host:
             host = ''
         else:
             host = host[0]
-        domains[row.xpath('td[1]/text()')[0]] = host
+        domains[domain[0]] = host
     return domains or None
 
 
