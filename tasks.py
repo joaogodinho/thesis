@@ -1,23 +1,28 @@
 from celery import Celery
 import pandas as pd
 import numpy as np
+import gzip
 import lib.data_loading as jcfg_data_loading
 import lib.helpers as jcfg_helpers
 from lxml import etree
 import lib.report_parsers as jcfg_report_parsers
+import json
 
 
+# app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost//')
 app = Celery('tasks', backend='rpc://')
 
 
 @app.task
-def extract_from_report(sample, content):
+def extract_from_report(sample, data_dir, output):
     """
         Takes a sample file and parses the report
     """
     SIZE_LIMIT = 10000000
     func_list = list(filter(lambda x: x.startswith('extract_'), dir(jcfg_report_parsers)))
 
+    with gzip.open(data_dir + sample) as gz_file:
+        content = jcfg_report_parsers.remove_whitespaces(gz_file.read().decode('utf8'))
 
     func_cutpoints = jcfg_report_parsers.generate_func_cutpoints(content)
     # Check if any section is over 10MB, otherwise
@@ -37,7 +42,10 @@ def extract_from_report(sample, content):
         # When saving we don't need the _huge call
         report[func.replace('_huge', '')] = result
 
-    return (sample, report)
+    with open(output + sample, 'w') as file:
+        file.write(json.dumps(report))
+
+    return sample
 
 
 
