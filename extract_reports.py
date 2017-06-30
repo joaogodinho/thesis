@@ -7,9 +7,9 @@ import gzip
 import json
 
 
-def main(input_dir, output_dir):
+def main(input_dir, output_dir, gig):
     # Read around 10GB to memory
-    CONTENT_SIZE = 1000000 * 1000 * 8
+    CONTENT_SIZE = 1000000 * 1000 * gig
     content_size = 0
     content_batch = []
     data_dir = input_dir + '/' if input_dir[-1] != '/' else input_dir
@@ -45,4 +45,4 @@ def main(input_dir, output_dir):
             file.write(json.dumps(r[1]))
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], int(sys.argv[3]))
