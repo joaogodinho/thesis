@@ -3,9 +3,42 @@ import pandas as pd
 import numpy as np
 import lib.data_loading as jcfg_data_loading
 import lib.helpers as jcfg_helpers
+from lxml import etree
+import lib.report_parsers as jcfg_report_parsers
 
 
 app = Celery('tasks', backend='rpc://')
+
+
+@app.task
+def extract_from_report(sample, content):
+    """
+        Takes a sample file and parses the report
+    """
+    SIZE_LIMIT = 10000000
+    func_list = list(filter(lambda x: x.startswith('extract_'), dir(jcfg_report_parsers)))
+
+
+    func_cutpoints = jcfg_report_parsers.generate_func_cutpoints(content)
+    # Check if any section is over 10MB, otherwise
+    # lxml can take it anyway
+    report = dict()
+    for idx, pair in enumerate(func_cutpoints[1:]):
+        if pair[1] > SIZE_LIMIT:
+            # Section to parse is the one before the one being compared
+            func_cutpoints[idx] = (func_cutpoints[idx][0] + '_huge', func_cutpoints[idx][1])
+
+    # Returns either str or etree depending on size
+    input_type = lambda name, content: content if '_huge' in name else etree.HTML(content)
+    for func, cutpoint in func_cutpoints:
+        content = content[cutpoint:]
+        # Turn the string into a function and call it with correct input
+        result = getattr(jcfg_report_parsers, func)(input_type(func, content))
+        # When saving we don't need the _huge call
+        report[func.replace('_huge', '')] = result
+
+    return (sample, report)
+
 
 
 @app.task
@@ -36,10 +69,10 @@ def extract_imports(submission, data_dir='data/analyses_gz'):
     """
     from lxml import etree
     import gzip
-    
+
     with gzip.open(data_dir + '/' + submission, 'rb') as gz_file:
         content = gz_file.read()
-        
+
     doc = etree.HTML(content)
     imports = set()
     for x in doc.xpath('//div[@id="pe_imports"]//a/text()'):
@@ -96,8 +129,8 @@ def count_fn_rate(fn_count, json_samples, threshold=0.5):
                 tp_count[vendor] += 1
             for vendor in vendors_clean.keys():
                 fn_count[vendor] += 1
-        
-    return fn_count, tp_count 
+
+    return fn_count, tp_count
 
 
 @app.task
@@ -115,8 +148,8 @@ def count_fp_rate(fp_count, json_samples, threshold=0.5):
                 tn_count[vendor] += 1
             for vendor in vendors_not_clean.keys():
                 fp_count[vendor] += 1
-        
-    return fp_count, tn_count 
+
+    return fp_count, tn_count
 
 
 @app.task
@@ -126,18 +159,18 @@ def count_fp_rate2(fp_count, baseline_vendors, json_samples, threshold=0.5):
     for _, sample in samples.iterrows():
         sample_filtered = sample[baseline_vendors].dropna()
         baseline_clean = sample_filtered[sample_filtered == 'clean']
-        
+
         # Check if "not malware" by looking at the majority of classifcations in the baseline
         if baseline_clean.count() / sample_filtered.count() > threshold:
             vendors = sample[list(fp_count.keys())].dropna()
             tn_vendors = vendors.keys().tolist()
             for vendor in vendors.keys():
                 tn_count[vendor] += 1
-            
+
             vendors_fp = vendors[vendors != 'clean']
             for vendor in vendors_fp.keys():
                 fp_count[vendor] += 1
-        
+
     return fp_count, tn_count
 
 
@@ -146,7 +179,7 @@ def simple_heuristic(common_features, malware_features, goodware_features, sampl
     common_features = set(common_features)
     malware_features = set(malware_features)
     goodware_features = set(goodware_features)
-    
+
     relevant_features = set.union(common_features, malware_features, goodware_features)
     common_count = 0
     unknown_count = 0
@@ -186,7 +219,7 @@ def simple_heuristic(common_features, malware_features, goodware_features, sampl
             else:
                 fn_count += 1
             continue
-        
+
         # No if matched, means only unknown features
         unknown_count += 1
     return {'common_count': common_count,
@@ -203,4 +236,3 @@ def multiple_ndc(pairs):
     for pair in pairs:
         result.append(jcfg_helpers.NDC(pair[0], pair[1]))
     return result
-
