@@ -9,8 +9,7 @@ import lib.report_parsers as jcfg_report_parsers
 import json
 
 
-# app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost//')
-app = Celery('tasks', backend='rpc://')
+app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost/thesis/')
 
 
 @app.task
