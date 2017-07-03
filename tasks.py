@@ -42,7 +42,8 @@ def extract_from_report(sample, data_dir, output):
         # When saving we don't need the _huge call
         report[func.replace('_huge', '')] = result
 
-    with open(output + sample, 'w') as file:
+    # Write the JSON gz compressed
+    with gzip.open(output + sample, 'w') as file:
         file.write(json.dumps(report))
 
     return sample
