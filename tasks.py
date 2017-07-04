@@ -43,7 +43,7 @@ def extract_from_report(sample, data_dir, output):
 
     # Write the JSON gz compressed
     with gzip.open(output + sample, 'w') as file:
-        file.write(json.dumps(report))
+        file.write(json.dumps(report).encode('utf8'))
 
     return sample
 
