@@ -9,15 +9,17 @@ import lib.report_parsers as jcfg_report_parsers
 import json
 
 
-# app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost/thesis')
-app = Celery('tasks', backend='rpc://')
+app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost/thesis')
 
 
 @app.task
 def extract_content(key, report, path):
     with gzip.open(path + report) as gz_file:
         content = json.loads(gz_file.read().decode('utf8'))
-        return (report, content[key])
+        if key in content:
+            return (report, content[key])
+        else:
+            return (report, None)
 
 
 @app.task
