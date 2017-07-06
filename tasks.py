@@ -13,6 +13,17 @@ app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost/the
 
 
 @app.task
+def extract_dlls_split(report, path, dll):
+    KEY = 'extract_peimports'
+    with gzip.open(path + report) as gz_file:
+        content = json.loads(gz_file.read().decode('utf8'))
+        if KEY in content and content[KEY] is not None:
+            if dll in content[KEY] and content[KEY][dll] is not None:
+                return (report, ';'.join(content[KEY][dll]))
+    return (report, None)
+
+
+@app.task
 def extract_dlls(report, path):
     KEY = 'extract_peimports'
     with gzip.open(path + report) as gz_file:

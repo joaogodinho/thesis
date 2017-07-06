@@ -3,20 +3,18 @@ from celery import group
 import lib.report_parsers as jcfg_report_parsers
 import tasks
 from os import walk
-import gzip
-import json
 import pandas as pd
 import numpy as np
 """
     Creates the CSV for the static imports.
     The base CSV contains the link and list of used dll's
     For each dll a CSV is created with link and imports from each sample
+    (see create_csv_dlls_split.py)
 """
 
 
 def main(path, outpath):
     BATCH_SIZE = 10000
-    counter = 0
     path = path + '/' if path[-1] != '/' else path
     outpath = outpath + '/' if outpath[-1] != '/' else outpath
 
