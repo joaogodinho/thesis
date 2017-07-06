@@ -25,7 +25,7 @@ def main(csv_file, path, dlls_file, outpath):
     for dll in dlls:
         for idx, batch in enumerate(batches):
             # Send the messages
-            jobs = group([tasks.extract_dlls_split.s(report, path, dll) for report in batch])
+            jobs = group([tasks.extract_dlls_split.s(report, path, dll.strip()) for report in batch])
             result = jobs.apply_async()
             result.join()
             arr = np.array(result.get())
