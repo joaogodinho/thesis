@@ -40,7 +40,7 @@ def main(csv_file, path, dlls_file, outpath):
     (_, _, checkpoints) = next(walk(outpath))
     for dll in dlls:
         concatenated_result = []
-        for c in filter(lambda x: x.contains(dll), checkpoints):
+        for c in filter(lambda x: dll in x, checkpoints):
             concatenated_result.append(pd.read_csv(outpath + c))
             final_frame = pd.concat(concatenated_result)
             final_frame = final_frame.set_index('link')
