@@ -22,7 +22,7 @@ def main(csv_file, path, dlls_file, outpath):
 
     dlls_frame = pd.read_csv(csv_file)
     for dll in dlls:
-        reports = dlls_frame[dlls_frame.dlls.str.contains(dll)].link.values
+        reports = dlls_frame[dlls_frame.dlls.str.contains(dll, regex=False)].link.values
         # Split the reports into batches, which will then be saved as checkpoints
         batches = [reports[i:i+BATCH_SIZE] for i in range(0, len(reports), BATCH_SIZE)]
         for idx, batch in enumerate(batches):
