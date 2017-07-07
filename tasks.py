@@ -17,9 +17,9 @@ def extract_dlls_split(report, path, dll):
     KEY = 'extract_peimports'
     with gzip.open(path + report) as gz_file:
         content = json.loads(gz_file.read().decode('utf8'))
-        if KEY in content and content[KEY] is not None:
-            if dll in content[KEY] and content[KEY][dll] is not None:
-                return (report, ';'.join(content[KEY][dll]))
+    if KEY in content and content[KEY] is not None:
+        if dll in content[KEY] and content[KEY][dll] is not None:
+            return (report, ';'.join(content[KEY][dll]))
     return (report, None)
 
 
@@ -28,8 +28,8 @@ def extract_dlls(report, path):
     KEY = 'extract_peimports'
     with gzip.open(path + report) as gz_file:
         content = json.loads(gz_file.read().decode('utf8'))
-        if KEY in content and content[KEY] is not None:
-            return (report, ';'.join(list(content[KEY].keys())))
+    if KEY in content and content[KEY] is not None:
+        return (report, ';'.join(list(content[KEY].keys())))
     return (report, None)
 
 
@@ -38,10 +38,9 @@ def extract_dlls(report, path):
 def extract_content(key, report, path):
     with gzip.open(path + report) as gz_file:
         content = json.loads(gz_file.read().decode('utf8'))
-        if key in content:
-            return (report, content[key])
-        else:
-            return (report, None)
+    if key in content and content[key] is not None:
+        return (report, content[key])
+    return (report, None)
 
 
 @app.task
