@@ -16,16 +16,22 @@ def main(csv_file, path, dlls_file, outpath):
     path = path + '/' if path[-1] != '/' else path
     outpath = outpath + '/' if outpath[-1] != '/' else outpath
 
-    dlls_frame = pd.read_csv(csv_file)
-    reports = dlls_frame.link.values
-    # Split the reports into batches, which will then be saved as checkpoints
-    batches = [reports[i:i+BATCH_SIZE] for i in range(0, len(reports), BATCH_SIZE)]
+    # Get all used dlls
     with open(dlls_file, 'r') as file:
-        dlls = file.readlines()
+        dlls = map(str.strip, file.readlines())
+
+    # Create dict with dlls and reports that use them
+    dlls_frame = pd.read_csv(csv_file)
+    dlls_reports = dict()
     for dll in dlls:
+        dlls_reports[dll] = dlls_frame[dlls_frame.dlls.str.contains(dll)].link.values
+
+    for dll in dlls:
+        # Split the reports into batches, which will then be saved as checkpoints
+        batches = [dlls_reports[dll][i:i+BATCH_SIZE] for i in range(0, len(dlls_reports[dll]), BATCH_SIZE)]
         for idx, batch in enumerate(batches):
             # Send the messages
-            jobs = group([tasks.extract_dlls_split.s(report, path, dll.strip()) for report in batch])
+            jobs = group([tasks.extract_dlls_split.s(report, path, dll) for report in batch])
             result = jobs.apply_async()
             result.join()
             arr = np.array(result.get())
@@ -33,7 +39,7 @@ def main(csv_file, path, dlls_file, outpath):
             frame = pd.DataFrame(data=list(arr[:,1]), index=arr[:,0])
             frame.index.name = 'link'
             frame.columns = [dll]
-            frame.to_csv(path_or_buf=outpath + 'pe32_pedll-{}_{}.csv.gz'.format(dll.strip(), idx + 1), compression='gzip')
+            frame.to_csv(path_or_buf=outpath + 'pe32_pedll-{}_{}.csv.gz'.format(dll, idx + 1), compression='gzip')
 
     (_, _, checkpoints) = next(walk(outpath))
     for dll in dlls:
@@ -42,7 +48,7 @@ def main(csv_file, path, dlls_file, outpath):
             concatenated_result.append(pd.read_csv(outpath + c))
             final_frame = pd.concat(concatenated_result)
             final_frame = final_frame.set_index('link')
-            final_frame.to_csv(path_or_buf=outpath + 'pe32_pedll_{}.csv.gz'.format(dll.strip()), compression='gzip')
+            final_frame.to_csv(path_or_buf=outpath + 'pe32_pedll_{}.csv.gz'.format(dll), compression='gzip')
 
 if __name__ == '__main__':
     main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
