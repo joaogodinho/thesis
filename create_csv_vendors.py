@@ -13,6 +13,7 @@ import numpy as np
 
 def main(path, outpath):
     BATCH_SIZE = 10000
+    BATCH_SIZE = 100
     path = path + '/' if path[-1] != '/' else path
     outpath = outpath + '/' if outpath[-1] != '/' else outpath
 
@@ -25,11 +26,20 @@ def main(path, outpath):
         result = jobs.apply_async()
         result.join()
         arr = np.array(result.get())
+        print(len(arr))
+        counter = 0
+        for r in arr:
+            if r[1] is None:
+                print(r)
+                counter += 1
+        print(counter)
         arr = arr[np.where(arr[:,1] != np.array(None))]
+        print(len(arr))
         # Transform the results into a dataframe
         frame = pd.DataFrame(data=list(arr[:,1]), index=arr[:,0])
         frame.index.name = 'link'
         frame.to_csv(path_or_buf=outpath + 'pe32_vendors{}.csv.gz'.format(idx + 1), compression='gzip')
+        break
 
     (_, _, checkpoints) = next(walk(outpath))
     concatenated_result = []
