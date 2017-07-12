@@ -32,13 +32,17 @@ class Command(BaseCommand):
         reports_frame = pd.read_csv(file_name)
         reports_frame = reports_frame.set_index('link')
 
-        jobs = []
-        for report in reports_frame.iterrows():
-            dlls = map(lambda x: x.strip(), report[1].dlls.split(';'))
-            dlls = filter(lambda x: x.endswith('.dll'), dlls)
-            dlls = map(lambda x: x.replace('.dll', ''), dlls)
-            jobs.append(gevent.spawn(self.create_uses_dll, report[0], dlls))
 
-        # Done spawning, wait
-        print('Waiting for jobs...')
-        gevent.joinall(jobs)
+        # Max number of sql connections
+        BATCH_SIZE = 150
+        reports = list(reports_frame.iterrows())
+        batches = [reports[i:i+BATCH_SIZE] for i in range(0, len(reports), BATCH_SIZE)]
+        for batch in batches:
+            jobs = []
+            for report in batch:
+                dlls = map(lambda x: x.strip(), report[1].dlls.split(';'))
+                dlls = filter(lambda x: x.endswith('.dll'), dlls)
+                dlls = map(lambda x: x.replace('.dll', ''), dlls)
+                jobs.append(gevent.spawn(self.create_uses_dll, report[0], dlls))
+            print('Waiting for jobs...')
+            gevent.joinall(jobs)
