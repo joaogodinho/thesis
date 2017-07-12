@@ -4,6 +4,7 @@ from .models import Report, DLL, UsesDLL
 
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('link', 'md5', 'file_type', 'date')
+    search_fields = ['link', 'md5']
 
 
 class DLLAdmin(admin.ModelAdmin):

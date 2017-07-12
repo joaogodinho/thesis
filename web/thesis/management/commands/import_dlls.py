@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django import db
 from thesis.models import Report, DLL, UsesDLL
 import pandas as pd
 import gevent
@@ -16,6 +17,7 @@ class Command(BaseCommand):
         for d in dlls:
             dll = DLL.objects.get(name=d)
             UsesDLL.objects.update_or_create(report=r, dll=dll)
+            db.connection.close()
 
     def add_arguments(self, parser):
         parser.add_argument('file', type=str)
