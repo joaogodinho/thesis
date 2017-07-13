@@ -13,6 +13,36 @@ app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost/the
 
 
 @app.task
+def extract_report_basic(report, path):
+    STR0 = '<section id="information">'
+    STR1 = '<section id="file">'
+    with gzip.open(path + report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    # Full timestamp
+    doc = etree.HTML(content[content.find(STR0):])
+    time = doc.xpath('//div[@class="box-content"]/table/tbody/tr/td[2]/text()')
+    time = time[0] if len(time) >= 1 else None
+
+    # File name
+    doc = etree.HTML(content[content.find(STR1):])
+    file_name = doc.xpath('//div[@class="box-content"]/table/tr[1]/td[1]/text()')
+    file_name = file_name[0] if len(file_name) >= 1 else None
+
+    # File size
+    file_size = doc.xpath('//div[@class="box-content"]/table/tr[2]/td[1]/text()')
+    file_size = file_size[0].split(' ')[0] if len(file_size) >= 1 else None
+
+    # File type
+    file_type = doc.xpath('//div[@class="box-content"]/table/tr[3]/td[1]/text()')
+    file_type = file_type[0] if len(file_type) >= 1 else None
+
+    return (report, time, file_name, file_size, file_type)
+
+
+
+
+@app.task
 def extract_dlls_split(report, path, dll):
     KEY = 'extract_peimports'
     with gzip.open(path + report) as gz_file:
