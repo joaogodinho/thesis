@@ -54,7 +54,7 @@ def extract_report_basic(report, path):
     # Full timestamp
     doc = etree.HTML(content[content.find(STR0):])
     if doc is None:
-        return (report, None, None, None, None)
+        return (report, None, None, None, None, None)
     time = doc.xpath('//div[@class="box-content"]/table/tbody/tr/td[2]/text()')
     time = time[0] if len(time) >= 1 else None
 
@@ -71,7 +71,11 @@ def extract_report_basic(report, path):
     file_type = doc.xpath('//div[@class="box-content"]/table/tr[3]/td[1]/text()')
     file_type = file_type[0] if len(file_type) >= 1 else None
 
-    return (report, time, file_name, file_size, file_type)
+    # MD5
+    md5 = doc.xpath('//div[@class="box-content"]/table/tr[4]/td[1]/text()')
+    md5 = md5[0] if len(md5) >=1 else None
+
+    return (report, md5, time, file_name, file_size, file_type)
 
 
 
