@@ -12,6 +12,7 @@ import pandas as pd
 
 def main(folder, out):
     BATCH_SIZE = 10000
+    BATCH_SIZE = 4
     filename = 'reports.csv'
     folder = folder + '/' if folder[-1] != '/' else folder
     out = out + '/' if out[-1] != '/' else out

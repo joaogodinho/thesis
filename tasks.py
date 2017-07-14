@@ -21,6 +21,8 @@ def extract_report_basic(report, path):
 
     # Full timestamp
     doc = etree.HTML(content[content.find(STR0):])
+    if doc is None:
+        return (report, None, None, None, None)
     time = doc.xpath('//div[@class="box-content"]/table/tbody/tr/td[2]/text()')
     time = time[0] if len(time) >= 1 else None
 
