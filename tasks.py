@@ -13,6 +13,24 @@ app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost/the
 
 
 @app.task
+def extract_report_vendors(report, path):
+    STR0 = '<section id="static_antivirus">'
+    with gzip.open(path + report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    doc = etree.HTML(content[content.find(STR0):])
+    vendors = dict()
+    if doc is not None:
+        rows = doc.xpath('//section[@id="static_antivirus"]/table/tr[position()>1]')
+        for tr in rows:
+            vendor = tr.xpath('td[1]/text()')
+            sign = tr.xpath('td[2]/span/text()')
+            if len(vendor) >= 1 and len(sign) >= 1:
+                vendors[vendor[0]] = sign[0]
+    return (report, vendors)
+
+
+@app.task
 def extract_report_basic(report, path):
     STR0 = '<section id="information">'
     STR1 = '<section id="file">'
