@@ -27,7 +27,7 @@ def main(folder, out):
         # Transform the results into a dataframe
         frame = pd.DataFrame(data=arr[:,range(1,5)], index=arr[:,0])
         frame.index.name = 'link'
-        frame.columns = ['date', 'file_name', 'file_size', 'file_type']
+        frame.columns = ['md5', 'date', 'file_name', 'file_size', 'file_type']
         frame.to_csv(path_or_buf=out + 'temp{}.csv'.format(idx + 1), compression='gzip')
 
     # Join all checkpoints into final CSV
