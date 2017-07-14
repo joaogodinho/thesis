@@ -1,6 +1,6 @@
 """
-    Generates the vendors.csv file with:
-        link, vendorA, vendorB, ....
+    Generates the dlls.csv file with:
+        link, dlls
 """
 import sys
 import tasks
@@ -13,7 +13,7 @@ import pandas as pd
 def main(reports, folder, out):
     BATCH_SIZE = 10000
     base_file = 'reports.csv.gz'
-    filename = 'vendors.csv.gz'
+    filename = 'dlls.csv.gz'
     folder = folder + '/' if folder[-1] != '/' else folder
     out = out + '/' if out[-1] != '/' else out
 
@@ -22,13 +22,14 @@ def main(reports, folder, out):
     batches = [reports[i:i+BATCH_SIZE] for i in range(0, len(reports), BATCH_SIZE)]
     for idx, batch in enumerate(batches):
         # Send the messages
-        jobs = group([tasks.extract_report_vendors.s(report, folder) for report in batch])
+        jobs = group([tasks.extract_report_dlls.s(report, folder) for report in batch])
         result = jobs.apply_async()
         result.join()
         arr = np.array(result.get())
         # Transform the results into a dataframe
         frame = pd.DataFrame(data=list(arr[:,1]), index=arr[:,0])
         frame.index.name = 'link'
+        frame.columns = ['dlls']
         frame.to_csv(path_or_buf=out + 'temp{}.csv'.format(idx + 1), compression='gzip')
 
     # Join all checkpoints into final CSV

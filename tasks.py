@@ -13,6 +13,20 @@ app = Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost/the
 
 
 @app.task
+def extract_report_dlls(report, path):
+    STR0 = '<div id="pe_imports">'
+    with gzip.open(path + report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    doc = etree.HTML(content[content.find(STR0):])
+    dlls = ''
+    if doc is not None:
+        dlls =  doc.xpath('//div/div/div/strong/text()')
+        dlls = ';'.join(map(lambda x: x.split(' ')[1].lower(), dlls))
+    return (report, dlls)
+
+
+@app.task
 def extract_report_vendors(report, path):
     STR0 = '<section id="static_antivirus">'
     with gzip.open(path + report) as gzip_file:
