@@ -12,7 +12,7 @@ import pandas as pd
 
 def main(folder, out):
     BATCH_SIZE = 10000
-    filename = 'reports.csv'
+    filename = 'reports.csv.gz'
     folder = folder + '/' if folder[-1] != '/' else folder
     out = out + '/' if out[-1] != '/' else out
 
@@ -25,7 +25,7 @@ def main(folder, out):
         result.join()
         arr = np.array(result.get())
         # Transform the results into a dataframe
-        frame = pd.DataFrame(data=arr[:,range(1,5)], index=arr[:,0])
+        frame = pd.DataFrame(data=arr[:,range(1,6)], index=arr[:,0])
         frame.index.name = 'link'
         frame.columns = ['md5', 'date', 'file_name', 'file_size', 'file_type']
         frame.to_csv(path_or_buf=out + 'temp{}.csv'.format(idx + 1), compression='gzip')
