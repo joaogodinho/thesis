@@ -43,7 +43,7 @@ test_Y = test.malware
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60*60*24,
     per_run_time_limit=60*5,
-    ml_memory_limit=1024*8
+    ml_memory_limit=1024*8,
     delete_tmp_folder_after_terminate=False,
     delete_output_folder_after_terminate=False)
 automl.fit(train_X, train_Y)
