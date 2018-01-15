@@ -22,7 +22,7 @@ def extract_report_dlls(report, path):
     dlls = ''
     if doc is not None:
         dlls =  doc.xpath('//div/div/div/strong/text()')
-        dlls = ';'.join(map(lambda x: x.split(' ')[1].lower(), dlls))
+        dlls = ';'.join(sorted(set(map(lambda x: x.split(' ')[1], dlls))))
     return (report, dlls)
 
 

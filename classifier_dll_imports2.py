@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from scipy import interp
 
 data_folder = 'data/'
-final_dataset_file = data_folder + 'dataset_v1.csv.gz'
+final_dataset_file = data_folder + 'dataset_v2.csv.gz'
 selected_imports_file = data_folder + 'selected_imports.csv.gz'
 
 cv_token_pattern = u'[^;]+'
