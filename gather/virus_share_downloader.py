@@ -12,12 +12,13 @@ def gevent_func(pair):
     print('Fetching {}...'.format(pair[0]))
     urlretrieve(pair[0], pair[1])
 
+
 def downloader(destination_dir):
     # https://virusshare.com/hashes/VirusShare_00000.md5
     base_url = 'https://virusshare.com/hashes/'
     file_name = 'VirusShare_{}.md5'
-    # As of 22/10/17; + 1 due to 0 based
-    total_files = 296 + 1
+    # As of 15/01/18; + 1 due to 0 based
+    total_files = 305 + 1
 
     # Append / if missing
     destination_dir = destination_dir + '/' if destination_dir[-1] != '/' else destination_dir
