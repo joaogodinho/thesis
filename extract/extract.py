@@ -37,7 +37,6 @@ def main(function, pe32_file, samples_folder, output):
         result = jobs.apply_async()
         result.join()
         results += result.get()
-        break
 
     logger.info('Joining results to DataFrame')
     samples_info = pd.DataFrame(results)
