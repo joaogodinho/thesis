@@ -64,3 +64,22 @@ def file_info(report):
     ssdeep= ssdeep[0] if len(ssdeep) >=1 else None
 
     return (report, md5, sha1, sha256, sha512, crc32, ssdeep, start_time, end_time, file_name, file_size, file_type)
+
+
+@app.task
+def vendors_info(report):
+    STR0 = '<section id="static_antivirus">'
+    with gzip.open(report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    doc = etree.HTML(content[content.find(STR0):])
+    vendors = dict()
+    vendors['link'] = report
+    if doc is not None:
+        rows = doc.xpath('//section[@id="static_antivirus"]/table/tr[position()>1]')
+        for tr in rows:
+            vendor = tr.xpath('td[1]/text()')
+            sign = tr.xpath('td[2]/span/text()')
+            if len(vendor) >= 1 and len(sign) >= 1:
+                vendors[vendor[0]] = sign[0]
+    return vendors
