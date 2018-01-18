@@ -86,3 +86,19 @@ def vendors_info(report):
             if len(vendor) >= 1 and len(sign) >= 1:
                 vendors[vendor[0]] = sign[0]
     return vendors
+
+
+@app.task
+def report_imports(report):
+    STR0 = '<div id="pe_imports">'
+    with gzip.open(report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    result = dict()
+    result['link'] = report
+    doc = etree.HTML(content[content.find(STR0):])
+    if doc is not None:
+        dlls = doc.xpath('//div/div/div/strong/text()')
+        dlls = ';'.join(sorted(set(map(lambda x: x.split(' ')[1], dlls))))
+        result['imports'] = dlls
+    return result
