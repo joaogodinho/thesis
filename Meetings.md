@@ -26,3 +26,9 @@ Até agora temos
 * Classificador que usa info estática (dll). Ver se as Detections Rates são boas, e os FP baixos. Comparar com o que existe.
 * Dados sobre os nomes. Conseguimos agregar os nomes? Conseguimos arranjar mapas entre nomes usados pelos vendors.
 * Identificação dos pioneiros?
+
+## 19Feb2018
+
+* Preparar analise dinamica para a próxima reunião: vector apenas com as calls a cada funçao. ver se dá melhores resultados que o estatico. quão melhores
+* Introduzir os conceitos teoricos, concept drift, etc.
+* fazer contas para ver pq 3 folds de treino são suficientes, em vez de 2 ou 4.
