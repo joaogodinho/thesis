@@ -2,6 +2,7 @@ import gzip
 from lxml import etree
 import sys
 import celery
+import json
 
 
 app = celery.Celery('tasks', backend='rpc://', broker='pyamqp://jcfg:jcfg@localhost/thesis')
@@ -101,4 +102,23 @@ def report_imports(report):
         dlls = doc.xpath('//div/div/div/strong/text()')
         dlls = ';'.join(sorted(set(map(lambda x: x.split(' ')[1], dlls))))
         result['imports'] = dlls
+    return result
+
+
+@app.task
+def behavior_categories(report):
+    STR0 = '<div id="graph_process_details">'
+    with gzip.open(report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    result = dict()
+    result['link'] = report
+    doc = etree.HTML(content[content.find(STR0):])
+    if doc is not None:
+        behavior_calls = doc.xpath('//script[@type="text/javascript" and contains(., "graph_raw_data")]/text()')
+        processes = json.loads(behavior_calls[0].strip().replace('var graph_raw_data = ', '').strip()[:-1])
+        # Get only the categories
+        for proc in processes:
+            for call in proc['calls']:
+                result[call['category']] = result.setdefault(call['category'], 0) + 1
     return result
