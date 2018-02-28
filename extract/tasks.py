@@ -108,15 +108,27 @@ def report_imports(report):
 @app.task
 def behavior_categories(report):
     STR0 = '<div id="graph_process_details">'
+    STR1 = '<script type="text/javascript">'
+    STR2 = 'var graph_raw_data = '
+    STR3 = '</script>'
     with gzip.open(report) as gzip_file:
         content = gzip_file.read().decode('utf8')
 
     result = dict()
     result['link'] = report
-    doc = etree.HTML(content[content.find(STR0):])
-    if doc is not None:
-        behavior_calls = doc.xpath('//script[@type="text/javascript" and contains(., "graph_raw_data")]/text()')
-        processes = json.loads(behavior_calls[0].strip().replace('var graph_raw_data = ', '').strip()[:-1])
+
+    # Use specific strings to find the dynamic calls,
+    # as sometimes the file is too big for etree
+    content = content[content.find(STR0):]
+    content = content[content.find(STR1) + len(STR1):].replace(STR2, '')
+    content = content[:content.find(STR3)]
+    content = content.strip()[:-1] # -1 removes ending ';'
+    if content is not None and len(content) != 0:
+        try:
+            processes = json.loads(content)
+        except:
+            print(report)
+            raise
         # Get only the categories
         for proc in processes:
             for call in proc['calls']:
