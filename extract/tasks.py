@@ -165,3 +165,19 @@ def behavior_func_calls(report):
             for call in proc['calls']:
                 result[call['api']] = result.setdefault(call['api'], 0) + 1
     return result
+
+
+@app.task
+def report_signatures(report):
+    STR0 = '<section id="signatures">'
+    with gzip.open(report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    result = dict()
+    result['link'] = report
+    doc = etree.HTML(content[content.find(STR0):])
+    if doc is not None:
+        sigs = doc.xpath('//section[@id="signatures"]/div[2]/@id')
+        for s in sigs:
+            result[s] = result.setdefault(s, 0) + 1
+    return result
