@@ -181,3 +181,21 @@ def report_signatures(report):
         for s in sigs:
             result[s] = result.setdefault(s, 0) + 1
     return result
+
+
+@app.task
+def report_imports_count(report):
+    STR0 = '<div id="pe_imports">'
+    with gzip.open(report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    result = dict()
+    result['link'] = report
+    doc = etree.HTML(content[content.find(STR0):])
+    if doc is not None:
+        imports = doc.xpath('//div/div[@class="well"]')
+        for im in imports:
+            import_name = im.xpath('//div/strong/text()')[0].split('Library ')[-1]
+            func_names = im.xpath('//div/span/a/text()')
+            result[import_name] = result.setdefault(import_name, []) + func_names
+    return result
