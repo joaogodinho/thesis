@@ -197,5 +197,5 @@ def report_imports_count(report):
         for im in imports:
             import_name = im.xpath('//div/strong/text()')[0].split('Library ')[-1]
             func_names = im.xpath('//div/span/a/text()')
-            result[import_name] = result.setdefault(import_name, []) + func_names
+            result[import_name] = result.setdefault(import_name, 0) + len(func_names)
     return result
