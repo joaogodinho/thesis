@@ -201,7 +201,7 @@ def report_imports_count(report):
     return result
 
 @app.task
-def behavior_func_calls(report):
+def behavior_func_calls_bigrams(report):
     STR0 = '<div id="graph_process_details">'
     STR1 = '<script type="text/javascript">'
     STR2 = 'var graph_raw_data = '
