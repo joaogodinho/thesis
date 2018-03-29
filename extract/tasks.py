@@ -231,3 +231,36 @@ def behavior_func_calls_bigrams(report):
                 b = proc['calls'][idx + 1]['api']
                 result[str((a, b))] = result.setdefault(str((a, b)), 0) + 1
     return result
+
+
+@app.task
+def behavior_func_calls_bigrams(report):
+    STR0 = '<div id="graph_process_details">'
+    STR1 = '<script type="text/javascript">'
+    STR2 = 'var graph_raw_data = '
+    STR3 = '</script>'
+    with gzip.open(report) as gzip_file:
+        content = gzip_file.read().decode('utf8')
+
+    result = dict()
+    result['link'] = report
+
+    # Use specific strings to find the dynamic calls,
+    # as sometimes the file is too big for etree
+    content = content[content.find(STR0):]
+    content = content[content.find(STR1) + len(STR1):].replace(STR2, '')
+    content = content[:content.find(STR3)]
+    content = content.strip()[:-1] # -1 removes ending ';'
+    if content is not None and len(content) != 0:
+        try:
+            processes = json.loads(content)
+        except:
+            print(report)
+            raise
+        # Get only the categories
+        for proc in processes:
+            for idx, call in enumerate(proc['calls'][:-1]):
+                a = call['category']
+                b = proc['calls'][idx + 1]['category']
+                result[str((a, b))] = result.setdefault(str((a, b)), 0) + 1
+    return result
