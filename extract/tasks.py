@@ -234,7 +234,7 @@ def behavior_func_calls_bigrams(report):
 
 
 @app.task
-def behavior_func_calls_bigrams(report):
+def behavior_categories_bigrams(report):
     STR0 = '<div id="graph_process_details">'
     STR1 = '<script type="text/javascript">'
     STR2 = 'var graph_raw_data = '
