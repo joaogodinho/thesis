@@ -298,34 +298,34 @@
 % http://www-h.eng.cam.ac.uk/help/tpl/textprocessing/nomencl.pdf
 %
 % Nomenclature (produces *.nlo *.nls files)
-\usepackage{nomencl}
-\makenomenclature
+%\usepackage{nomencl}
+%\makenomenclature
 %
 % Group variables according to their symbol type
 %
-\RequirePackage{ifthen} 
-\ifthenelse{\equal{\languagename}{english}}%
-    { % English
-    \renewcommand{\nomgroup}[1]{%
-      \ifthenelse{\equal{#1}{R}}{%
-        \item[\textbf{Roman symbols}]}{%
-        \ifthenelse{\equal{#1}{G}}{%
-          \item[\textbf{Greek symbols}]}{%
-          \ifthenelse{\equal{#1}{S}}{%
-            \item[\textbf{Subscripts}]}{%
-            \ifthenelse{\equal{#1}{T}}{%
-              \item[\textbf{Superscripts}]}{}}}}}%
-    }{% Portuguese
-    \renewcommand{\nomgroup}[1]{%
-      \ifthenelse{\equal{#1}{R}}{%
-        \item[\textbf{Simbolos romanos}]}{%
-        \ifthenelse{\equal{#1}{G}}{%
-          \item[\textbf{Simbolos gregos}]}{%
-          \ifthenelse{\equal{#1}{S}}{%
-            \item[\textbf{Subscritos}]}{%
-            \ifthenelse{\equal{#1}{T}}{%
-              \item[\textbf{Sobrescritos}]}{}}}}}%
-    }%
+%\RequirePackage{ifthen} 
+%\ifthenelse{\equal{\languagename}{english}}%
+%    { % English
+%    \renewcommand{\nomgroup}[1]{%
+%      \ifthenelse{\equal{#1}{R}}{%
+%        \item[\textbf{Roman symbols}]}{%
+%        \ifthenelse{\equal{#1}{G}}{%
+%          \item[\textbf{Greek symbols}]}{%
+%          \ifthenelse{\equal{#1}{S}}{%
+%            \item[\textbf{Subscripts}]}{%
+%            \ifthenelse{\equal{#1}{T}}{%
+%              \item[\textbf{Superscripts}]}{}}}}}%
+%    }{% Portuguese
+%    \renewcommand{\nomgroup}[1]{%
+%      \ifthenelse{\equal{#1}{R}}{%
+%        \item[\textbf{Simbolos romanos}]}{%
+%        \ifthenelse{\equal{#1}{G}}{%
+%          \item[\textbf{Simbolos gregos}]}{%
+%          \ifthenelse{\equal{#1}{S}}{%
+%            \item[\textbf{Subscritos}]}{%
+%            \ifthenelse{\equal{#1}{T}}{%
+%              \item[\textbf{Sobrescritos}]}{}}}}}%
+%    }%
 
 
 % 'glossary' package
@@ -334,12 +334,12 @@
 % http://www.ctan.org/tex-archive/macros/latex/contrib/glossary/
 %
 % Glossary (produces *.glo *.ist files)
-\usepackage[number=none]{glossary}
+%\usepackage[number=none]{glossary}
 % (remove blank line between groups)
-\setglossary{gloskip={}}
+%\setglossary{gloskip={}}
 % (redefine glossary style file)
 %\renewcommand{\istfilename}{myGlossaryStyle.ist}
-\makeglossary
+%\makeglossary
 
 
 % 'rotating' package
