@@ -11,7 +11,9 @@
 \chapter{Static Features}
 \label{chapter:static_features}
 
-In the present chapter we go into details about how we built a machine learning model to detect malware based on static features. We start by detailing the model selection and its evaluation, followed by the selected features. We then provide the results of our model and some improvements that were made to the model.
+In the present chapter we go into details about how we built a machine learning model to detect malware based on static features.
+We start by detailing the model selection and its evaluation, followed by the selected features.
+We finish off by providing how our model performed under various scenarios.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Model Selection and Evaluation}
@@ -214,7 +216,8 @@ Since our interest is to measure performance variation over time, we plot in Fig
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
-	\caption[Single layer results for static features in \textit{Past-to-Present}.]{\gls{auroc} for each iteration of the \textit{Past-to-Present} evaluation. Folds order consistent with temporal order (\ie\ fold 0 contains older samples thanfold 1)}
+	\caption[Single layer results for static features in \textit{Past-to-Present}.]{\gls{auroc} for each iteration of the \textit{Past-to-Present} evaluation. Folds order consistent with temporal order (\ie\ fold 0 contains older samples than
+fold 1)}
 	\label{fig:pastpresent}
 \end{figure}
 
@@ -286,9 +289,3 @@ Another important idea that should be stressed is that for cross validation we u
 \medskip
 
 With a better understanding of how the model behaves under different methodologies, we now diverge to how we improved not only the overall results, but also the information provided by the model.
-
-\todo[inline]{Diria talvez começar um novo capitulo, so de improvements, tal como o multilayer e uso de mais features}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Multi Layer Results}
-\label{section:multi_layer_results}
-
