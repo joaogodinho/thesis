@@ -71,15 +71,139 @@ For example, if a given set of names contain the name \textit{trojan} 3 times an
 
 Having these malware classes defined for our multi layer model, we also added the \textit{goodware} class for samples that are not malware.
 Doing so gives us 7 possible classes, 6 of which are malware only.
-It is worth mentioning that if a sample belongs to the \textit{goodware} class, it cannot belong to any other, likewise if it belongs to any malware class, it cannot belong to the \textit{goodware} class.
+It is worth mentioning that if a sample belongs to the \textit{goodware} class, it cannot belong to any other, likewise, if it belongs to any malware class, it cannot belong to the \textit{goodware} class.
+
+By applying this new labeling, we refine our previous datasets $\CC_{strict}$, $\CC_{loose}$ and $\CC_{real}$ as shown in Table \ref{tab:dataset_sizes_new}.
+
+\begin{table}[!htb]
+	\renewcommand{\arraystretch}{1.2} % more space between rows
+	\centering
+	\begin{tabular}{lccc}
+		\toprule
+		Dataset			& $\CC_{real}$ & $\CC_{loose}$ & $\CC_{strict}$	\\
+		\midrule
+		Trojan			& 0 & 0 & 0\\
+		Virus			& 0 & 0 & 0\\
+		Worm			& 0 & 0 & 0\\
+		Spyware			& 0 & 0 & 0\\
+		Ransom			& 0 & 0 & 0\\
+		Other			& 0 & 0 & 0\\
+		\midrule
+		Total Malware	& 0 & 0 & 0\\
+		Total Goodware	& 0 & 0 & 0\\
+		\midrule
+		\midrule
+		Total			& 0 & 0 & 0\\
+		\bottomrule
+	\end{tabular}
+	\caption{New sizes for datasets $\CC_{real}$, $\CC_{loose}$ and $\CC_{strict}$.}
+	\label{tab:dataset_sizes_new}
+\end{table}
 
 In sum, we added a layer of labeling to our dataset, where a sample can either belong to the \textit{goodware} class, or to a set of the other 6 malware classes.
-This concludes our first improvement to our model, what follows are our improvements regarding features.
+This concludes the description of our first improvement to the model, what follows are our improvements regarding features.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Dynamic Features}
 \label{section:improvements_dynamic_features}
 
+Having described our first model improvement, we now proceed to our second enhancement, which takes advantage of the amount of information available in Cuckoo's~\cite{tool:cuckoo} reports.
+
+In the previous chapter, we used static imports as features for our malware detection model.
+Although the results are reasonable, the information which can be retrieved from static imports alone is limited.
+As an example, if a sample is compressed, encrypted or packed, its behavior cannot be inferred from static imports only.
+To overcome these limitations, we resort to more dynamic information provided by Cuckoo.
+
+Given that Cuckoo runs the provided samples inside a virtual machine, it monitors the sample from a dynamic point of view.
+This monitoring includes information like the sequence of library calls and their categories and network and file activity.
+With this in mind, we now detail what dynamic information we extracted from the reports.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Category Calls}
+\label{section:improvements_categories}
+
+The first type of dynamic information we extracted were the number of dynamic category calls.
+When Cuckoo runs and monitors a sample, it registers some low level library calls, which it then assigns to a fixed number of categories.
+
+There are a total of 14 different categories defined by Cuckoo: \textit{anomaly}, \textit{device}, \textit{filesystem}, \textit{hooking}, \textit{misc}, \textit{network}, \textit{process}, \textit{registry}, \textit{services}, \textit{socket}, \textit{synchronization}, \textit{system}, \textit{threading} and \textit{windows}.
+After using Celery~\cite{tool:celery} to extract the number of each category calls for the samples, we obtained a total of 148,036 samples with information regarding category calls.
+
+Figure \ref{fig:boxplot_category_calls} shows a boxplot for the category calls, where one can see the categories \textit{filesystem}, \textit{registry} and \textit{system} are the ones with higher mean, hence more used than the other categories.
+Although not depicted, some outliers for the number of category calls go up to 1,400,000, which do not provide useful information other than the number of category calls is very high.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{Figures/boxplot_category_calls.png}
+	\caption{Category calls boxplot.}
+	\label{fig:boxplot_category_calls}
+\end{figure}
+
+With that in mind, we decide to transform the values into a $[0,1]$ range.
+We do this by using scikit-learn's~\cite{tool:sklearn} \textit{QuantileTransformer} with a normal distribution, which splits the possible values into bins such that the resulting distribution is of type \textit{Gaussian} with a mean of 0.
+This way we have a greater number of bins around the mean, allowing for better discrimination, whereas very large values fall into the same bin.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Library Calls}
+\label{section:improvements_api_unigrams}
+
+Our second type of dynamic information are the number of library calls, which closely relate to the previous feature.
+While \textit{category calls} provide the number of calls for a given category, \textit{library calls} provide the count for each library call, hence being a subset of the previous.
+
+Cuckoo~\cite{tool:cuckoo} registers the number of calls for 163 different functions, ranging from opening and closing files, to opening and closing sockets.
+Again we used Celery~\cite{tool:celery} to extract these numbers, obtaining information from 148,036 samples.
+
+Given we are dealing with a high number of features (163 different library calls), we decided to apply the same variance threshold as in Section \ref{section:feature_selection}, to remove features that do not vary in most samples.
+By choosing a threshold of 80\%, we remove library calls that do not vary in more than 80\% of the samples, effectively reducing the number of library calls to 144.
+With regards to how these features can vary from 0 to $+\infty$, as before, we again apply a quantile transformer with a normal distribution.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Cuckoo Signatures}
+\label{section:improvements_categories}
+
+For our third and last type of dynamic information, we resort to Cuckoo~\cite{tool:cuckoo} custom signatures.
+These signatures are built from certain activities that Cuckoo deems malicious or suspicious.
+For example, if a sample allocates memory and then makes it executable, it might suggest some sort of packing or obfuscation.
+
+Although some signatures are defined by a sequence of library calls, which could also be attained by creating n-grams of our previously defined feature, using the already defined Cuckoo signatures saves training time.
+As an example, creating bi-grams of library calls, given there are 144 unique calls, would yield over 20,000 possible features, hence being unpractical.
+
+To extract these signatures, we use Celery~\cite{tool:celery} and obtain a total of 124,821 samples and 61 different signatures.
+As with our static import features, we use a binary vector for each sample, where each position corresponds to a specific signature. Re-iterating on how we represent this, if a given signature $i$ is present in a sample, its feature vector $x$ will have the value 1 at that position $x_i$. Likewise, if a given signature $j$ is not present in a sample, its feature vector $x$ will have the value 0 at that position $x_j$.
+
+\medskip
+
+Having these new features, we create a new set with all features (static, category and library calls and signatures) $\FF_{dynamic}$.
+We joined these samples $\FF_{dynamic}$ to the labeled samples $\CC_{real}$, obtaining a total of \miss{size} labeled samples with dynamic imports $\DD_{dynamic} = \CC_{real} \cap \FF_{dynamic}$.
+
+% To reduce the number of features into those that are more representative, we apply, as in other features, a variance threshold, removing signatures that do not vary in more than 80\% of the samples.
+% By doing so, we reduce the total number of signatures to 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Improved Model Results}
 \label{section:improvements_results}
+
+In the previous sections we described all our modifications to the original model $\LR$: a two layer approach that splits malware into subclasses and the addition of three dynamic features.
+We now present the results of our new model $\mathcal{E}$, validated using the same methodology as described in \ref{section:evaluation}.
+Specifically we test the model using the baseline cross-validation methodology, followed by our three temporally consistent scenarios: \textit{Past-to-Present}, \textit{Present-to-Past} and \textit{Temporal Window}.
+We test each methodology using the three different scenarios: $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$.
+
+We again use the resources provided by INOV - Inesc Inovação, together with scikit-learn~\cite{tool:sklearn}, Pandas~\cite{tool:pandas} and Jupyter Interactive Notebooks~\cite{tool:jupyter} to train and analyze the data.
+
+\medskip
+
+Starting with \textit{laboratory conditions}, we apply the cross-validation evaluation to model $\mathcal{E}$ with the labeled dataset $\CC_{strict}$ and features $\DD_{dynamic}$, providing scenario $\mathcal{S}_{\strict}$.
+For this scenario, we obtain an \gls{auroc} of \miss{score}, as presented by the red line in Figure \ref{fig:improved_xval}.
+These provide the highest results, provided by factors like a small and reliable dataset, and the use of cross-validation.
+
+Relaxing to more \textit{real-world conditions}, under the form of a less reliable ground truth, we test the datasets $\CC_{loose}$ and $\CC_{real}$ on features $\DD_{dynamic}$.
+As shown in Figure \ref{fig:improved_xval}, the score under \gls{auroc} decreases to \miss{socre} for $\mathcal{S}_{\loose}$ (blue line) and \miss{score} for $\mathcal{S}_{\real}$ (green line).
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
+	\caption{Improved model results with dynamic features in laboratory conditions.}
+	\label{fig:improved_xval}
+\end{figure}
+
+% Adicionar seccao para resultados do multi layer apenas.
+

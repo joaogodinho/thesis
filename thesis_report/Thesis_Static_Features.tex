@@ -147,7 +147,7 @@ With that in mind, we chose to use the static imports as features.
 Static imports are present in the import table, referencing libraries or other executables that are not part of the current binary.
 Their usage is key, as they provide access to all kind of system level operations (\eg\ file manipulation, network access). Given their purpose, our expectation is that a sample's maliciousness can be inferred based on the static imports.
 
-Using Celery~\cite{tool:celery}, a distributed task queue for Python, we optimized the parsing of the available HTML reports, extracting samples that contained information regarding static imports into a new set $\DD_{static}$.
+Using Celery~\cite{tool:celery}, a distributed task queue for Python, we optimized the parsing of the available HTML reports, extracting samples that contained information regarding static imports into a new set $\FF_{static}$.
 We then joined the samples with static imports $\FF_{static}$ to the labeled samples $\CC_{real}$, obtaining a total of 189,352 labeled samples with static imports $\DD_{static} = \CC_{real} \cap \FF_{static}$.
 
 We then vectorized imports by creating a binary vector where each position corresponds to a specific import.
@@ -161,7 +161,7 @@ The variance threshold calculates the variance for each import, removing those t
 In our case, since we are working with a binary vector, each import can be represented as Bernoulli random variable, hence their variance is given by $p(1-p)$.
 With that in mind, we removed any import that did not vary in more than 99\% of samples.
 
-The resulting dataset $\FF_{static}$ got reduced to 187,545 samples, each with a 64 dimensional binary vector.
+The resulting dataset $\DD_{static}$ got reduced to 187,545 samples, each with a 64 dimensional binary vector.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Single Layer Results}
