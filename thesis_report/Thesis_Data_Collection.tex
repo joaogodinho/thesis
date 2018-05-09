@@ -59,6 +59,7 @@ The service went back up in September 2014, after which it stabilized around 20,
 
 Following this initial observation, we measured the percentage of duplicated submissions per month, which vary between 10\% and 20\%, and the percentage of different file types, as shown in Figure \ref{fig:monthly_distributions}.
 The file types distribution is interesting, as it shows that executables (\ie\ compiled binary files) took the great majority of submissions up to the end of 2014, after which documents (\eg\ Word, Excel) and text files (\eg\ HTML, JavaScript) started to increase.
+
 As a side observation, this increase might indicate how users are more suspicious of these type of files, given that it is not uncommon to see malware being distributed in documents (under email attachments) and in websites (as JavaScript scripts) in more recent years.
 
 \begin{figure}[!htb]
@@ -71,7 +72,7 @@ As a side observation, this increase might indicate how users are more suspiciou
 	\label{fig:monthly_distributions}
 \end{figure}
 
-Having a better overall understanding on the available reports, and taking into account the limitations of static analysis in \textcolor{red}{Cuckoo} as mentioned in Section \ref{section:cuckoo}, led us to our first data selection criteria: collect reports from \gls{pe} (\eg\ 32bit executables, DLL's) submissions only.
+Having a better overall understanding on the available reports, and taking into account the limitations of static analysis in Cuckoo~\cite{tool:cuckoo} as mentioned in Section \ref{section:cuckoo}, led us to our first data selection criteria: collect reports from \gls{pe} (\eg\ 32bit executables, DLL's) submissions only.
 This selection reduces the number of available reports to 388,702 (60.48\% of the total) but enables us to work with more static information.
 
 We went on to extract these reports, again using Scrapy, as HTML files and kept them in a gzip compressed format to save disk space.
@@ -82,17 +83,17 @@ previous amount as some errors could have occurred during scraping) occupying a 
 \subsection{VirusTotal Classifications}
 \label{subsection:virustotal_classifications}
 
-As previously mentioned in Section \ref{section:cuckoo}, Malwr aggregates the scan report as provided by VirusTotal (if the sample is already known by VirusTotal), which entails multiple antivirus classifications.
+As previously mentioned in Section \ref{section:cuckoo}, Malwr aggregates the scan report as provided by VirusTotal (if the sample is already known by VirusTotal) in its static analysis, which entails multiple anti-virus classifications.
 Our next analysis takes advantage of this information to better understand how the samples are labeled and how reliable using the VirusTotal report can be to label our dataset.
 
-After counting the number of different antivirus vendors present in at least one submission, we decided to narrow down to the amount of unique vendors by requiring their presence in at least 95\% of the classified reports.
+After counting the number of different anti-virus vendors present in at least one submission, we decided to narrow down to the amount of unique vendors by requiring their presence in at least 95\% of the classified reports.
 Doing so guarantees that vendors did not show occasionally and have a strong presence in all classified samples.
 
 By applying this criteria, we narrowed from 97 unique vendors to a smaller set $\VV$ of 38.
 This led us to a smaller set $\mathcal{C}\subseteq\mathcal{R}$ of classified reports, which totaled 284,880 submissions. With this new set $\mathcal{C}$ we went on to analyze how reliable the vendors classification is.
 
 Reiterating what was already said, defining and classifying malware is not a trivial task.
-The \textit{ground truth} of a sample is hard to obtain, as both antivirus vendors and users disagree on what is malware.
+The \textit{ground truth} of a sample is hard to obtain, as both anti-virus vendors and users disagree on what is malware.
 To come to terms with this obstacle, we make use of the classifications given by our set of vendors $\mathcal{V}$ to define a simple malware/goodware criteria: what is the minimum/maximum threshold of positive malware classifications as to label a sample as malware/goodware.
 
 Although this criteria bases itself on a vote policy, adding robustness to the criteria, it also inherits some of the vendors problems: false positives and false negatives. With this in mind, we now aim to understand vendors' accuracy and how they change their classifications.
@@ -171,7 +172,7 @@ We chose five as the threshold, observing that percentage of samples that decrea
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=\textwidth]{Figures/distribution_clean.png}
-	\caption[Distribution of duplicated samples with $\Pf=0$.]{Distribution of samples that started as goodware and changed in the number of positive classifications between the last and first submission, \ie $\Pl-\Pf$ for samples with $\Pf=0$}
+	\caption[Distribution of duplicated samples with $\Pf=0$.]{Distribution of samples that started as goodware and changed in the number of positive classifications between the last and first submission, \ie\ $\Pl-\Pf$ for samples with $\Pf=0$}
 	\label{fig:distribution_clean}
 \end{figure}
 
@@ -228,7 +229,7 @@ With a better understanding on the vendors' accuracy, followed by metrics that a
 \label{section:data_labeling}
 
 Given we are interested not only in providing a model to detect malware, but also in understanding the impacts of \textit{ground truth} in a detection model, we now go into detail on how we made use of the previously defined top vendors $\VVstar$ in conjunction with the information provided by \gls{nsrl} and VirusShare.com to label the available samples.
-To do so, we take the previously defined scenarios in Figure \ref{fig:dataset_sizes} to define three labeling metrics.
+To do so, we take the previously defined scenarios in Figure \ref{fig:scenarios} to define three labeling metrics.
 
 The first and most real metric we define is $\Mrealv$ that labels a sample $s\in\CC$ as:
 
@@ -285,10 +286,10 @@ Table \ref{tab:dataset_sizes} provides information regarding the size and number
 		\toprule
 		Dataset			& $\CC_{real}$ & $\CC_{loose}$ & $\CC_{strict}$	\\
 		\midrule
-		Malware			& 0 & 0 & 0\\
-		Goodware		& 0 & 0 & 0\\
+		Malware			& 98,582 & 45,306 & 24,658\\
+		Goodware		& 56,475 & 1,989 & 1,989\\
 		\midrule
-		Total			& 0 & 0 & 0\\
+		Total			& 155,057 & 47,295 & 26,647\\
 		\bottomrule
 	\end{tabular}
 	\caption{Sizes for datasets $\CC_{real}$, $\CC_{loose}$ and $\CC_{strict}$.}

@@ -278,12 +278,12 @@ These results come to reaffirm our argument that we can reduce the size of the t
 	\centering
 	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
 	\caption[Single layer results for static features in \textit{Temporal Window}.]{\gls{auroc} for our three scenarios, under the \textit{Temporal Window} methodology.}
-	\label{fig:slidingwindow}
+	\label{fig:slidingwindow3}
 \end{figure}
 
 Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from \miss{0.93 to 0.87 for $\mathcal{S}_{\strict}$, from 0.92 to 0.86 for $\mathcal{S}_{\loose}$ and from 0.79 to 0.76 for $\mathcal{S}_{\real}$.}
 We should highlight that the results that use temporal-consistency should better reflect the reality than standard cross-validation, since we are requiring temporal consistency.
-Another important idea that should be stressed is that for cross validation we used a fairly reasonable amount of data for training purposes, whereas in this last case we used a restricted amount of data. This might be a relevant issue in a few year's time. The results obtained are summarized in Table \ref{tab:singlelayer_results}
+Another important idea that should be stressed is that for cross validation we used a fairly reasonable amount of data for training purposes, whereas in this last case we used a restricted amount of data. This might be a relevant issue in a few year's time. The results obtained are summarized in Table \ref{tab:multilayer_results}.
 
 \begin{table}[!htb]
 	\renewcommand{\arraystretch}{1.2} % more space between rows
@@ -297,5 +297,5 @@ Another important idea that should be stressed is that for cross validation we u
 		\hline
 	\end{tabular}
 	\caption{Single layer results summary.}
-	\label{tab:singlelayer_results}
+	\label{tab:multilayer_results}
 \end{table}
