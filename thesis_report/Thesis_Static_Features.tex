@@ -148,20 +148,20 @@ Static imports are present in the import table, referencing libraries or other e
 Their usage is key, as they provide access to all kind of system level operations (\eg\ file manipulation, network access). Given their purpose, our expectation is that a sample's maliciousness can be inferred based on the static imports.
 
 Using Celery~\cite{tool:celery}, a distributed task queue for Python, we optimized the parsing of the available HTML reports, extracting samples that contained information regarding static imports into a new set $\FF_{static}$.
-We then joined the samples with static imports $\FF_{static}$ to the labeled samples $\CC_{real}$, obtaining a total of 189,352 labeled samples with static imports $\DD_{static} = \CC_{real} \cap \FF_{static}$.
+We then joined the samples with static imports $\FF_{static}$ to the labeled samples $\CC_{real}$, obtaining a total of 155,057 labeled samples with static imports $\DD_{static} = \CC_{real} \cap \FF_{static}$.
 
 We then vectorized imports by creating a binary vector where each position corresponds to a specific import.
 If a given import $i$ is present in a sample, its feature vector $x$ will have the value 1 at that position $x_i$.
 Likewise, if a given import $j$ is not present in a sample, its feature vector $x$ will have the value 0 at that position $x_j$.
 
-Due to the amount of samples and variety of imports, each sample got a vector $x$ of 6,647 dimensions (\ie\ there are 6,647 different imports).
+Due to the amount of samples and variety of imports, each sample got a vector $x$ of 7,280 dimensions (\ie\ there are 7,280 different imports).
 To reduce this number, and to remove any noise due to incorrect parsing of static imports by Cuckoo, we applied a variance threshold.
 
 The variance threshold calculates the variance for each import, removing those that are below a given threshold.
 In our case, since we are working with a binary vector, each import can be represented as Bernoulli random variable, hence their variance is given by $p(1-p)$.
 With that in mind, we removed any import that did not vary in more than 99\% of samples.
 
-The resulting dataset $\DD_{static}$ got reduced to 187,545 samples, each with a 64 dimensional binary vector.
+The resulting dataset $\DD_{static}$ got reduced to 153,374 samples, each with a 64 dimensional binary vector.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Single Layer Results}
@@ -181,14 +181,14 @@ We define this our single layer model $\LR$ results, as we are directly taking a
 We start with what we define as \textit{laboratory conditions}, ideal conditions for the problem of malware detection.
 These conditions are met when we take the labeled dataset $\CC_{strict}$ and features $\DD_{static}$, providing scenario $\mathcal{S}_{\strict}$.
 
-Using cross-validation, our $\LR$ scored with an \gls{auroc} of \miss{score}, as shown by the red line in Figure \ref{fig:xval_results}.
+Using cross-validation, our $\LR$ scored with an \gls{auroc} of 91\%, as shown by the red curve in Figure \ref{fig:xval_results}.
 We argue that such high values are easily attained from factors like a small and reliable dataset, and the use of cross-validation, which mixes samples and ignores possible dependencies on malware samples.
 
-When we relax our ideal conditions to more \textit{real-world conditions}, by testing the labeled dataset $\CC_{loose}$ and $\CC_{real}$ on features $\DD_{static}$ for scenarios $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, respectively, the score under \gls{auroc} decreases to \miss{score} for $\mathcal{S}_{loose}$ (blue line in Figure \ref{fig:xval_results}) and \miss{score} for $\mathcal{S}_{real}$ (green line in Figure \ref{fig:xval_results}).
+When we relax our ideal conditions to more \textit{real-world conditions}, by testing the labeled dataset $\CC_{loose}$ and $\CC_{real}$ on features $\DD_{static}$ for scenarios $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, respectively, the score under \gls{auroc} decreases to 90\% for $\mathcal{S}_{loose}$ (blue curve in Figure \ref{fig:xval_results}) and 75\% for $\mathcal{S}_{real}$ (green curve in Figure \ref{fig:xval_results}).
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
+	\includegraphics[width=0.8\textwidth]{Figures/xval_results.png}
 	\caption[Single layer results for static features in laboratory conditions.]{Single layer results for static features in laboratory conditions.}
 	\label{fig:xval_results}
 \end{figure}
@@ -215,22 +215,22 @@ Since our interest is to measure performance variation over time, we plot in Fig
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
+	\includegraphics[width=0.8\textwidth]{Figures/pastpresent.png}
 	\caption[Single layer results for static features in \textit{Past-to-Present}.]{\gls{auroc} for each iteration of the \textit{Past-to-Present} evaluation. Folds order consistent with temporal order (\ie\ fold 0 contains older samples than
 fold 1)}
 	\label{fig:pastpresent}
 \end{figure}
 
-When directly comparing the average \gls{auroc} for cross-validation and our \textit{Past-to-Present} validation, we note a decrease from \miss{score} to \miss{score} for $\mathcal{S}_{\strict}$, \miss{score} to \miss{score} for $\mathcal{S}_{\loose}$, and \miss{score} to \miss{score} for $\mathcal{S}_{\real}$.
-This decrease is intuitive to the methodology, as we are forcing temporal consistency between samples.
+When directly comparing the average \gls{auroc} for cross-validation and our \textit{Past-to-Present} validation, we note that for both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ the \gls{auroc} remains identical, while for $\mathcal{S}_{\real}$ the score decreases from 0.75\% to 0.68\%.
 
-When looking at results from $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$, we see they closely relate.
-This relation has already been noticed on previous cross-validation results, as their metrics $\Mstrictv$ and $\Mloosev$ are not very different.
-As for $\mathcal{S}_{\real}$, the degradation is higher, as the reliability of the metric $\Mrealv$ goes down.
+For both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ we note only a slight increase as new folds are added.
+They still relate, as we have previously noted for cross-validation, arguably given their metrics $\Mstrictv$ and $\Mloosev$ are not very different.
+The small variation to the cross-validation methodology can be justified by using small dataset size for both cases.
+
+As for $\mathcal{S}_{\real}$ we note higher variation and lower overall score, as the reliability of the metric $\Mrealv$ goes down.
+This is expected, not only because we are enforcing temporal consistency between samples, but as new folds are added, the training gets bigger, while the test remains the same.
 
 Our main observation for this validation methodology is that there is a slight tendency for \gls{auroc} to increase, as we move forward in time, close to the validation set.
-
-Both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ behave similarly under our \textit{Past-to-Present} evaluation, decreasing the \gls{auroc} until fold \miss{fold}, after which both increase, stabilizing around \miss{score} \gls{auroc} by the last \miss{two} folds. As for $\mathcal{S}_{\real}$, its \gls{auroc} does not vary significantly, although a subtle increase over time is noticeable.
 
 \medskip
 
@@ -240,46 +240,48 @@ This methodology starts by fixing the validation set to the most recent samples,
 At each iteration, older samples are added to the training set and validated on the fixed, most recent, samples.
 
 By applying this methodology to the three scenarios, $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$, we plot Figure \ref{fig:presentpast}, where the X axis increases as older samples are added to the training set (\ie\ fold 0 contains newer samples than fold 1), hence measuring the performance variance over time.
-Similarly to the previous observation, the average \gls{auroc} suffers a decrease when compared to cross-validation. For $\mathcal{S}_{\strict}$ we note a change from \miss{score} to \miss{score}, for $\mathcal{S}_{\loose}$ the decrease is from \miss{score} to \miss{score}, and for $\mathcal{S}_{\real}$ \miss{score} to \miss{score}.
+Similarly to the previous observation, the average \gls{auroc} remains identical when compared to cross-validation for both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$.
+As for $\mathcal{S}_{\real}$, we note a decrease in score from 75\% to 69\%.
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
+	\includegraphics[width=0.8\textwidth]{Figures/presentpast.png}
 	\caption[Single layer results for static features in \textit{Present-to-Past}.]{\gls{auroc} for each iteration of the \textit{Present-to-Past} evaluation. Folds order is the inverse of temporal order (\ie\ fold 0 contains newer samples than fold 1)}
 	\label{fig:presentpast}
 \end{figure}
 
 The comparison between scenarios is identical to what was observed in cross-validation and \textit{Past-to-Present}: scenarios $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ display very similar results, with $\mathcal{S}_{\real}$ dropping behind due to its less reliable labeling metric.
+It is noticeable that using the entire dataset does not bring much improvement to the final results. In fact, for $\mathcal{S}_{\real}$ the score even drops after fold $\#2$.
 
 With these results, our original observation that samples closer to the validation set benefit the model becomes more convincing. In fact, we argue that there should be an ideal number of necessary training folds, temporally consistent with the validation fold (\ie\ any fold from training predates validation), needed to maximize the overall score.
 
 \medskip
 
 Finally, we analyze how does such reduced training set behaves in our scenarios; for this purpose, we define a sliding window that moves forward in time through each scenario for training and validation.
-We propose a reduction on the training size to \miss{$w=3$} folds predating the validation fold. We choose \miss{$w = 3$}, since we have seen that the scores either do not improve (for $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$) or actually go down (for $\mathcal{S}_{\real}$) with higher folds.
-In summary, we have selected \miss{30\%} of each dataset for training purposes and the next \miss{10\%} for validation \miss{(3 training folds, 1 validation fold)}, and then started moving the window forward in time (1 fold at a time) to obtain the following results (Figure~\ref{fig:slidingwindow}): for  $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$, we obtain \gls{auroc} values of \miss{score, score and score}, respectively. 
-These results come to reaffirm our argument that we can reduce the size of the training set, without losing any significant score.
+We propose a reduction on the training size to $w=3$ folds predating the validation fold. We choose $w=3$, since we have seen that the scores either do not improve (for $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$) or actually go down (for $\mathcal{S}_{\real}$) with higher folds.
+In summary, we have selected 30\% of each dataset for training purposes and the next 10\% for validation (3 training folds, 1 validation fold), and then started moving the window forward in time (1 fold at a time) to obtain the following results (Figure~\ref{fig:slidingwindow}): for  $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$, we obtain \gls{auroc} values of 89\%, 88\% and 73\%, respectively. 
+These results come to reaffirm our argument that we can reduce the size of the training set, without losing any significant score (2\% for each scenario).
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
+	\includegraphics[width=0.8\textwidth]{Figures/slidingwindow.png}
 	\caption[Single layer results for static features in \textit{Temporal Window}.]{\gls{auroc} for our three scenarios, under the \textit{Temporal Window} methodology.}
 	\label{fig:slidingwindow}
 \end{figure}
 
-Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from \miss{0.93 to 0.87 for $\mathcal{S}_{\strict}$, from 0.92 to 0.86 for $\mathcal{S}_{\loose}$ and from 0.79 to 0.76 for $\mathcal{S}_{\real}$.}
-We should highlight that the results that use temporal-consistency should better reflect the reality than standard cross-validation, since we are requiring temporal consistency.
-Another important idea that should be stressed is that for cross validation we used a fairly reasonable amount of data for training purposes, whereas in this last case we used a restricted amount of data. This might be a relevant issue in a few year's time. The results obtained are summarized in Table \ref{tab:singlelayer_results}
+Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from 91\% to 89\% for $\mathcal{S}_{\strict}$, from 90\% to 88\% for $\mathcal{S}_{\loose}$ and from 75\% to 73\% for $\mathcal{S}_{\real}$.
+We should highlight that the results that use temporal consistency should better reflect the reality than standard cross-validation, since we are requiring temporally ordered samples.
+Another important idea that should be stressed is that for cross validation we used a fairly reasonable amount of data for training purposes, whereas in this last case we used a restricted amount of data. This might be a relevant issue in a few year's time. The results obtained are summarized in Table \ref{tab:singlelayer_results}.
 
 \begin{table}[!htb]
 	\renewcommand{\arraystretch}{1.2} % more space between rows
 	\centering
 	\begin{tabular}{ccccc}
 	\hline AUROC & $\DS_\strict$ & $\DS_\loose$ & $\DS_\real$ & Train/Test \%\\
-	\hline Cross-Validation & 0.93 & 0.92 & 0.79 & 90 / 10\\
-	\hline Past-to-Present & 0.88 & 0.87 & 0.71 & 10 to 90 / 10\\
-	\hline Present-to-Past & 0.90 & 0.86 & 0.72 & 10 to 90 / 10\\
-	\hline Sliding-Window & 0.87 & 0.86 & 0.76 & 30 / 10\\
+	\hline Cross-Validation & 0.91 & 0.90 & 0.75 & 90 / 10\\
+	\hline Past-to-Present & 0.90 & 0.90 & 0.67 & 10 to 90 / 10\\
+	\hline Present-to-Past & 0.90 & 0.90 & 0.69 & 10 to 90 / 10\\
+	\hline Sliding-Window & 0.89 & 0.88 & 0.73 & 30 / 10\\
 	\hline
 \end{tabular}
 \caption{Single layer results summary.}
