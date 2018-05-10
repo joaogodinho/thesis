@@ -73,7 +73,8 @@ Having these malware classes defined for our multi layer model, we also added th
 Doing so gives us 7 possible classes, 6 of which are malware only.
 It is worth mentioning that if a sample belongs to the \textit{goodware} class, it cannot belong to any other, likewise, if it belongs to any malware class, it cannot belong to the \textit{goodware} class.
 
-By applying this new labeling, we refine our previous datasets $\CC_{strict}$, $\CC_{loose}$ and $\CC_{real}$ as shown in Table \ref{tab:dataset_sizes_new}.
+The following Table \ref{tab:dataset_sizes_new} discriminates the amount of each malware class.
+Note that the classes are not exclusive, as such the represented numbers show how many samples, out of each dataset $\CC_{strict}$, $\CC_{loose}$ and $\CC_{real}$, are classified by at least one vendor as belonging to any of the defined classes.
 
 \begin{table}[!htb]
 	\renewcommand{\arraystretch}{1.2} % more space between rows
@@ -82,23 +83,22 @@ By applying this new labeling, we refine our previous datasets $\CC_{strict}$, $
 		\toprule
 		Dataset			& $\CC_{real}$ & $\CC_{loose}$ & $\CC_{strict}$	\\
 		\midrule
-		Trojan			& 0 & 0 & 0\\
-		Virus			& 0 & 0 & 0\\
-		Worm			& 0 & 0 & 0\\
-		Spyware			& 0 & 0 & 0\\
-		Ransom			& 0 & 0 & 0\\
-		Other			& 0 & 0 & 0\\
-		\midrule
-		Total Malware	& 0 & 0 & 0\\
-		Total Goodware	& 0 & 0 & 0\\
-		\midrule
-		\midrule
-		Total			& 0 & 0 & 0\\
+		Trojan			& 97,054 & 44,329 & 24,176\\
+		Other			& 49,443 & 24,126 & 14,750\\
+		Worm			& 24,554 & 14,837 & 9,381\\
+		Virus			& 21,055 & 12,531 & 6,899\\
+		Spyware			& 20,724 & 10,172 & 5,955\\
+		Ransom			& 7,761 & 1,924 & 1,160\\
 		\bottomrule
 	\end{tabular}
-	\caption{New sizes for datasets $\CC_{real}$, $\CC_{loose}$ and $\CC_{strict}$.}
+	\caption{Samples belonging to each of the 6 malware classes for $\CC_{real}$, $\CC_{loose}$ and $\CC_{strict}$.}
 	\label{tab:dataset_sizes_new}
 \end{table}
+
+One can see that the \textit{trojan} class is present in almost all samples, whereas \textit{ransom} is the least common class.
+More detailed statistics regarding each dataset is presented in Appendix \ref{chapter:appendixClasses}, containing information like the average weight for each class and the minimum and maximum values.
+
+\medskip
 
 In sum, we added a layer of labeling to our dataset, where a sample can either belong to the \textit{goodware} class, or to a set of the other 6 malware classes.
 This concludes the description of our first improvement to the model, what follows are our improvements regarding features.
@@ -138,7 +138,7 @@ Although not depicted, some outliers for the number of category calls go up to 1
 	\label{fig:boxplot_category_calls}
 \end{figure}
 
-With that in mind, we decide to transform the values into a $[0,1]$ range.
+With that in mind, we decide to transform the values to follow a normal distribution.
 We do this by using scikit-learn's~\cite{tool:sklearn} \textit{QuantileTransformer} with a normal distribution, which splits the possible values into bins such that the resulting distribution is of type \textit{Gaussian} with a mean of 0.
 This way we have a greater number of bins around the mean, allowing for better discrimination, whereas very large values fall into the same bin.
 
@@ -160,23 +160,38 @@ With regards to how these features can vary from 0 to $+\infty$, as before, we a
 \subsection{Cuckoo Signatures}
 \label{section:improvements_categories}
 
-For our third and last type of dynamic information, we resort to Cuckoo~\cite{tool:cuckoo} custom signatures.
+For our third and last type of dynamic information, we resort to Cuckoo's~\cite{tool:cuckoo} custom signatures.
 These signatures are built from certain activities that Cuckoo deems malicious or suspicious.
 For example, if a sample allocates memory and then makes it executable, it might suggest some sort of packing or obfuscation.
 
-Although some signatures are defined by a sequence of library calls, which could also be attained by creating n-grams of our previously defined feature, using the already defined Cuckoo signatures saves training time.
-As an example, creating bi-grams of library calls, given there are 144 unique calls, would yield over 20,000 possible features, hence being unpractical.
+Although some signatures are defined by a sequence of library calls, which could also be attained by creating \textit{n-grams} of our previously defined feature, using the already defined Cuckoo signatures saves training time.
+As an example, creating bi-grams of library calls, given there are 144 unique calls, would yield over 20,000 possible features, which becomes highly unpractical when considering a higher degree of n-grams.
 
 To extract these signatures, we use Celery~\cite{tool:celery} and obtain a total of 124,821 samples and 61 different signatures.
 As with our static import features, we use a binary vector for each sample, where each position corresponds to a specific signature. Re-iterating on how we represent this, if a given signature $i$ is present in a sample, its feature vector $x$ will have the value 1 at that position $x_i$. Likewise, if a given signature $j$ is not present in a sample, its feature vector $x$ will have the value 0 at that position $x_j$.
 
 \medskip
 
-Having these new features, we create a new set with all features (static, category and library calls and signatures) $\FF_{dynamic}$.
-We joined these samples $\FF_{dynamic}$ to the labeled samples $\CC_{real}$, obtaining a total of \miss{size} labeled samples with dynamic imports $\DD_{dynamic} = \CC_{real} \cap \FF_{dynamic}$.
+We joined these features $\FF_{dynamic}$ to the labeled samples $\CC_{real}$, obtaining a total of 122,633 labeled samples with the new features $\DD_{dynamic} = \CC_{real} \cap \FF_{dynamic}$.
 
-% To reduce the number of features into those that are more representative, we apply, as in other features, a variance threshold, removing signatures that do not vary in more than 80\% of the samples.
-% By doing so, we reduce the total number of signatures to 
+Given there is a lower amount of available samples, we provide in Table \ref{tab:dataset_sizes_improved} the new sizes for $\CC_{real}$, $\CC_{loose}$ and $\CC_{strict}$, which take into account the new features $\FF_{dynamic}$.
+
+\begin{table}[!htb]
+	\renewcommand{\arraystretch}{1.2} % more space between rows
+	\centering
+	\begin{tabular}{lccc}
+		\toprule
+		Dataset			& $\CC_{real}$ & $\CC_{loose}$ & $\CC_{strict}$	\\
+		\midrule
+		Malware			& 94,248 & 42,911 & 23,437\\
+		Goodware		& 28,385 & 1,741 & 1,741\\
+		\midrule
+		Total			& 122,633 & 44,652 & 25,178\\
+		\bottomrule
+	\end{tabular}
+	\caption{New sizes for datasets $\CC_{real}$, $\CC_{loose}$ and $\CC_{strict}$.}
+	\label{tab:dataset_sizes_improved}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Improved Model Results}
@@ -184,6 +199,7 @@ We joined these samples $\FF_{dynamic}$ to the labeled samples $\CC_{real}$, obt
 
 In the previous sections we described all our modifications to the original model $\LR$: a two layer approach that splits malware into subclasses and the addition of three dynamic features.
 We now present the results of our new model $\mathcal{E}$, validated using the same methodology as described in \ref{section:evaluation}.
+
 Specifically we test the model using the baseline cross-validation methodology, followed by our three temporally consistent scenarios: \textit{Past-to-Present}, \textit{Present-to-Past} and \textit{Temporal Window}.
 We test each methodology using the three different scenarios: $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$.
 
@@ -192,110 +208,110 @@ We again use the resources provided by INOV - Inesc Inovação, together with sc
 \medskip
 
 Starting with \textit{laboratory conditions}, we apply the cross-validation evaluation to model $\mathcal{E}$ with the labeled dataset $\CC_{strict}$ and features $\DD_{dynamic}$, providing scenario $\mathcal{S}_{\strict}$.
-For this scenario, we obtain an \gls{auroc} of \miss{score}, as presented by the red line in Figure \ref{fig:improved_xval}.
+For this scenario, we obtain an \gls{auroc} of 98\%, as presented by the red curve in Figure \ref{fig:improved_xval}.
 These provide the highest results, provided by factors like a small and reliable dataset, more features and the use of cross-validation.
 
 Relaxing to more \textit{real-world conditions}, under the form of a less reliable ground truth, we test the datasets $\CC_{loose}$ and $\CC_{real}$ on features $\DD_{dynamic}$.
-As shown in Figure \ref{fig:improved_xval}, the score under \gls{auroc} decreases to \miss{socre} for $\mathcal{S}_{\loose}$ (blue line) and \miss{score} for $\mathcal{S}_{\real}$ (green line).
+As shown in Figure \ref{fig:improved_xval}, the score under \gls{auroc} is 98\% for $\mathcal{S}_{\loose}$ (blue curve) and 95\% for $\mathcal{S}_{\real}$ (green curve).
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
-	\caption{Improved model results with dynamic features in laboratory conditions.}
+	\includegraphics[width=0.8\textwidth]{Figures/xval_improved.png}
+	\caption{Multi layer results for dynamic features in laboratory conditions.}
 	\label{fig:improved_xval}
 \end{figure}
 
 % Adicionar seccao para resultados do multi layer apenas.
 
-As with previous results, one notes that from $\mathcal{S}_{\strict}$ to $\mathcal{S}_{\loose}$ the results are not highly affected, when the change between the scenarios is merely in the number of malware samples.
+As with previous results, one notes that from $\mathcal{S}_{\strict}$ to $\mathcal{S}_{\loose}$ the results are affected at all, when the change between the scenarios is merely in the number of malware samples.
+Between $\mathcal{S}_{\loose}$ to $\mathcal{S}_{\real}$ we again note the already seen pattern, the score is lowest when using the most realistic dataset.
 
-Between $\mathcal{S}_{\loose}$ to $\mathcal{S}_{\real}$ we again note the already seen pattern, the lowest score when using the most realistic dataset.
+The comparison between scenarios does not yield any new information from what was seen in Section \ref{section:single_layer_results}.
+What is more interesting is that the absolute values are boosted in all scenarios, which show indeed that using the multi-layer approach with dynamic features improve the model's results.
 
-\todo[inline]{}
-
-When looking at the changes from $\mathcal{S}_{\loose}$ to $\mathcal{S}_{\real}$, not only the amount of malware labeled samples increase, but also the number of goodware labeled samples, both by a significant amount. 
-The way this impacts the results is pretty significant, as we observe a high decrease in the \gls{auroc} for both models.
-The metric $\Mrealv$ that labels malware and goodware for this scenario $\mathcal{S}_{\real}$ disregards the cross-check from outside repositories, which in turn degrade the reliability significantly, as well as increase the dataset size notably.
-We attribute the results' degradation mainly to the unreliability of goodware labeling, not only because we have previously seen that increase in malware does not significantly impact results (from $\mathcal{S}_{\strict}$ to $\mathcal{S}_{\loose}$), but also due to the tendency for false negatives in vendors (Figure \ref{fig:dups_frequency}), which in turn lead us to incorrectly label goodware for the samples in $\CC_{real}$.
-
-The results we described show how relaxing \textit{laboratory conditions} to more \textit{real-world conditions} degrade the model's performance.
-We now focus on using our previously defined temporal based methodologies to further converge into a real-world scenario.
+Having applied the same cross-validation to our modified model, obtaining interesting results, we now go over to test how our temporal based methodologies are affected.
 
 \medskip
 
-We start by applying our \textit{Past-to-Present} validation to the three scenarios, $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$.
-As previously defined, this validation starts with an older set of training samples and iteratively adds newer samples, validating each iteration on a fixed set of the most recent samples.
-Since our interest is to measure performance variation over time, we plot in Figure~\ref{fig:pastpresent} the \gls{auroc} at every iteration (\ie, fold), for each of our three scenarios.
+We start again with \textit{Past-to-Present} validation to each scenario $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$.
+Figure \ref{fig:pastpresent_modified} shows the \gls{auroc} at every iteration (\ie\ fold) for each scenario: 96\% for $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$, and 92\% $\mathcal{S}_{\real}$.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
-	\caption[Single layer results for static features in \textit{Past-to-Present}.]{\gls{auroc} for each iteration of the \textit{Past-to-Present} evaluation. Folds order consistent with temporal order (\ie\ fold 0 contains older samples than
+	\includegraphics[width=0.8\textwidth]{Figures/pastpresent_improved.png}
+	\caption[Multi layer results for dynamic features in \textit{Past-to-Present}.]{\gls{auroc} for each iteration of the \textit{Past-to-Present} evaluation. Folds order consistent with temporal order (\ie\ fold 0 contains older samples than
 		fold 1)}
-	\label{fig:pastpresent}
+	\label{fig:pastpresent_modified}
 \end{figure}
 
-When directly comparing the average \gls{auroc} for cross-validation and our \textit{Past-to-Present} validation, we note a decrease from \miss{score} to \miss{score} for $\mathcal{S}_{\strict}$, \miss{score} to \miss{score} for $\mathcal{S}_{\loose}$, and \miss{score} to \miss{score} for $\mathcal{S}_{\real}$.
-This decrease is intuitive to the methodology, as we are forcing temporal consistency between samples.
+When comparing the average \gls{auroc} between cross-validation and \textit{Past-to-Present} validation, we note that both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ decrease 2\%, while $\mathcal{S}_{\real}$ decreases 3\%.
+This decrease is not a surprise, given the temporal consistency enforcement between samples.
 
-When looking at results from $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$, we see they closely relate.
-This relation has already been noticed on previous cross-validation results, as their metrics $\Mstrictv$ and $\Mloosev$ are not very different.
-As for $\mathcal{S}_{\real}$, the degradation is higher, as the reliability of the metric $\Mrealv$ goes down.
-
-Our main observation for this validation methodology is that there is a slight tendency for \gls{auroc} to increase, as we move forward in time, close to the validation set.
-
-Both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ behave similarly under our \textit{Past-to-Present} evaluation, decreasing the \gls{auroc} until fold \miss{fold}, after which both increase, stabilizing around \miss{score} \gls{auroc} by the last \miss{two} folds. As for $\mathcal{S}_{\real}$, its \gls{auroc} does not vary significantly, although a subtle increase over time is noticeable.
+The results are consistent with was previously seen in Section \ref{section:single_layer_results}, with the added factor that the absolute values are higher, and the tendency to increase is more present as we move forward in time, close to the validation set.
 
 \medskip
 
-Our next result, which uses our \textit{Present-to-Past} validation methodology will further help analyze the aforementioned detail.
-The \textit{Present-to-Past} validation enhances the previous results under real-world conditions.
-This methodology starts by fixing the validation set to the most recent samples, but with the training set starting at the temporally closest samples to validation.
-At each iteration, older samples are added to the training set and validated on the fixed, most recent, samples.
-
-By applying this methodology to the three scenarios, $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$, we plot Figure \ref{fig:presentpast}, where the X axis increases as older samples are added to the training set (\ie\ fold 0 contains newer samples than fold 1), hence measuring the performance variance over time.
-Similarly to the previous observation, the average \gls{auroc} suffers a decrease when compared to cross-validation. For $\mathcal{S}_{\strict}$ we note a change from \miss{score} to \miss{score}, for $\mathcal{S}_{\loose}$ the decrease is from \miss{score} to \miss{score}, and for $\mathcal{S}_{\real}$ \miss{score} to \miss{score}.
+Following the previous evaluation order, we now present the results using our \textit{Present-to-Past} validation methodology.
+In Figure \ref{fig:presentpast_improved} we present the \gls{auroc} for each iteration, where higher folds represent older samples. Here we see values of 97\% for $\mathcal{S}_{\strict}$, 98\% for $\mathcal{S}_{\loose}$ and 96\% $\mathcal{S}_{\real}$.
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
-	\caption[Single layer results for static features in \textit{Present-to-Past}.]{\gls{auroc} for each iteration of the \textit{Present-to-Past} evaluation. Folds order is the inverse of temporal order (\ie\ fold 0 contains newer samples than fold 1)}
-	\label{fig:presentpast}
+	\includegraphics[width=0.8\textwidth]{Figures/presentpast_improved.png}
+	\caption[Multi layer results for dynamic features in \textit{Present-to-Past}.]{\gls{auroc} for each iteration of the \textit{Present-to-Past} evaluation. Folds order is the inverse of temporal order (\ie\ fold 0 contains newer samples than fold 1)}
+	\label{fig:presentpast_improved}
 \end{figure}
 
-The comparison between scenarios is identical to what was observed in cross-validation and \textit{Past-to-Present}: scenarios $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ display very similar results, with $\mathcal{S}_{\real}$ dropping behind due to its less reliable labeling metric.
+When comparing to cross-validation, we note $\mathcal{S}_{\strict}$ is affected as expected, whereas $\mathcal{S}_{\loose}$ is not.
+The fact that the datasets vary in size and so the amount of goodware and malware used for testing in each may vary, can justify how the $\mathcal{S}_{\loose}$ is not affected, whereas $\mathcal{S}_{\strict}$ is.
 
-With these results, our original observation that samples closer to the validation set benefit the model becomes more convincing. In fact, we argue that there should be an ideal number of necessary training folds, temporally consistent with the validation fold (\ie\ any fold from training predates validation), needed to maximize the overall score.
+$\mathcal{S}_{\real}$ seems to have a higher value than in cross-validation, but it is rounded, which slightly inflates the value.
+In practice both cross-validation and \textit{Present-to-Past} are identical for $\mathcal{S}_{\real}$.
+
+In these results, the noticeable increase in the first 3 folds (0, 1 and 2) for $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ goes even more in favor with our argument that samples closer to the validation set benefit the model.
+More so as the \gls{auroc} stabilizes from those folds on.
+This effect is not as accentuated for $\mathcal{S}_{\real}$, although using more and older folds do not provide significantly better results.
 
 \medskip
 
-Finally, we analyze how does such reduced training set behaves in our scenarios; for this purpose, we define a sliding window that moves forward in time through each scenario for training and validation.
-We propose a reduction on the training size to \miss{$w=3$} folds predating the validation fold. We choose \miss{$w = 3$}, since we have seen that the scores either do not improve (for $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$) or actually go down (for $\mathcal{S}_{\real}$) with higher folds.
-In summary, we have selected \miss{30\%} of each dataset for training purposes and the next \miss{10\%} for validation \miss{(3 training folds, 1 validation fold)}, and then started moving the window forward in time (1 fold at a time) to obtain the following results (Figure~\ref{fig:slidingwindow}): for  $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$, we obtain \gls{auroc} values of \miss{score, score and score}, respectively. 
-These results come to reaffirm our argument that we can reduce the size of the training set, without losing any significant score.
+Finally, we retest how a reduced training set behaves in our scenarios by using our \textit{Temporal Window} methodology.
+As previously mentioned, the first 3 folds seem to provide enough information to obtain good results, hence we apply the same sliding window size of $w=3$ as in Section \ref{section:single_layer_results}.
+In summary, we selected 30\% of each dataset for training and 10\% for validation.
+Starting at the oldest fold, we apply this window and slide it by one fold at each iteration.
+Figure \ref{fig:slidingwindow_modified} shows how all our scenarios $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$ score the same \gls{auroc} of 94\%, although with different curves.
+
+For $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ the score is equally and negatively affected by 4\%.
+The jagged curve on both scenarios indicate that slight changes on the \gls{fpr} threshold have significant impact on the \gls{tpr}, this may be caused by the smaller dataset size, which in turn creates uneven folds for malware and goodware.
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.8\textwidth]{Figures/dia_slidingwindow.png}
-	\caption[Single layer results for static features in \textit{Temporal Window}.]{\gls{auroc} for our three scenarios, under the \textit{Temporal Window} methodology.}
-	\label{fig:slidingwindow3}
+	\includegraphics[width=0.8\textwidth]{Figures/slidingwindow_improved.png}
+	\caption[Multi layer results for dynamic features in \textit{Temporal Window}.]{\gls{auroc} for our three scenarios, under the \textit{Temporal Window} methodology.}
+	\label{fig:slidingwindow_modified}
 \end{figure}
 
-Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from \miss{0.93 to 0.87 for $\mathcal{S}_{\strict}$, from 0.92 to 0.86 for $\mathcal{S}_{\loose}$ and from 0.79 to 0.76 for $\mathcal{S}_{\real}$.}
-We should highlight that the results that use temporal-consistency should better reflect the reality than standard cross-validation, since we are requiring temporal consistency.
-Another important idea that should be stressed is that for cross validation we used a fairly reasonable amount of data for training purposes, whereas in this last case we used a restricted amount of data. This might be a relevant issue in a few year's time. The results obtained are summarized in Table \ref{tab:multilayer_results}.
+For $\mathcal{S}_{\real}$, the fact that it only loses 1\% when compared to cross-validation shows that indeed our argument about reducing the training set size is sustained.
+Its curve is much smoother when compared to the previous scenarios, as the dataset is bigger and more even.
+
+\medskip
+
+As a closing remark, we reaffirm on how it is possible to yield reasonable results when considering temporal consistent samples, specifically in this improved model, which not only uses more features, but has the ability to provide more information regarding a malware sample, as it can discriminate malware classes due to its multi layer design.
+The improved layer results are summarized in Table \ref{tab:multilayer_results}.
 
 \begin{table}[!htb]
 	\renewcommand{\arraystretch}{1.2} % more space between rows
 	\centering
 	\begin{tabular}{ccccc}
-		\hline AUROC & $\DS_\strict$ & $\DS_\loose$ & $\DS_\real$ & Train/Test \%\\
-		\hline Cross-Validation & 0.93 & 0.92 & 0.79 & 90 / 10\\
-		\hline Past-to-Present & 0.88 & 0.87 & 0.71 & 10 to 90 / 10\\
-		\hline Present-to-Past & 0.90 & 0.86 & 0.72 & 10 to 90 / 10\\
-		\hline Sliding-Window & 0.87 & 0.86 & 0.76 & 30 / 10\\
-		\hline
+		\toprule
+		AUROC & $\DS_\strict$ & $\DS_\loose$ & $\DS_\real$ & Train/Test \%\\
+		\midrule
+		Cross-Validation & 0.98 & 0.98 & 0.95 & 90 / 10\\
+		Past-to-Present & 0.96 & 0.96 & 0.92 & 10 to 90 / 10\\
+		Present-to-Past & 0.97 & 0.98 & 0.96 & 10 to 90 / 10\\
+		Sliding-Window & 0.94 & 0.94 & 0.94 & 30 / 10\\
+		\bottomrule
 	\end{tabular}
-	\caption{Single layer results summary.}
+	\caption{Multi layer results summary.}
 	\label{tab:multilayer_results}
 \end{table}
+
+Having studied how our modifications improved the proposed model, the following chapter goes on to provide practical applications for our work.
