@@ -3,27 +3,53 @@
 %     File: Thesis_Conclusions.tex                                     %
 %     Tex Master: Thesis.tex                                           %
 %                                                                      %
-%     Author: Andre C. Marta                                           %
-%     Last modified :  2 Jul 2015                                      %
+%     Author: João C. Godinho                                          %
+%     Last modified : May 2018                                         %
 %                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Conclusions}
 \label{chapter:conclusions}
 
-Insert your chapter material here...
+In this work we analyzed how \gls{ml} techniques fit into the scope of malware detection and how could the chosen dataset influence the results of the classifier.
+We collected, analyzed, trained and validated multiple datasets to better understand how \textit{laboratory conditions} vary from \textit{real-world conditions}.
+Doing so provided us with \gls{auroc} results varying from as high as 98\% to as low as 67\%.
 
+Given the non-existence of a common agreement on how to label samples in a real world dataset, we have proposed three different metrics $\Mrealv$, $\Mloosev$ and $\Mstrictv$ for labeling these samples, and presented three different scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, ranging from a more simulated scenario, to more realistic ones.
+
+We have analyzed the different scenarios mainly on two kind of conditions: the \textit{laboratory conditions} where the standard cross-validation methodology was applied discarding the importance of \emph{time} in malware detection, and temporal consistent techniques where we have trained and validated the model in a temporal consistent manner.
+We have shown that for a modest compromise in accuracy temporal consistent methodologies are adequate to classify malware samples.
+
+We have also concluded that we can reduce the size of the training dataset to avoid the need of training with all ever seen samples, and argue on how much it can be reduced without compromising optimal results.
+
+Having solid knowledge on the effects of temporal consistency in the task of malware detection, we improved our base model for better results.
+This was done by using a multi layer approach to provide the ability to extract information regarding malware classes, and by adding more features to the model.
+These improvements boosted our results between 7\% and 20\%, while still guaranteeing temporal consistency.
+
+To show our confidence in the obtained results, we provided two practical applications of our developed model, still under development, but with hopes of being implemented in a production environment soon.
+
+We believe that the pertinent question of how much should we seek for great results on \gls{ml} techniques applied to malware detection is worth to be further discussed, bearing in mind that it leads to classifiers that would not perform better over realistic conditions.
+
+The task we set ourselves to achieve was not without its difficulties, but all in all, we believe our work shows that the path to malware detection via machine learning is feasible, not only theoretically, as related work as shown, but also with practical implications.
 
 % ----------------------------------------------------------------------
 \section{Achievements}
 \label{section:achievements}
 
-The major achievements of the present work...
+In summary, in this work we achieved the following results:
 
+\begin{itemize}
+	\item We provided means to achieve metrics as to facilitate the malware labeling task.
+	\item We developed methodologies that test real-world scenarios which take into account time consistency.
+	\item We provided a simple model to detect malware and how it behaves under different methodologies.
+	\item We improved the previous model to boost the results in all of our tested methodologies.
+	\item We started developing practical applications of our model, to be inserted in real world scenarios.
+\end{itemize}
 
 % ----------------------------------------------------------------------
 \section{Future Work}
 \label{section:future}
 
-A few ideas for future work...
-
+As future work, the developed model could be improved by adding more features, and by doing better research regarding the impacts of each feature.
+Other models could be tested, as well as used in conjunction with our logistic regression, to improve the overall results.
+Diverging from a supervised learning methodology to include other types of learning would also bring benefits and possibly achieve a fully automated pipeline to detect malware, with minimal user interaction.
