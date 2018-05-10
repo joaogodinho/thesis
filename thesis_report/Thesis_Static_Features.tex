@@ -277,12 +277,14 @@ Another important idea that should be stressed is that for cross validation we u
 	\renewcommand{\arraystretch}{1.2} % more space between rows
 	\centering
 	\begin{tabular}{ccccc}
-	\hline AUROC & $\DS_\strict$ & $\DS_\loose$ & $\DS_\real$ & Train/Test \%\\
-	\hline Cross-Validation & 0.91 & 0.90 & 0.75 & 90 / 10\\
-	\hline Past-to-Present & 0.90 & 0.90 & 0.67 & 10 to 90 / 10\\
-	\hline Present-to-Past & 0.90 & 0.90 & 0.69 & 10 to 90 / 10\\
-	\hline Sliding-Window & 0.89 & 0.88 & 0.73 & 30 / 10\\
-	\hline
+		\toprule
+		AUROC & $\DS_\strict$ & $\DS_\loose$ & $\DS_\real$ & Train/Test \%\\
+		\midrule
+		Cross-Validation & 0.91 & 0.90 & 0.75 & 90 / 10\\
+		Past-to-Present & 0.90 & 0.90 & 0.67 & 10 to 90 / 10\\
+		Present-to-Past & 0.90 & 0.90 & 0.69 & 10 to 90 / 10\\
+		Sliding-Window & 0.89 & 0.88 & 0.73 & 30 / 10\\
+		\bottomrule
 \end{tabular}
 \caption{Single layer results summary.}
 \label{tab:singlelayer_results}
