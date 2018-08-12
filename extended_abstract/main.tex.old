@@ -1,0 +1,1110 @@
+
+%% bare_conf.tex
+%% V1.4b
+%% 2015/08/26
+%% by Michael Shell
+%% See:
+%% http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
+%% conference paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/pkg/ieeetran
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall the IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%*************************************************************************
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+
+\documentclass[conference]{IEEEtran}
+% Some Computer Society conferences also require the compsoc mode option,
+% but others use the standard conference format.
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[conference]{../sty/IEEEtran}
+
+
+
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/pkg/ifpdf
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  \graphicspath{{img/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at: 
+% http://www.ctan.org/pkg/graphicx
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/pkg/epslatex
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). The IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+\usepackage{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics.
+%
+% Note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/pkg/algorithms
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/pkg/algorithmicx
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/array
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\ifCLASSOPTIONcompsoc
+%  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a larger sans serif font
+% than the serif footnote size font used in traditional IEEE formatting
+% and thus the need to invoke different subfig.sty package options depending
+% on whether compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure.
+% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
+% corrections already built into the system in which case a warning will
+% be issued if an attempt is made to load fixltx2e.sty as it is no longer
+% needed.
+% The latest version and documentation can be found at:
+% http://www.ctan.org/pkg/fixltx2e
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/url
+% Basically, \url{my_url_here}.
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+% My imported packages
+\usepackage{dirtytalk}
+\usepackage{todonotes}
+\usepackage{glossaries} % Acronyms
+\usepackage{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% ACRONYMS %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\newacronym{ml}{ML}{Machine Learning}
+\newacronym{pe}{PE}{Portable Executable}
+\newacronym{dll}{DLL}{Dynamic-link Library}
+\newacronym{nsrl}{NSRL}{National Software Reference Library}
+\newacronym{roc}{ROC}{Receiver Operating Characteristic}
+\newacronym{auroc}{AUROC}{Area Under the Receiver Operating Characteristic}
+\newacronym{dr}{DR}{Detection Rate}
+\newacronym{fpr}{FPR}{False Postive Rate}
+\newacronym{tts}{TTS}{The Top Set}
+\newacronym{tgs}{TGS}{The Good Set}
+\newacronym{tbs}{TBS}{The Bad Set}
+\newacronym{lr}{LR}{Logistic Regression}
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Temporal Consistency on Malware Detection}
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+%\author{\IEEEauthorblockN{Michael Shell}
+%\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
+%Georgia Institute of Technology\\
+%Atlanta, Georgia 30332--0250\\
+%Email: http://www.michaelshell.org/contact.html}
+%\and
+%\IEEEauthorblockN{Homer Simpson}
+%\IEEEauthorblockA{Twentieth Century Fox\\
+%Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\and
+%\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
+%\IEEEauthorblockA{Starfleet Academy\\
+%San Francisco, California 96678--2391\\
+%Telephone: (800) 555--1212\\
+%Fax: (888) 555--1212}}
+
+% conference papers do not typically use \thanks and this command
+% is locked out in conference mode. If really needed, such as for
+% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
+% after \documentclass
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page, use this alternative format:
+% 
+%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
+%Homer Simpson\IEEEauthorrefmark{2},
+%James Kirk\IEEEauthorrefmark{3}, 
+%Montgomery Scott\IEEEauthorrefmark{3} and
+%Eldon Tyrell\IEEEauthorrefmark{4}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
+%Georgia Institute of Technology,
+%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
+%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
+%Telephone: (800) 555--1212, Fax: (888) 555--1212}
+%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
+
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+
+% make the title area
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations
+% in the abstract
+\begin{abstract}
+%The use of supervised learning techniques for malware detection have been used increasingly to aid standard classification methods. In this paper we propose three datasets' selection methods, which will further allow us to analyze the impact of the reliability of ground truth on the final results. We analyze each dataset against laboratory and real-world conditions. In contrast to the usual approach, where time dependency is not considered, this work aims at analyzing temporal consistency on malware detection, and at providing a temporal-based methodology to reduce the size of the training set, while still achieving an optimal area under the ROC curve.
+The use of supervised learning techniques for malware detection have been used increasingly to aid classical classification methods. In this paper we aim at analyzing the impact of the reliability of the training dataset on the classifier. For this purpose, we propose three datasets' scenarios, whose content range from very well-known malware and goodware samples to more ambiguous ones. We analyze each scenario in laboratory conditions, where standard cross-validation methodologies are applied, discarding the importance of {\it time} in malware detection, and also in real-world conditions, where temporal-based methodologies are proposed and applied. We further use the proposed temporal-based methodologies to analyze if we can reduce the size of the training dataset without compromising optimal results. We conclude that there exists an ideal number of necessary training folds, temporally consistent with the validation fold, in order to maximize the overall score.
+\end{abstract}
+
+% no keywords
+%
+%
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+\section{Introduction}
+
+The usage of \gls{ml} approaches for malware detection as a complement to classical methodologies for malicious-content detection have been actively studied\cite{schultz:data_mining,nissim:al_pdf,christodorescu:semantics,miller:rev_int,vsrndic2013detection,kolter:learning}. As have been observed by the disparate results popping up\cite{shabtai:survey,vsrndic2013detection,miller:rev_int,kolter:learning}, there are many issues arising in regards to the usage of machine learning techniques to malware analysis.
+
+The very first challenge that we face stands on the definition of {\it malware}. Malware is considered to be \say{a program with malicious intent}\cite{christodorescu:semantics}. But concrete metrics and properties that uniquely distinguish malware from {\it goodware} are still an open problem. The occurrence of malware samples  has been growing considerably in recent years\cite{av-test:report}, with reports of malware infections making the headlines, now more then ever.%, and this the closer that we have to a 'metric' for distinguishing malware from goodware.
+
+Taking into consideration the increasing popularity and success of \gls{ml} methodologies, it is only natural to see these applied to complement classical malware detection methods. Specifically, supervised learning techniques have shown a remarkable capability to distinguish malware from goodware\cite{schultz:data_mining,miller:rev_int,kolter:learning}. However, greatly influenced by the huge success of \gls{ml} methodologies in a myriad of areas\cite{lee2003learning,joachims2002learning,li2010object,ding2001multi}, recent works often present admirable and remarkable results\cite{schultz:data_mining,nissim:al_pdf}. On a sometimes ambiguous scenario that is the task of distinguishing malware from goodware, these remarkable results are only possible due to fine-grained datasets of malware and goodware samples, often not representing the real-world. In this paper we address this pertinent questions and make a comparative analysis of a supervised learning approach in three different scenarios (depicted in Figure \ref{fig:scenarios}): a {\it strict scenario} where only very well-known samples are considered, a {\it loose scenario} where a wider set of still well-studied samples is considered, and finally, a {\it realistic scenario} where we get closer to the reality faced by vendors of malware detection solutions.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=2.5in]{dataset_sizes}
+	\caption{Visual representation of our defined scenarios: $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$.}
+	\label{fig:scenarios}
+\end{figure}
+
+Throughout this work we will not focus on maximizing the results of our supervised learning methodology, but instead on performing a comparative analysis of the three above mentioned different scenarios under two distinct environments:
+
+\begin{itemize}
+	\item {\it laboratory conditions} where traditional cross-validation methodologies are applied;
+	\item {\it real-world conditions} where time matters and we analyze the behavior of the classifier with temporal-based methodologies.
+\end{itemize}
+
+We show that without much tweaking, and using simple features, a \gls{lr} model is able to achieve an \gls{auroc} of 0.97 when ideal laboratory conditions are met. As conditions change into a more real-world scenario, results go down to an \gls{auroc} of 0.77.
+
+With the purpose of actually evaluating the usage of \gls{ml} methodologies for malware detection as a complement to traditional malware detection techniques, we analyse how the size of the training set can influence the performance of the classifier under the three studied scenarios. For this, we use the aforementioned temporal-based methodologies to come up with conclusions on how large the training set need to be to ensure optimal results from the classifier.
+
+As the main contributions of this work, we propose three different scenarios to train and validate the model which range from a more simulated scenario to a more realistic one, we propose temporal-based methodologies to train and validate the classifier, and finally, we conclude on how much can we reduce the training dataset without compromising the optimal results. 
+
+This paper is outlined as follows: in Section \ref{sec:related_work} we present the related work and justify how did they motivated our work; in Section \ref{sec:data_collection} we overview the available dataset and propose a selection of the relevant antivirus vendors; in Section \ref{sec:feature_model} we propose a feature selection and describe the model that we will use; Section \ref{sec:evaluation_results} encloses our main contributions and is where we describe the three scenarios, we present the cross-validation and our temporal-based methodologies, and provide the main results that we have obtained; in Section \ref{sec:discussion} we discuss our main achievements; Section \ref{sec:conclusion} concludes the paper and discusses avenues for further research.
+
+%Malware, \say{a program with malicious intent}\cite{christodorescu:semantics}, has grown considerably in recent years\cite{av-test:report}, with reports of malware infections making the headlines, now more then ever.
+
+%For the increasing popularity and success of \gls{ml} methodologies, it is only natural to see these applied to complement classical malware detection methods. Specifically, supervised learning techniques have shown the capability to distinguish malware from goodware.
+
+%This paper aims at providing a supervised learning approach for malware detection, but instead of focusing on maximizing the results for a predefined dataset, we focus on analyzing how three datasets produce different results when evaluated under laboratory \textit{vs} real-world scenarios.
+
+%We show that without much tweaking, and using simple features, a \gls{lr} model is able to achieve an \gls{auroc} of 0.97 when ideal laboratory conditions are met. As conditions degrade the results go down to an \gls{auroc} of 0.77.
+
+%As we approach real-world conditions, by both decreasing the reliability of the dataset and enforcing a temporal-based evaluation, we are able to reduce the size of a training set without compromising its results.
+
+%As a by-product of our main analysis, we provide different metrics for labeling samples. These also allow us to measure the performance of antivirus vendors, and end up suggesting a possible dependency between vendors.
+
+%In sum, our main contributions are:
+
+%\texttt{\begin{itemize}
+%	\item bla bla bla
+%\end{itemize}}
+
+%\todo[inline]{}
+%a primeira linha de defesa contra malware sao os AV, 
+%para ajudar na luta ou w/e contra o malware
+%
+%The first line of defense against threats comes from IDS' (both host and network based)
+%
+%Any aid researchers get is beneficial for the never-ending game of catch with malware developers. 
+%
+%Analysts and attackers play a never-ending game of catch, where the 
+
+
+%This paper aims at providing a supervised learning approach for malware detection. For this purpose, we carry out a tight analysis of the existing malware and goodware samples' reports and end out with three datasets over which our analysis relies along with a features' selection. An analysis of the dependency between the many vendors allows us to select the relevant vendors for our study. The proposed classifier is trained and validated using the Logistic Regression model, ending up with about 95\% of area below the ROC curve. One of the most relevant contributions of this paper consists on the analysis of temporal consistency. We propose a temporal-based methodology to train and validate the classifier with a minimal amount of data still achieving 89\% of area below the ROC curve.
+
+
+%\todo[inline]{introduzir problema, malware, quantidades. aumento }
+%
+%
+%\todo[inline]{defining malware is hard, ambiguous}
+%\todo[inline]{classical detection methods fall short for new types of malware}
+%\todo[inline]{enhancing detection by using ML as shown good results}
+%\todo[inline]{problems: datasets are easily biased}
+%\todo[inline]{problems: validation does not take into account temporal consistency}
+%\todo[inline]{contributions: baseline classifier based on static imports}
+%\todo[inline]{contributions: how temporal consistency impacts results}
+%\todo[inline]{contributions: how there's an ideal time frame to maximize results}
+
+\section{Related Work}\label{sec:related_work}
+
+We use this section to present prior work that closely relates to the topic of our research and our areas of contribution. Specifically, detecting malicious software by training supervised models on static information, and validation methodologies that resemble real-world conditions.
+
+Shabtai et al.\cite{shabtai:survey} provide a survey directedat the application of \gls{ml} classifiers to detect malware from staticfeatures. Their work concerns the design and evaluation of such systems. Our contributions are inspired by the concern of how to correctly evaluate \gls{ml} classifiers, regarding size, reliability of labeling metrics and chronological evaluation.
+
+In the topic of methodologies that resemble real-world conditions, Srndi\'c et al.\cite{vsrndic2013detection}
+train and validate their malicious PDF detector under laboratory and real-world conditions. Laboratory conditions consist on applying regular cross-validation, whereas real-world conditions validate a newer dataset with a model created from outdated data (i.e.\ older then the validation), and also validate the model when the validation set spans one week and the training is gathered in the previous 4 weeks. They show that laboratory conditions inflate the results, when compared to real-world conditions.
+
+Miller et al.\cite{miller:rev_int} also introduce sample temporal consistency. They show the impact of performance measurement technique on a dataset containing 1.1 million samples, when using cross-validation and temporally consistent samples. As noted by others, regular cross-validation showed inflated results when compared to temporally consistent samples.
+
+Our work enhances these methodologies by analyzing the performance variation when the distance between the training and validation set increases and decreases, as well as analysis on how reducing the size of the training without compromising the results.
+
+Kolter et al.\cite{kolter:learning} learn to detect malicious executables in a dataset with under 4,000 samples, obtained from reliable sources, and evaluate their model under standard cross-validation and by gathering newer malware samples to validate for new and unseen samples. They show how the model provides optimal results under cross-validation, but for the unseen samples lower scores are obtained. Our work considers these results to compare how reliability affects performance.
+
+\section{Data Collection and Labeling}\label{sec:data_collection}
+
+This section aims at providing a brief overview of the available \textit{corpus} and how it can be used to define data labeling metrics. On top of that, we propose a vendor selection to improve the reliability of data labeling.
+
+\subsection{Data Collection}
+
+The \textit{corpus} used to train and evaluate the current work was obtained from Malwr\cite{tool:malwr}. This service provides free malware analysis by using Cuckoo Sandbox\cite{tool:cuckoo} to analyze files. Alongside the analysis results, Malwr also aggregates antivirus' signatures given by VirusTotal\cite{tool:virustotal} at the time of the analysis.
+
+
+In general, malware detection is not a deterministic task, several nuances make vendors disagree on what is malware. For this reason, we propose to enrich the available information with an additional couple of repositories, namely, VirusShare\cite{tool:virusshare} for malware, and \gls{nsrl}\cite{tool:nsrl} for goodware, enabling us to cross-check VirusTotal's classifications. We observe that for VirusShare there are 105,251 common samples, and for \gls{nsrl} 4,756. On top of that, they share 426 samples. The cross-checking with these repositories will be a key element to increase the reliability of the ground truth, at a later stage.
+
+We now proceed with an initial filtering of the dataset. For the purpose of this work we are interested in reports from samples that provided static information to be used as features, specifically static imports (e.g.\ \gls{dll}), and that are known in VirusTotal (i.e.\ classified), to provide a way to label samples.
+
+We start by discarding vendors that have not seen at least 90\% of \textit{corpus} obtained from Malwr, let $\mathcal{V}_{>0.9}$ denote the remaining vendors. From now on, we only consider the reports classified by some vendor in $\mathcal{V}_{>0.9}$. We refer to the set of classified samples as $\mathcal{D}_{class}$, which contains 292,127 reports.
+
+Our model's features will be obtained from the reports' static imports, so let us denote by $\mathcal{D}_{static}$, $\mathcal{D}_{static} \subseteq \mathcal{D}_{class}$, the classified samples that contain static imports. This dataset contains 287,117 reports.
+
+\subsection{Data Labeling}
+
+We now turn our focus into labeling the reports as goodware or malware. To do so, we use $\mathcal{D}_{class}$ together with VirusShare and \gls{nsrl} information to derive three different metrics to label the reports as benign or malicious, over a set of vendors $\mathcal{V}$.
+
+The first and tightest metric we define, $\mathcal{M}_{strict}^\mathcal{V}$, labels a sample from $\mathcal{D}_{class}$ as:
+
+\begin{itemize}
+	\item \textbf{Malware} if all vendors in $\mathcal{V}$ classify it positively, it belongs to VirusShare repository, and does not belong to \gls{nsrl} repository;
+	\item \textbf{Goodware} if all vendors in $\mathcal{V}$ classify it negatively, it belongs to \gls{nsrl} repository, and does not belong to VirusShare repository.
+\end{itemize}
+
+Obviously this is the most reliable metric, in the sense that it is closely related to the samples' ground truth, leaving little room for disagreement. However, it is very likely that it
+will not be applicable to majority of the samples.
+
+To overcome the strictness of the previous metric, we now define a couple of new metrics that will balance the vendors' agreement on the classification. Indeed, given the reports are classified by multiple antivirus solutions, it is not surprising to see disagreement on whether a sample is malware or not. Due to this, and following a methodology identical to \cite{miller:rev_int}, we analyze duplicated submissions and establish a minimum number of vendors needed to label a sample as malware.
+
+Let us denote by $\mathcal{D}_{dups}$, $\mathcal{D}_{dups} \subseteq \mathcal{D}_{class}$, the samples submitted more than once. These duplicated samples constitute 26.86\% of $\mathcal{D}_{class}$, with a total of 28,996 samples. Figure \ref{fig:distribution_changes} shows the distribution of samples that increase or decrease in positive classifications between the last and the first submissions.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{dist_changes}
+	\caption{Distribution of samples that increase or decrease in the number of positive classifications between last and first submissions.}
+	\label{fig:distribution_changes}
+\end{figure}
+
+We first note that 40.18\% of the duplicated samples change in classification. From those, 34.55\% increase in classification (i.e.\ more vendors classifying as malware), whereas only 5.63\% decrease in classification (i.e.\ less vendors classifying as malware). Such discrepancy between positive and negative changes suggest a preference for false negatives over false positives, as also noted in \cite{miller:rev_int}.
+
+Following the approach in \cite{miller:rev_int} and \cite{vsrndic2013detection}, in the next scenarios we will require at least 5 positive classifications to label a sample as malware. This threshold is supported by the results presented in Figure \ref{fig:distribution_changes}, where we can see that samples that decrease in 5 or more positive represent 0.45\% of samples.
+
+With regards to goodware labeling, we require that a sample must have zero positive classifications. We further analyze this requirement, as there is a high possibility that a sample labeled as goodware increases to some positive classification, given that 34.55\% of samples from $\mathcal{D}_{dups}$ increase in classification.
+
+We are interested in knowing the possibility of a sample that is labeled as goodware, to become malware according to the previous malware labeling requirement. For this purpose, Figure \ref{fig:distribution_changes_zero} presents the same analysis as Figure \ref{fig:distribution_changes}, but restricted to samples that start with zero positive classifications.
+
+% We first identify that 17.77\% of samples increased from zero to some positive classification. From those, 7.51\% increase from zero to 5 or more (our malware threshold), which indicates that there is some chance of wrongly labeling a malware sample as goodware.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{dist_changes_zero}
+	\caption{Distribution of samples that start with zero classifications and increase in the number of positive classifications to the last submission.}
+	\label{fig:distribution_changes_zero}
+\end{figure}
+
+We verify that 17.77\% of samples increased from zero to some positive classification. From those, 7.51\% increase from zero to 5 or more (our malware threshold), which indicates that it is possible to wrongly label a malware sample as goodware, by solely using this criterion.
+
+Based on the previous analyses, we define an intermediate metric, characterized by not being as strict as $\mathcal{M}_{strict}^\mathcal{V}$, but still trying to overcome the aforementioned vendors' classification inconsistency. Consider this new metric, $\mathcal{M}_{loose}^\mathcal{V}$, which labels a sample from $\mathcal{D}_{class}$ as:
+
+\begin{itemize}
+	\item \textbf{Malware} if at least 5 vendors in $\mathcal{V}$ classify it positively, it belongs to VirusShare repository, and does not belong to \gls{nsrl} repository;
+	\item \textbf{Goodware} if all vendors in $\mathcal{V}$ classify it negatively, it belongs to \gls{nsrl} repository, and does not belong to VirusShare repository.
+\end{itemize}
+
+Although more prone to incorrect labeling, when compared to $\mathcal{M}_{strict}^\mathcal{V}$, metric $\mathcal{M}_{loose}^\mathcal{V}$ encompasses a larger variety of samples, being much closer to reality.
+
+As seen in Figure \ref{fig:distribution_changes}, it is widely accepted that malware detection is imperfect and prone to error. We can argue that although strict metrics provide more reliable labeling, and consequently provide better models and results, they lack the ability to cope with real-world conditions. 
+
+For this reason, we propose a third metric, $\mathcal{M}_{real}^\mathcal{V}$, that solely relies on vendors' classification, hence including their imperfection and uncertainty. It labels a sample from $\mathcal{D}_{class}$ as:
+
+\begin{itemize}
+	\item \textbf{Malware} if at least 5 vendors in $\mathcal{V}$ classify it positively;
+	\item \textbf{Goodware} if all vendors in $\mathcal{V}$ classify it negatively.
+\end{itemize}
+
+This metric is closer to antivirus vendors' reality, and incorporates the underlying classification uncertainty.
+
+%We first note that out of 28,996 samples, 11,651 (40.18\%) change in classification; furthermore, we note that 34.55\% of samples increase in classification (i.e.\ more vendors classifying as malware), while only 5.63\% decrease in classifications (i.e.\ less vendors classifying as malware). This tendency suggests that vendors favor false negatives over false positives, as also noted in \textbf{[quote]}.
+
+% follow the same approach and use 5
+
+%Having an understanding on how vendors tend to change their classification, we choose a minimum threshold of 5 positive classifications to label a sample as malware\textbf{cite}. \textbf{Figure X} shows that samples that decrease in 5 or more positive classifications represent 0.45\% of samples, meaning that the probability of a given sample where 5 or more vendors classify it malware actually turns out to be goodware is lower than 0.45\%. 
+
+%The actual value is lower because our graph does not take into account the starting number of positive classifications, meaning it also accounts for cases where a sample starts with 20 positive classifications and ends with 5.
+
+%To label a sample as goodware, we choose a metric where there must be zero positive classifications in a sample. Although intuitive, this metric may have drawbacks when considering that 34.55\% of samples increase in classification. To better understand how likely it is for a sample with zero classifications to go above the previously defined malware threshold (5 or more), we reproduced \textbf{Figure X} but only taking into account changes for samples that start with zero classifications. The results can be seen in \textbf{Figure X}.
+
+%We first identify that 17.77\% of samples increased from zero to some positive classification. From those, 7.51\% increase from zero to 5 or more (our malware threshold), which indicates that there is some chance of wrongly labeling a malware sample as goodware.
+
+%\todo[inline]{To have more room to improve the reliability of the dataset; enhance the metric with info from VS and NSRL.}
+
+%To minimize the chance of wrongly labeling goodware, and to achieve a better overall ground truth, we applied the knowledge from VirusShare and \gls{nsrl}.
+
+%The applied methodology is straightforward, instead of relying solely on the reports' classification, we also require samples to be present in VirusShare and \gls{nsrl} to be labeled as malware and goodware, respectively. Doing so results in having a 86,503 malware samples and 4,000 goodware samples. It is worth noting that samples both in Virus Share and \gls{nsrl} dataset were discarded, as their actual label is dubious.
+
+%These results gave us a sound metric to label samples as malware or goodware. The next subsection builds on this labeling process to narrow down the total amount of vendors, by measuring their detection and false positive score, based on our metric.
+
+% \todo[inline]{Summarize the 3 metrics}
+
+\subsection{Top Vendors}
+
+Since our metrics are highly dependent on vendor's classification, in this subsection we aim at narrowing down the total amount of vendors, by assessing their \gls{dr} and \gls{fpr} according to our strictest metric $\mathcal{M}_{strict}^{\mathcal{V}_{>0.9}}$.
+
+For each vendor $v$ in $\mathcal{V}_{>0.9}$, we considered the metric $\mathcal{M}_{strict}^{\mathcal{W}}$, over the set of vendors $\mathcal{W} = \mathcal{V}_{>0.9}\setminus \{v\}$ to label the samples as malware and goodware. We calculate $v$'s \gls{dr} as the ratio of $v$'s positive detections over the total malware. Furthermore, we calculate $v$'s \gls{fpr} as the ratio of $v$'s positive detections over the total goodware.
+
+The \gls{dr} and \gls{fpr} for each vendor are depicted in Figure's \ref{fig:dr_fpr} left and right Y axis, respectively.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{dr_fpr}
+	\caption{Calculated \gls{dr} and \gls{fpr} for $\mathcal{M}_{strict}^{\mathcal{V}_{>0.9}}$ metric, ordered by \gls{dr}.}
+	\label{fig:dr_fpr}
+\end{figure}
+
+We proceed with the 20 vendors with highest \gls{dr}. Let $\mathcal{V}^*$, $\mathcal{V}^* \subseteq \mathcal{V}_{>0.9}$, represent the top 20 vendors, and consider this refinement of classified samples, $\mathcal{D}_{class}^* \subseteq \mathcal{D}_{class}$, by filtering according to $\mathcal{V}^*$. Similarly, consider the refined set $\mathcal{D}_{static}^* \subseteq \mathcal{D}_{static}$, the classified samples from $\mathcal{D}_{class}^*$ that contain static imports.
+
+\section{Feature and Model Selection}\label{sec:feature_model}
+
+In this subsection we describe our approach to feature selection and linear model choice. Since the main focus of our work is to compare results relatively and not absolutely, we do not emphasize much on this topic.
+
+\subsection{Feature Selection}
+
+Following the work of \cite{miller:rev_int,schultz:data_mining} features based on static imports have shown very promising results in \gls{ml} applications for malware detection.
+
+For the purpose of this work we use static imports as features. Given that Cuckoo sometimes fails in parsing static imports, some reports contain noise which should be removed. To do so we apply a regular expression to filter invalid ASCII and special characters (e.g.\ \texttt{!}, \texttt{\&}, \texttt{*}). Doing so removes imports like \texttt{*invalid*} and \texttt{MSVCRT.dll\textbackslash x90} (where \text{\textbackslash x90} represents a byte with value 90 in hexadecimal).
+
+We select static imports from $\mathcal{D}_{static}^*$, collecting a total number of 9,698 imports, applying the previous criterion we remove 40, obtaining a final number of 9,658 imports.
+
+These discriminate case sensitivity (i.e.\ \texttt{kernel32.dll} is different from \texttt{KERNEL32.dll}), which increases the number of features, but provides more information for the classifier to separate classes. From the 9,658 imports, 8,861 (91.75\%) end with the \texttt{dll} extension, while the other 797 (8.25\%) used different extensions (e.g.\ \texttt{bpl}, \texttt{exe}, \texttt{sys}).
+
+On the topic of features, we close the subsection by describing how imports are converted to a vector of features. We vectorize imports by creating a binary vector where each position corresponds to a specific import. If a given import $i$ is present in a sample, its feature vector $x$ will have the value at that position $x_i$ set to 1. Likewise, if a given import $j$ is not present in a sample, its feature vector $x$ will have the value at that position $x_j$ set to 0.
+
+\subsection{Model Selection}
+
+In this subsection we go over the classifier used to create the model that separates malware from goodware. Our main concerns when choosing a classifier regard the ability to produce a probabilistic output, good scaling for large number of features and samples, and ease of use.
+
+With this in mind, we choose the linear logistic regression model. This model gives the probability of a random variable $X$, being 0 or 1, based on experimental data. For our problem, the random variable $X$ is an unknown sample and the outcome is the probability of being either goodware or malware\cite{friedman2001elements}. By having a probabilistic output we can fine tune the threshold at which a sample is labeled malicious. Due to its popularity, it is also readily available from several libraries.
+
+\section{Evaluation and Results}\label{sec:evaluation_results}
+
+In this section we aim at doing a comparative analysis on three different scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, built on top of the previously defined metrics. This comparison is done using standard cross-validation methodologies and a proposed temporal-based methodology. We further provide an analysis on how to reduce the size of the training set, without compromising the final results.
+
+\subsection{Evaluation}
+
+The three scenarios that we will focus on will rely on metrics $\mathcal{M}_{strict}^\mathcal{V^*}$, $\mathcal{M}_{loose}^\mathcal{V^*}$ and $\mathcal{M}_{real}^\mathcal{V^*}$, over the dataset $\mathcal{D}_{class}^*$:
+
+\begin{itemize}
+	\item Strict Scenario $\mathcal{S}_{strict}$, labels as malware samples that: all vendors in $\mathcal{V^*}$ classify positively, belong to VirusShare repository, and do not belong to \gls{nsrl} repository; labels as goodware samples that: all vendors in $\mathcal{V^*}$ classify negatively, belong to \gls{nsrl}, and do not belong to VirusShare repository. This scenario contains 1,361 malware samples and 4,000 goodware samples.
+	\item Loose Scenario $\mathcal{S}_{loose}$, labels as malware samples that: at least 5 vendors in $\mathcal{V^*}$ classify positively, belong to VirusShare repository, and do not belong to \gls{nsrl} repository; labels as goodware samples that: all vendors in $\mathcal{V^*}$ classify negatively, belong to \gls{nsrl}, and do not belong to VirusShare repository. This scenario encloses 85,503 malware samples and 4,000 goodware samples.
+	\item Real Scenario $\mathcal{S}_{real}$, labels as malware samples that: at least 5 vendors in $\mathcal{V^*}$ classify positively; labels as goodware samples that: all vendors in $\mathcal{V^*}$ classify negatively. This scenario contains 186,444 malware samples and 49,783 goodware samples.
+\end{itemize}
+
+\paragraph{Cross validation}
+To gain a better insight on how the model generalizes our scenarios, we apply a k-fold cross-validation, with $k=10$. This methodology splits the dataset into $k$ subsets (i.e.\ folds), selects a single fold for validation and uses the remaining $k-1$ folds as training. This process is repeated $k$ times, ensuring every fold is used for validation and training.
+
+Although the cross-validation methodology enables to measure the generalization capabilities of a model, it does not account for temporal ordering of the samples. Since we want to measure the score when training samples pre-date validation samples, we now define a couple of temporal consistent validations.
+
+\paragraph{Temporal consistent validation}
+The first temporal consistent validation, which we designate as \textit{Past-to-Present} validation, can be resumed as an iterative methodology where the validation set is fixed with the most recent samples, and the training set with the oldest. At each iteration the training set is extended with more recent samples and scored against the validation, until all samples are used.
+
+The seconds temporal consistent validation, which we designate as \textit{Present-to-Past} validation, is the opposite of \textit{Past-to-Present} with regards to the starting position of the training set. Again the validation is fixed the most recent samples, but now the training set starts with the temporally closest samples to the validation set. At each iteration the training set is extended, this time with older samples and scored against the validation, until all samples are used.
+
+\textit{Past-to-Present} and \textit{Present-to-Past} validations both require two parameters, specifically the size of the validation set, and how the increments to the training set are made. For our evaluation, we use the 20\% most recent samples as validation, and split the remaining 80\% into 10 folds, hence the validation is done 10 times, with each iteration increasing the training size by one fold.
+
+These two validation methodologies give us the ability to account for temporal consistency. Moreover, they enable us to compare the importance of older \textit{vs} newer samples to classify recent samples.
+
+We designate the third and last temporal consistent validation as \textit{Temporal Window}. This validation methodology is inspired on regular cross-validation, in the sense it splits the dataset into folds, but changes how the folds are used. Specifically it takes $n$  temporal consistent and followed folds (i.e.\ each fold immediately precedes the next one), using the last fold (more recent samples) as validation and the previous folds as training (older samples). By starting with the $n$ first folds and sliding one fold on each iteration, we apply a sliding window of size $n$ over the dataset.
+
+For this last validation methodology, we again split the dataset into 10 folds. The sliding window size, $n$, is chosen during the results phase, as its choice depends on previous results.
+
+The different scenarios will be compared by plotting their \glsreset{roc}\gls{roc} curve and measuring the \glsreset{auroc}\gls{auroc}. The \gls{roc} plots the True Positive Rate (or \gls{dr}) against the \gls{fpr} at different thresholds, which are the most relevant metrics when dealing malware detection.
+
+We measure the \gls{auroc} during each validation's iteration and use the average measurement to discuss the results.
+
+\subsection{Results}
+
+We implement our experiments in Python, by using Jupyter Interactive Notebooks\cite{tool:jupyter} to facilitate data visualization. We use scikit-learn\cite{tool:sklearn} for \gls{ml}, and Pandas\cite{tool:pandas} for data analysis. Our experiments were conducted on an Ubuntu Virtual Machine with 16 cores and 16GB of RAM, in order to minimize training and validation times.
+
+We now focus on applying the evaluation methodologies to our scenarios. This enables us to compare the different conditions, and consequently results, that affect malware detection.
+
+We start with what we determine as \textit{laboratory conditions}, ideal conditions for the problem of malware detection. These are met when we apply the strict metrics $\mathcal{M}_{strict}^V$, to the dataset $\mathcal{D}_{class}^*$, obtaining scenario $\mathcal{S}_{strict}$.
+
+Under these conditions, the model provides the best results, with an \gls{auroc} of 0.97, as shown in Figure \ref{fig:roc_xval}. We argue that such high values are easily attained from factors like a small and reliable dataset, and the use of cross-validation, which mixes samples and ignores possible dependencies between.
+
+To understand how reliability influences the model's result, we use scenarios $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, which are less reliable and include more samples.
+
+Under these more relaxed, \textit{real-world} conditions, the model's results unsurprisingly decrease to an \gls{auroc} of 0.95 for $\mathcal{S}_{loose}$ and 0.77 for $\mathcal{S}_{real}$, as shown in Figure \ref{fig:roc_xval}.
+
+From $\mathcal{S}_{strict}$ to $\mathcal{S}_{loose}$, the only change is the amount of malware labeled samples, which significantly increase. The difference is interesting, as although the number of malware labeled samples increase significantly, the results are not that affected. This suggests that although the reliability for malware decreases, its impact is not as noticeable as expected. This might also suggest that vendors do converge on their definition of malware, under our $\mathcal{M}_{loose}$ metric.
+
+When looking at the changes from $\mathcal{S}_{loose}$ to $\mathcal{S}_{real}$, not only the amount of malware labeled samples increase, but also the number of goodware labeled samples, both by a significant amount. The way this impacts the results is pretty significant, as we observe a high decrease in the \gls{auroc}, from 0.95 to 0.77. The metric $\mathcal{M}_{real}$ that labels malware and goodware for this scenario $\mathcal{S}_{real}$ disregards the cross-check from outside repositories, which in turn degrade the reliability significantly, as well as increase the dataset size notably. We attribute the result's degradation mainly to the unreliability of goodware labeling, not only because we have previously seen that increase in malware does not significantly impact results, but also due to the tendency for false negatives in vendors, which in turn lead us to incorrectly label goodware under samples in $\mathcal{D}_{class}^*$.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_xval}
+	\caption{Cross-Validation \gls{roc} and \gls{auroc} for our three scenarios.}
+	\label{fig:roc_xval}
+\end{figure}
+
+The results we described show how moving from \textit{laboratory conditions} to more \textit{real-world conditions} degrade the model's performance. We now focus on using our previously defined temporal consistency methodologies to further converge into a real-world scenario.
+
+We start by applying our \textit{Past-to-Present} validation to the three scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$. As previously defined, this validation starts with an older set of training samples and iteratively adds newer samples, validating each iteration on a fixed set of the most recent samples. Since our interest is to measure performance variance over time, we plot in Figure \ref{fig:roc_tc_1} the \gls{auroc} at every iteration (i.e.\ fold), for each of out three scenarios.
+
+When directly comparing the average \gls{auroc} for cross-validation and our \textit{Past-to-Present} validation, we note a decrease from 0.97 to 0.94 for $\mathcal{S}_{strict}$, 0.95 to 0.93 for $\mathcal{S}_{loose}$, and 0.77 to 0.72 for $\mathcal{S}_{real}$. This decrease is intuitive to the methodology, as we are forcing temporal consistency between samples.
+
+When looking at results from $\mathcal{S}_{strict}$ and $\mathcal{S}_{loose}$, we see they closely relate. This relation has already been noticed on the previous cross-validation results, as the their metrics $\mathcal{M}_{strict}$ and $\mathcal{M}_{loose}$ are not very different. As for $\mathcal{S}_{real}$, the degradation is higher, as the reliability of the metric $\mathcal{M}_{real}$ goes down.
+
+Our main observation for this validation methodology is how there is a slight tendency for \gls{auroc} to increase, as we move forward in time, close to the validation set.
+
+When looking at $\mathcal{S}_{strict}$, we note that from the initial fold 0 to fold 3, the \gls{auroc} increases by 0.02, without going significantly further down, from that fold forward. This observation can be seen in Figure \ref{fig:roc_tc_strict_1}. Similarly, looking at $\mathcal{S}_{loose}$, we note it holds the \gls{auroc} up until fold 7, after which it there is a slight increase, although not very noticeable, Figure \ref{fig:roc_tc_loose_1} shows more clearly the change in scores. As for $\mathcal{S}_{real}$, we see a fluctuation down from the initial folds, followed by a steady increase until the last fold. Figure \ref{fig:roc_tc_real_1} shows the actual fluctuation values.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_all_1}
+	\caption{\gls{auroc} for each iteration of the \textit{Past-to-Present} evaluation. Folds order consists with temporal order (i.e.\ fold 0 contains older samples than fold 1)}
+	\label{fig:roc_tc_1}
+\end{figure}
+
+From these observations, we argue about the possibility that with fixed validation set of the most recent samples, a model benefits by using samples temporally closer to validation. Our next result, which uses our \textit{Present-to-Past} validation methodology will further help analyze the aforementioned detail. The \textit{Present-to-Past} validation enhance the previous results under real-world conditions. This methodology starts by fixing the validation set to the most recent samples, but with the training set starting at the temporally closest samples to validation. At each iteration, older samples are added to the training set and validated on the fixed, most recent, samples.
+
+By applying this methodology to the three scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, we plot Figure \ref{fig:roc_tc_2}, where the X axis increases as older samples are added to the training set (e.g.\ fold 0 contains newer samples than fold 1), hence measuring the performance variance over time. Similarly to the previous observation, the average \gls{auroc} suffers a decrease when compared to cross-validation. For $\mathcal{S}_{strict}$ we note a change from 0.97 to 0.94, for $\mathcal{S}_{loose}$ the decrease is from 0.95 to 0.94, and for $\mathcal{S}_{real}$ from 0.77 to 0.75.
+
+%From these observations, we argue about the possibility that with fixed validation set of the most recent samples, a model benefits by using samples temporally closer to validation. Our next result, which uses our \textit{Present-to-Past} validation methodology will further help analyze the aforementioned detail.
+
+%The \textit{Present-to-Past} validation enhance the previous results under real-world conditions. This methodology starts by fixing the validation set to the most recent samples, but with the training set starting at the temporally closest samples to validation. At each iteration, older samples are added to the training set and validated on the fixed, most recent samples.
+
+%By applying this methodology to the three scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, we plot Figure \ref{fig:roc_tc_2}, where the X axis increases as older samples are added to the training set (e.g.\ fold 0 contains newer samples than fold 1), hence measuring the performance variance over time.
+
+%Similarly to the previous observation, the average \gls{auroc} suffers a decrease when compared to cross-validation. For $\mathcal{S}_{strict}$ we note a change from 0.97 to 0.XX, for $\mathcal{S}_{loose}$ the decrease is from 0.95 to 0.XX, and for $\mathcal{S}_{real}$ from 0.77 to 0.XX.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_all_2}
+	\caption{\gls{auroc} for each iteration of the \textit{Present-to-Past} evaluation. Folds order is the inverse of temporal order (i.e.\ fold 0 contains newer samples than fold 1)}
+	\label{fig:roc_tc_2}
+\end{figure}
+
+The comparison between scenarios is identical to what was observed in cross-validation and \textit{Past-to-Present}: scenarios $\mathcal{S}_{strict}$ and $\mathcal{S}_{loose}$ are display very similar results, with $\mathcal{S}_{real}$ dropping behind due to its less reliable labeling metric.
+
+Compared to the \textit{Past-to-Present} validation, the average \gls{auroc} increases slightly. Furthermore, we note that the score maxes out at early folds, specifically between fold 0 to fold 4.
+
+For scenario $\mathcal{S}_{strict}$, there is a slight increase of 0.02 between fold 0 and fold 4, maximum out from there on. For $\mathcal{S}_{loose}$ there is barely any change throughout folds. In scenario $\mathcal{S}_{real}$ the increase in early folds is very small, but what we note is that the older samples weight down the score, with maximum values between fold 1 and fold 4, from fold 5 and onward, the score decreases significantly. The concrete values for each fold for $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$ can be observed in Figure \ref{fig:roc_tc_strict_2}, \ref{fig:roc_tc_loose_2}, \ref{fig:roc_tc_real_2}, respectively.
+
+%With these results, our observation that samples closer to the validation set benefit the model becomes more convincing. In fact, we argue that there should be an ideal number of necessary training folds, temporally consistent with the validation fold (i.e.\ any fold from training predates validation), needed to maximum the overall score.
+
+%Our final results test if indeed we can reduce the training size to some number of folds $n$, which predate the validation fold. We choose $n = 3$, for we have seen the scores either do not improve (for $\mathcal{S}_{strict}$ and $\mathcal{S}_{loose}$) or actually go down (for $\mathcal{S}_{real}$) with higher folds, and apply the final \textit{Temporal Window} validation, which consists in a sliding window of size 4 (3 training folds, 1 validation) to the scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$.
+
+%As presented in Figure \ref{fig:roc_sliding_window}, for the scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, we obtain \gls{auroc} values of 0.95, 0.91 and 0.74, respectively.
+
+With these results, our observation that samples closer to the validation set benefit the model becomes more convincing. In fact, we argue that there should be an ideal number of necessary training folds, temporally consistent with the validation fold (i.e.\ any fold from training predates validation), needed to maximize the overall score. For a validation set composed by 10\% of the total dataset, the preceding 30\% should stand for training.
+
+Finally, we analyse how does such reduced training set behaves in our scenarios; for this purpose, we define a sliding window that moves forward in time through each scenario for training and validation. We propose a reduction on the training size to $n=3$ folds predating the validation fold. We chose $n = 3$, since we have seen the scores either do not improve (for $\mathcal{S}_{strict}$ and $\mathcal{S}_{loose}$) or actually go down (for $\mathcal{S}_{real}$) with higher folds. In summary, we have selected 30\% of each dataset (read, scenario) for training purposes and the next 10\% for validation (3 training folds, 1 validation fold), then started moving the window forward in time (1 fold at a time) and obtained the results: as presented in Figure \ref{fig:roc_sliding_window}, for the scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, we obtain \gls{auroc} values of 0.95, 0.91 and 0.74, respectively. These results come to reaffirm our argument that we can reduce the size of the training set, without losing any significant score.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_sliding_window}
+	\caption{\gls{roc} and \gls{auroc} for our three scenarios, under the \textit{Temporal Window} methodology.}
+	\label{fig:roc_sliding_window}
+\end{figure}
+
+Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from 0.97 to 0.95 for $\mathcal{S}_{strict}$, from 0.95 to 0.91 for $\mathcal{S}_{loose}$ and from 0.77 to 0.74 for $\mathcal{S}_{real}$. An expected result, as we are enforcing temporal validation. We should highlight that these results should be much closer to reality, since we are requiring temporal consistency and also a reasonable amount of data for training purposes (which might be a relevant issue in a few year's time).
+
+%%%%
+
+%Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from 0.97 to 0.95 for $\mathcal{S}_{strict}$, from 0.95 to 0.91 for $\mathcal{S}_{loose}$ and from 0.77 to 0.74 for $\mathcal{S}_{real}$. An expected result, as we are enforcing temporal validation.
+
+%When doing the comparison to the average \gls{auroc} from \textit{Past-to-Present} and \textit{Present-to-Past}, the \textit{Temporal Window} averages either hold similar scores or are actually better, specifically when compared to \textit{Past-to-Present} validation.
+
+%These results come to reaffirm our argument that we can reduce the size of the training set, without losing any significant score.
+
+%\todo[inline]{tabela de todos os resultados finais}
+
+%\todo[inline]{modelo do strict, validado no real vs modelo real validado no real}
+
+% We start with baseline results, that take all three scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$
+
+%\todo[inline]{Cross-validation para os 3 datasets}
+%\todo[inline]{Referir como o resultado é optimo para strict}
+
+%ROC/AUROC c/ x-validation, p/ 3 datasets, discussion (0.96; optimo em strict dataset, validar depois com loose e real)
+
+% ROC/AUROC c/ tc validation, p/ 3 datasets, discussion
+
+
+
+%discussion entre c/ e s/ TC, comprova perda, mais p/ real, pq é menos reliable
+
+%passado mais recente mais relevante, verificar isso com sliding window
+%
+%ROC/AUROC c/ tc sliding window, p/ 3 datasets, discussion - possibilidade de descardar dados sem perder resultados.
+%
+%discussion - resumo dos resultados anteriores
+%
+%future work - usar nomes do malware, usar mais features, maximizar resultadosb
+%
+%\todo[inline]{}
+
+%\subsection{Classifier Implementation}\label{sub_sec:classifier_implementation}
+
+%In this subsection we go over the classifier used to create the model that separates malware from goodware. We chose \textit{Logistic Regression} linear classifier for this task, as it deals well with high number of samples and features, but also enables a better understand on what the model is learning, given it assigns weights to each feature.
+
+%\todo[inline]{elaborar isto, ate q ponto?}
+
+%\subsection{Evaluation and Results}\label{sub_sec:results}
+
+%We now put together all the previous subsections to describe evaluation and results. This subsection is hence divided into evaluation, where we describe how our results are measured and why they are measured that way, and results, where we discuss the outcome of our work.
+
+%Our evaluation is based on measuring the \gls{dr} and \gls{fpr}. This metric allows us to directly compare our model to vendors' results, as well as plotting a \gls{roc} curve, which measures the \gls{dr} and \gls{fpr} ate different thresholds. To obtain the overall score we measure the \gls{auroc} curve, that varies between 0 and 1, indicating 0.0 \gls{dr} and 1.0 \gls{fpr} and 1.0 \gls{dr} and 0.0 \gls{fpr}, respectively.
+
+%We evaluated our work by creating different datasets based on the available samples. By using different datasets we compare how the balance of malware/goodware influences the final results. We cross-validated each dataset using k-fold (with $k=10$) and plot its \gls{roc} curve. Furthermore, we apply a validation where we maintain temporal consistency of samples, meaning the training set always predates the validation set. Comparing the curves with and without temporal consistency gives us a better approximation on how models behave under laboratory \textit{vs} real world conditions.
+
+% The used datasets were created by applying the different metrics described in \ref{sub_sec:data_labeling}. In practice we used 3 datasets:
+
+% \subsubsection{\gls{tts}} This dataset is the most fine-grained, and smallest. The malware samples are those where every top vendor classifies as malware, are in the VirusShare set and are not in the \gls{nsrl} set. As for goodware samples, these must all be classified as clean, are in the \gls{nsrl} and are not in the VirusShare set. Numbers wise, this dataset contains 1,361 malware samples and 4,000 goodware samples.
+
+% \subsubsection{\gls{tgs}} This dataset is less strict than the previous, differing only by applying the minimum threshold necessary to label a sample as malware (at least 5 malware classifications). In terms of size, this dataset contains 86,503 malware samples and 4,000 goodware samples.
+
+% \subsubsection{\gls{tbs}} This dataset ignores the VirusShare and \gls{nsrl} sets, meaning a sample is labeled as malware if it has at least 5 top vendors classifying it as malware, and labels a sample as goodware if all top vendors classify it as clean. Since it is less strict dataset, it contains 186,444 malware samples and 49,783 goodware samples.
+
+% \todo[inline]{talvez criar dataset 4 e 5 de fixar malware bom vs fixar goodware bom}
+
+%For temporal consistency validation we sorted the dataset by date and removed the last 20\% of samples for validation. We split the remaining 80\% into 10 temporal consistent folds (i.e.\ samples from fold 0 predate samples from fold 1), we then measure the \gls{roc} curve after applying the algorithms presented in \textbf{Algorithms X}, which provide an incremental validation approach.
+
+%\todo[inline]{algoritmo com old to new, começar do fold 0, ir juntando folds novos}
+%\todo[inline]{algoritmo com new to old, começar do fold 9, ir juntando folds velhos}
+
+%This validation provides insight on the dependency between newer and older samples, enabling to understand how recent (and how large) the training set needs to be in order to maximize the validation score.
+
+%Following the previous temporal consistency validation, we apply another approach to temporal consistency. Specifically we split the dataset again into 10 temporal consistent folds, and apply a sliding window over the folds, maintaining the training set older than the validation set.
+
+%\todo[inline]{se calhar separar resultados numa subseccao propria}
+%\todo[inline]{onde introduzir arquitectura, sklearn e etc}
+
+%We now present the results of our evaluation, starting by applying the cross-validation for all the datasets, serving as a baseline for \textit{laboratory conditions}.
+
+%For \gls{tts} we obtain an average \gls{auroc} of 0.96, going down to 0.94 for \gls{tgs} and even further down to 0.77 for \gls{tbs}, as seen in \textbf{Figure X}.
+
+%For each dataset we used the exact same methodology to derive a model, varying only the amount of samples. This size increase between datasets, and consequently score decrease, is due to relaxing the labeling methodology, meaning less accurate ground truth which in turn includes samples that are harder for the model to separate.
+
+%Our experiments showed how a reliable model can be obtained when the dataset is built in a way that facilitates separation, even without much work in feature selection and classifier optimization. The limitation is how a good dataset does not represent real world samples, which in turn are much harder to separate, as seen in the results for \gls{tbs}.
+
+%To better approximate \textit{real-world conditions}, our next experiments go over temporal consistency when validating the model. We applied the algorithms described in \textbf{Algorithms X} to the 3 datasets.
+
+%When applying \textbf{Algorithm x.1}, we observed a \gls{auroc} variation from 0.92 to 0.93 for \gls{tts} and \gls{tgs}, where \gls{tbs} varies between 0.69 to 0.74, as seen in \textbf{Figure X.1}.
+
+%Again, the same methodology was applied to all datasets, but by incrementing the training set size with newer samples on every fold, we noticed the tendency is for the \gls{auroc} to increase. We only note that for the first two folds in \gls{tbs} the score is maximum, although it goes down with the third fold and follows the same incrementing pattern as the other sets.
+
+%When applying \textbf{Algorithm x.2}, we observed a \gls{auroc} variation from 0.92 to 0.93 for \glossary{tts} and \gls{tgs}, identical to the previous experiment, but for \gls{tbs} the variation was between 0.72 and 0.76, as observed in \textbf{Figure X.2}.
+
+%With the same methodology for all datasets, but now the training set using older samples as it grows in size, we note that increasing the training with older samples does not improve the score for \gls{tts} and \gls{tgs}, even more, for \gls{tbs} we note the score decreases as we use older samples.
+
+%Comparing results from both temporal consistent validation algorithms, we are led to believe they describe inverse patterns. This fact reinforces the intuition that newer samples are more related to the a close past, rather than a distant one.
+
+%By identifying that with the 3 closest folds to the validation we achieve a maximum or near maximum score, we use this knowledge to apply the last experiment on temporal consistency. We apply the sliding window with 3 folds for training and the forth for validation, incrementing one fold on each iteration.
+
+%By looking at the \gls{auroc}, we note that for \gls{tts} we got an average score of 0.94, for \gls{tgs} the average was 0.88 and for \gls{tbs} 0.74, as depicted in \textbf{Figure X}. For all but \gls{tgs} sets we got scores that are up to par with the scores when using a larger training size. We can argue that using smaller training sets, but close in time to the validation is more beneficial than using a larger dataset that includes samples further away in time.
+
+%To summarize the results, we showed that some conditions to optimize a malware classification model's score exist (i.e.\ laboratory conditions), such as choosing samples that are further apart, by enforcing a stricter labeling method, and using validations techniques that are ideal for independent and identically distributed samples, like k-fold cross-validation.
+
+%When labeling conditions are less strict, the overall scores decrease, as shown by the three different datasets; furthermore, when a time-wise dependency between samples is taken into account, the overall score is negatively impacted, when compared to a normal cross-validation. Nonetheless we showed that it is possible to obtain good results on temporal consistency, without having to take into account the whole past, only the recent past.
+
+\section{Discussion}\label{sec:discussion}
+We have proposed different scenarios, based on different labeling metrics, to study laboratory \textit{vs} real-world conditions. Our scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, vary both in reliability and size, going from a more reliable and small dataset to a larger and less reliable one. We have developed several comparative analysis between these three scenarios, to evaluate how much the nature of the dataset can influence the results. We have splitted the analysis into two major validation conditions: the cross validation methodology, where the the time consistency is discarded; and temporal-based methodologies.
+
+Following a cross-validation methodology, we have confirmed our intuitions: $\mathcal{S}_{strict}$ showed up an \gls{auroc} of 0.97, $\mathcal{S}_{loose}$ have presented 0.95, whereas $\mathcal{S}_{real}$ decreased to 0.77. As we have argued, the results on the strict scenario are justified by factors like a small and reliable dataset, and the use of cross-validation, which mixes samples and ignores possible dependencies between. This scenario $\mathcal{S}_{strict}$ is composed by very well-known and analysed samples. Although the loose scenario slightly relaxes the requirements, it is still composed by very well-known samples, which partially justifies the good \gls{auroc} (0.95). But this difference is interesting, as although the number of malware labeled samples increase significantly, the results are not that affected. As we have noticed, this might also suggest that vendors do converge on their definition of malware, under our $\mathcal{M}_{loose}$ metric. The changes observed from $\mathcal{S}_{loose}$ to $\mathcal{S}_{real}$ are more remarkable, but somehow expected. The metric $\mathcal{M}_{real}$ that labels malware and goodware for the scenario $\mathcal{S}_{real}$ disregards the cross-check from outside repositories, which in turn degrade the reliability significantly, as well as increase the dataset size notably. As we have already noticed, we attribute the result's degradation mainly to the unreliability of goodware labeling, not only because we have previously seen that increase in malware does not significantly impact results, but also due to the tendency for false negatives in vendors, which in turn lead us to incorrectly label goodware under samples in $\mathcal{D}_{class}^*$.
+
+When temporal consistency comes into play, the results on different scenarios do not differ much, nevertheless we can observe more pronounce trends. The great conclusion that we can take stands on the relative position of the training set with respect to the validation set and its size. Indeed, samples closer to the validation set benefit the model. We argue that there should be an ideal number of necessary training folds (30\% of the dataset), temporally consistent with the validation fold (10\% of the dataset), needed to maximum the overall score. This support our argument that we can reduce the size of the training set, without losing any significant score.
+
+We finished our analysis by validating this temporal-based results. For this purpose, we have defined a sliding window for each scenario, with the above parameters, that moved forward in time (1 fold at a time) and obtained the results: we have obtained \gls{auroc} values of 0.95 for $\mathcal{S}_{strict}$, 0.91 for $\mathcal{S}_{loose}$ and 0.74 for $\mathcal{S}_{real}$. Comparing these results with the baseline cross-validation, we note a very slight decrease for each scenario. The decrease was more than expected due to the enforcement of temporal consistency, and it was not significant. We should highlight that these results should be much closer to reality than the ones provided by cross validation techniques, since we are requiring temporal consistency and also a reasonable amount of data for training purposes (which might be a relevant issue in a few year's time). Indeed, aiming at complementing antivirus' vendors techniques with machine learning, we should not expect to gather and use all the samples ever seen for training purposes, and these results may be very useful on the choice of the right training set.
+
+
+
+%%%
+
+%We created different scenarios, based on different labeling metrics, to study laboratory \textit{vs} real-world conditions. Our scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, vary both in reliability and size, going from a more reliable and small dataset to a larger and less reliable one.
+
+%Using standard cross-validation on the different scenarios showed the impact of more or less reliable metrics. Our intuition that a more strict metric would provide better results was confirmed by our experiments, as seen in Figure \ref{fig:roc_xval}.
+
+%\todo[inline]{verificar varios tipos de cenarios; resultados que variam nos cenarios; publicaçoes com tbm variaçao de resultados; dataset influencia; tradeoff dos datasets/validacao. argumentar que se calhar mais vale usar real dataset/validation. complementar os vendors com tecnicas de machine learning nao podemos para sempre acumular todas as samples, quao atras precisamos de ir, para maximizar o resultado sem ter todas as samples. fazer uma analise de ao usar o sliding window, se piora muito. diversidade do related, relativamente aos resultados.}
+
+
+%\section{Introduction}
+%% no \IEEEPARstart
+%This demo file is intended to serve as a ``starter file''
+%for IEEE conference papers produced under \LaTeX\ using
+%IEEEtran.cls version 1.8b and later.
+%% You must have at least 2 lines in the paragraph with the drop letter
+%% (should never be an issue)
+%I wish you the best of success.
+%
+%\hfill mds
+% 
+%\hfill August 26, 2015
+%
+%\subsection{Subsection Heading Here}
+%Subsection text here.
+%
+%
+%\subsubsection{Subsubsection Heading Here}
+%Subsubsection text here.
+
+
+% An example of a floating figure using the graphicx package.
+% Note that \label must occur AFTER (or within) \caption.
+% For figures, \caption should occur after the \includegraphics.
+% Note that IEEEtran v1.7 and later has special internal code that
+% is designed to preserve the operation of \label within \caption
+% even when the captionsoff option is in effect. However, because
+% of issues like this, it may be the safest practice to put all your
+% \label just after \caption rather than within \caption{}.
+%
+% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
+% option should be used if it is desired that the figures are to be
+% displayed while in draft mode.
+%
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=2.5in]{myfigure}
+% where an .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+%\caption{Simulation results for the network.}
+%\label{fig_sim}
+%\end{figure}
+
+% Note that the IEEE typically puts floats only at the top, even when this
+% results in a large percentage of a column being occupied by floats.
+
+
+% An example of a double column floating figure using two subfigures.
+% (The subfig.sty package must be loaded for this to work.)
+% The subfigure \label commands are set within each subfloat command,
+% and the \label for the overall figure must come after \caption.
+% \hfil is used as a separator to get equal spacing.
+% Watch out that the combined width of all the subfigures on a 
+% line do not exceed the text width or a line break will occur.
+%
+%\begin{figure*}[!t]
+%\centering
+%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
+%\label{fig_second_case}}
+%\caption{Simulation results for the network.}
+%\label{fig_sim}
+%\end{figure*}
+%
+% Note that often IEEE papers with subfigures do not employ subfigure
+% captions (using the optional argument to \subfloat[]), but instead will
+% reference/describe all of them (a), (b), etc., within the main caption.
+% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
+% labels, the optional argument to \subfloat must be present. If a
+% subcaption is not desired, just leave its contents blank,
+% e.g., \subfloat[].
+
+
+% An example of a floating table. Note that, for IEEE style tables, the
+% \caption command should come BEFORE the table and, given that table
+% captions serve much like titles, are usually capitalized except for words
+% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
+% and up, which are usually not capitalized unless they are the first or
+% last word of the caption. Table text will default to \footnotesize as
+% the IEEE normally uses this smaller font for tables.
+% The \label must come after \caption as always.
+%
+%\begin{table}[!t]
+%% increase table row spacing, adjust to taste
+%\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+%\caption{An Example of a Table}
+%\label{table_example}
+%\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+%\begin{tabular}{|c||c|}
+%\hline
+%One & Two\\
+%\hline
+%Three & Four\\
+%\hline
+%\end{tabular}
+%\end{table}
+
+
+% Note that the IEEE does not put floats in the very first column
+% - or typically anywhere on the first page for that matter. Also,
+% in-text middle ("here") positioning is typically not used, but it
+% is allowed and encouraged for Computer Society conferences (but
+% not Computer Society journals). Most IEEE journals/conferences use
+% top floats exclusively. 
+% Note that, LaTeX2e, unlike IEEE journals/conferences, places
+% footnotes above bottom floats. This can be corrected via the
+% \fnbelowfloat command of the stfloats package.
+
+
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+In this paper we aimed at analyzing how \gls{ml} techniques fit into the scope of malware detection and how could the chosen dataset influence the results of the classifier. For this purpose we have presented three different scenarios, ranging from a more simulated scenario, where better results are achieved, to more realistic ones, where the \gls{auroc} results can go down about 20\%. We have analysed the different scenarios mainly on two kind of conditions: the laboratory conditions where the standard cross-validation methodology was applied discarding the importance of {\it time} in malware detection, and temporal-consistent techniques where we have trained and validated the model in a temporal-consistent manner. We have also concluded on how much can we reduce the size of the training dataset without compromising optimal result, to avoid the need of training with all ever seen samples.
+
+We believe that the pertinent question of how much should we seek for great results on \gls{ml} techniques applied to malware detection, bearing in mind that it leads to classifiers that would not perform better over realistic conditions, is worth to be further discussed. As future work we aim at optimizing our logistic regression model, at increasing and optimizing the features, and, finally, at developing a supervised learning methodology to classify malware samples according to the main malware families.
+
+% conference papers do not normally have an appendix
+
+% use section* for acknowledgment
+%\section*{Acknowledgment}
+%
+%The authors would like to thank...
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+\bibliography{IEEEabrv,articlebib}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+%\begin{thebibliography}{1}
+%	
+%	\bibitem{IEEEhowto:kopka}
+%	H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+%	0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+%	
+%\end{thebibliography}
+
+\newpage
+\appendix
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_strict_1}
+	\caption{\gls{roc} and \gls{auroc} for $\mathcal{S}_{strict}$ under \textit{Past-to-Present} .}
+	\label{fig:roc_tc_strict_1}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_loose_1}
+	\caption{\gls{roc} and \gls{auroc} for $\mathcal{S}_{loose}$ under \textit{Past-to-Present} .}
+	\label{fig:roc_tc_loose_1}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_real_1}
+	\caption{\gls{roc} and \gls{auroc} for $\mathcal{S}_{real}$ under \textit{Past-to-Present} .}
+	\label{fig:roc_tc_real_1}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_strict_2}
+	\caption{\gls{roc} and \gls{auroc} for $\mathcal{S}_{strict}$ under \textit{Present-to-Past} .}
+	\label{fig:roc_tc_strict_2}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_loose_2}
+	\caption{\gls{roc} and \gls{auroc} for $\mathcal{S}_{loose}$ under \textit{Present-to-Past} .}
+	\label{fig:roc_tc_loose_2}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_real_2}
+	\caption{\gls{roc} and \gls{auroc} for $\mathcal{S}_{real}$ under \textit{Present-to-Past} .}
+	\label{fig:roc_tc_real_2}
+\end{figure}
+
+
+% that's all folks
+\end{document}
+
+

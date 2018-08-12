@@ -1,0 +1,16 @@
+%!TEX root = main.tex
+
+\section{Conclusion}\label{sec:conclusion}
+
+In this paper we analyzed how \gls{ml} techniques fit into the scope of malware detection and how could the chosen dataset influence the results of the classifier. 
+
+Given the non-existence of a common agreement on how to label samples in a real world dataset, we have proposed three different metrics for labeling these samples, and presented three different scenarios, ranging from a more simulated scenario, where better results are achieved, to more realistic ones, where the \gls{auroc} results can go down by 23\%.
+We have analyzed the different scenarios mainly on two kind of conditions: the laboratory conditions where the standard cross-validation methodology was applied discarding the importance of \emph{time} in malware detection, and temporal-consistent techniques where we have trained and validated the model in a temporal-consistent manner.
+We have shown that for a modest compromise in accuracy temporal-consistent methodologies are adequate to classify malware samples.
+
+We have also concluded that we can reduce the size of the training dataset to avoid the need of training with all ever seen samples, and argue on how much it can be reduced without compromising optimal results.
+
+Having a sound understanding of the effects of different methodologies, we improved our model to yield higher results.
+
+We believe that the pertinent question of how much should we seek for great results on \gls{ml} techniques applied to malware detection is worth to be further discussed, bearing in mind that it leads to classifiers that would not perform better over realistic conditions. 
+As future work we aim at optimizing our logistic regression model, at increasing and optimizing the features, and finally, at developing a supervised learning methodology to classify malware samples according to the main malware families.

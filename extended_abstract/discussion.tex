@@ -1,0 +1,39 @@
+%!TEX root = main.tex
+
+\section{Discussion}\label{sec:discussion}
+
+We have proposed different scenarios, based on different labeling metrics, to study laboratory \textit{vs} real-world conditions. Our scenarios, $\mathcal{S}_{\strict}$, $\mathcal{S}_{\loose}$ and $\mathcal{S}_{\real}$, vary both in reliability and size, going from a more reliable and small dataset to a larger and less reliable one.
+This (un)reliability is due to the fact that for real world samples there is usually no agreement among vendors on how to classify a given sample, and for that we had to assign a labeling to such samples according to our proposed metrics.
+We have developed several comparative analysis between these three scenarios, to evaluate how much the nature of the dataset can influence the results.
+We have split the analysis into two major validation conditions: the cross validation methodology, where the time consistency is discarded; and temporal-based methodologies.
+We tested our methodologies by using a simple \gls{lr} model, which was then improved to transmit better information and to use more features.
+
+Following a cross-validation methodology, we have confirmed our intuitions: $\mathcal{S}_{\strict}$ showed up an \gls{auroc} of 0.91, $\mathcal{S}_{\loose}$ have presented 0.9, whereas $\mathcal{S}_{\real}$ decreased to 0.75. 
+As we have argued, the results on $\mathcal{S}_{\strict}$ are justified by factors like a small and reliable dataset, and the use of cross-validation, which mixes samples and ignores possible dependencies between them.
+This scenario is composed by very well-known and analyzed samples.
+Although $\mathcal{S}_{\loose}$ slightly relaxes these requirements, it is still composed by very well-known samples, which partially justifies the comparable \gls{auroc} (0.90).
+But this difference is interesting, as although the number of malware labeled samples increased significantly, the results are not that affected.
+As we have noticed, this might also suggest that vendors do converge on their definition of malware, under our $\mathcal{M}_{\loose}$ metric. 
+The changes observed from $\mathcal{S}_{\loose}$ to $\mathcal{S}_{\real}$ are more remarkable, but somehow expected.
+The metric that labels malware and goodware for the scenario $\mathcal{S}_{\real}$ disregards the cross-check from outside repositories, which in turn degrades the reliability significantly, while increasing the dataset size notably. 
+As we have already noticed, we attribute the result's degradation mainly to the unreliability of goodware labeling, not only because we have previously seen that the increase in malware does not significantly impact the results (from $\SS_\strict$ to $\SS_\loose$), but also due to the tendency for false negatives in vendors (Figure~\ref{fig:distribution_changes}), which in turn lead us to incorrectly label as goodware some of the malicious samples in $\DD$.
+
+When temporal consistency comes into play, the results on different scenarios do not differ much, nevertheless we can observe more pronounce trends.
+The great conclusion that we can take stands on the relative position of the training set with respect to the validation set and its size.
+Indeed, samples closer to the validation set seem to benefit the model.
+We argue that there should be an ideal number of necessary training folds (30\% of the dataset), temporally consistent with the validation fold (10\% of the dataset), needed to maximize the overall score.
+This supports our argument that we can reduce the size of the training set, without losing any significant score.
+
+We finished our analysis by validating this temporal-based results.
+For this purpose, we have defined a sliding window for each scenario, with the above parameters, that moved forward in time (1 fold at a time) and obtained the \gls{auroc} values of 0.89 for $\mathcal{S}_{\strict}$, 0.88 for $\mathcal{S}_{\loose}$ and 0.73 for $\mathcal{S}_{\real}$.
+Comparing these results with the baseline cross-validation, we note a very slight decrease for each scenario.
+This decrease, although not significant, was more than expected due to the enforcement of temporal consistency as well as the significant reduction of the size of the training set. 
+We should highlight that these results should be much closer to reality than the ones provided by cross validation techniques, since we are requiring temporal consistency and also a reasonable amount of data for training purposes, which might be a relevant issue in a few year's time.
+Indeed, aiming at complementing antivirus' vendors techniques with machine learning, we should not expect to gather and use all the samples ever seen for training purposes, and these results may be very useful on the choice of the right training set.
+
+Finally, we describe multiple improvements to our base model $\LR$ in order to improve the overall results.
+We started by using a multi layer approach to build a new model $\mathcal{E}$, which enables the extraction of more detailed information regarding a malicious sample, specifically the malware class it belongs.
+We also introduced three new dynamic features, to improve the amount of information obtained from the samples.
+After applying the same evaluation methodologies to our new model $\mathcal{E}$, we observed an increase in all cases.
+We note that the bigger the dataset, the higher the improvement, as $\mathcal{S}_{\strict}$ increased by 0.07 (cross-validation), $\mathcal{S}_{\loose}$ by 0.08 and $\mathcal{S}_{\real}$ (cross-validation) by 0.27 (\textit{present-to-past}).
+This comes to show how the model was better able to learn from the new features.

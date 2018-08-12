@@ -1,0 +1,67 @@
+%!TEX root = main.tex
+\color{black}
+\section{Feature and Model Selection}\label{sec:feature_model}
+
+In this subsection we describe our approach to feature selection and linear model choice.
+
+\subsection{Feature Selection}
+\label{section:feature_selection}
+
+One of the most important stages in Machine Learning is the selection of the features to analyze, and features based on static imports have shown promising results in \gls{ml} applications for malware detection~\cite{miller:rev_int,schultz:data_mining}. 
+In this section we describe the adopted static features that were fed into our model.
+
+Although Cuckoo provides enormous amounts of usable information, we chose to start with simple features as to have a basic understanding of how doable our approach is.
+More so, one of our main concerns is how the same feature gives different results under our different scenarios, hence the performance between scenarios and methodologies is more relevant than absolute performance.
+With that in mind, we chose to use the static imports as features.
+
+Using Celery~\cite{tool:celery}, a distributed task queue for Python, we optimized the parsing of the available HTML reports, extracting samples that contained information regarding static imports into a new set $\FF_{static}$.
+We then joined the samples with static imports $\FF_{static}$ to the labeled samples $\CC_{real}$, obtaining a total of 155,057 labeled samples with static imports $\DD_{static} = \CC_{real} \cap \FF_{static}$.
+
+We then vectorized imports by creating a binary vector where each position corresponds to a specific import.
+If a given import $i$ is present in a sample, its feature vector $x$ will have the value 1 at that position $x_i$.
+Likewise, if a given import $j$ is not present in a sample, its feature vector $x$ will have the value 0 at that position $x_j$.
+
+Due to the amount of samples and variety of imports, each sample got a vector $x$ of 7,280 dimensions (\ie\ there are 7,280 different imports).
+To reduce this number, and to remove any noise due to incorrect parsing of static imports by Cuckoo, we applied a variance threshold.
+
+The variance threshold calculates the variance for each import, removing those that are below a given threshold.
+In our case, since we are working with a binary vector, each import can be represented as Bernoulli random variable, hence their variance is given by $p(1-p)$.
+With that in mind, we removed any import that did not vary in more than 99\% of samples.
+
+The resulting dataset $\DD_{static}$ got reduced to 153,374 samples, each with a 64 dimensional binary vector.
+
+\subsection{Model Selection}
+
+In this subsection we go over the classifier used to create the model that separates malware from goodware.
+Our main concerns when choosing a classifier regard the ability to produce a probabilistic output, good scaling for large number of features and samples, and ease of use.
+
+Taking into consideration the guidelines given in~\cite{rossow:practices,shabtai:survey} and related work in~\cite{miller:rev_int,nissim:al_pdf,rieck:dynamic,schultz:data_mining}, we decide to use \textit{\acrfull{lr}} as our model.
+This model fits our needs as it gives the probability of a random variable $X$ being 0 or 1, given a set of constraints (\ie~features), scales well with samples and features and it is readily available from several libraries, facilitating implementation~\cite{friedman2001elements}.
+
+\gls{lr} can be defined with the form
+\begin{eqnarray*}
+	\rho(x) = \dfrac{1}{1 + e^{-x}},&x = \beta_0 + \beta_1x_1 + ... + \beta_nx_n
+\end{eqnarray*}
+where $\beta_n$ is the learned weight for feature $x_n$.
+This weight is learned through iteration in order to minimize the error between the predicted values and the actual values.
+In other words, given an \textit{n-th} dimensional set of features, \gls{lr} will try to create an hyperplane that divides samples from two classes.
+
+As \gls{lr} is based on the logistic function (or sigmoid function), each feature $x_n$ can vary from $-\infty$ to $+\infty$ and still the output is contained between 0 and 1, hence providing probabilistic values.
+
+%\todo[inline]{}
+%\medskip 
+%
+%Our first and simplest model $\mathcal{LR}$, takes as features a sample's static imports, as a binary vector, and outputs the likelihood of a sample being malware. As we are dealing with a variety of malware samples, in the sense they have different behaviour and characteristics (\eg, trojan, virus), a generic classifier like this one may not perform well, as not only goodware may be diverse, but also is malware.
+%
+%\medskip
+%
+%To mitigate this shortcoming we provide a more complex model $\mathcal{E}$, which comprises a simple ensemble stacking approach. This model also takes as features the static imports and outputs the likelihood of a sample being malware, but it is layered in two steps.
+%
+%The first step (layer $\mathcal{E}_{\mathcal{L}_{0}}$) is composed of 6 \gls{lr} models, where each model is trained to output the likelihood of a sample belonging to one of six classes: trojan $\mathcal{C}_{t}$, worm $\mathcal{C}_{w}$, virus $\mathcal{C}_{v}$, spyware $\mathcal{C}_{s}$, ransom $\mathcal{C}_{r}$, or other $\mathcal{C}_{o}$, in a \textit{one-vs-all} methodology, \ie, a sample either belongs to $\mathcal{C}_{n}$ or not, with a sample's static imports as features.
+%
+%%\todo[inline]{maybe talk about AVClass here. PA: concordo}
+%%\todo[inline]{\color{blue}moved to III-B.}
+%
+%The second step (layer $\mathcal{E}_{\mathcal{L}_{1}}$) is identical to $\mathcal{LR}$, but now takes as features the output of each classifier from the previous layer, outputting the likelihood of a sample being malware.
+%
+%In summary, we make use of two models $\mathcal{LR}$ and $\mathcal{E}$, both using a linear logistic regression as base, but where $\mathcal{LR}$ uses a single classifier, and $\mathcal{E}$ uses a 2 layer ensemble stacking with 6 classifiers on the first layer providing input to a single classifier in the second layer, with the hope of facilitating class separation.

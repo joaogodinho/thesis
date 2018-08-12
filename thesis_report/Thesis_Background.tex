@@ -231,6 +231,7 @@ Other downsides of sand-boxing come as compatibility issues, the possibility of 
 Detecting malware is not as simple as applying one of the mentioned techniques, different methods work best in different scenarios, hence anti-virus need to balance the usage of these techniques to keep systems protected.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO mais umas linhas sobre estatico e dinamico
 \section{Cuckoo Sandbox and Malwr}
 \label{section:cuckoo}
 
@@ -255,6 +256,7 @@ Upon finishing the analysis the system provides reports about the sample. The re
 Some of the defined sections are not always available.
 Their availability depends both on a successful analysis by Cuckoo, as well as the type of submitted file.
 For example, only binary executables (\eg\ \gls{dll}, \gls{pe}) provide static analysis information.
+Using the defined sections provided by Cuckoo's reports, one can obtain static and dynamic features from the samples.
 
 The creator of Cuckoo and one of its developers, Alessandro Tanasi, also created a free malware analysis service, Malwr~\cite{tool:malwr}.
 This service implements the Cuckoo system and allows users to upload their own files, which are then run with Cuckoo.
@@ -366,6 +368,8 @@ Authors make use of specific \gls{ml} classifiers like Naive Bayes (NB), \gls{lr
 
 The main focus is to note the choices made by the authors relative to the datasets, classifiers and their evaluation, all of which were taken into consideration in the current work.
 
+\subsection{Best Practices for \gls{ml} in Malware Detection}
+
 Before analyzing the work done with \gls{ml} in malware detection, it is worth noting how such work is to be conducted.
 
 Rossow et al.~\cite{rossow:practices} present some guidelines for designing malware experiments.
@@ -405,7 +409,7 @@ Some problems addressed that are of importance for the presented work include th
 Having a balanced dataset of malware and goodware might not accurately represent the real world.
 For chronological evaluation the question if whether the usage of old samples for training can aid or hinder the classification of new samples.
 
-\medskip
+\subsection{Malware Detection using Static and Dynamic Features}
 
 When it comes to malware detection from static features, Schultz et al.~\cite{schultz:data_mining} present a data-mining framework to detect new, unseen malicious executables.
 Their work uses a dataset of 4,266 programs, with 3,625 malicious binaries and 1,001 clean programs, labeled by a commercial anti-virus.
@@ -486,7 +490,7 @@ They note that one anti-virus label is prevalent for each of the ten clusters, a
 
 By applying their framework to two different sets, where one was created from real-world samples, the authors show how their framework is applicable to a real-world scenario.
 
-\medskip
+\subsection{Pitfalls of Using Classical Validation Methodologies}
 
 Miller et al.~\cite{miller:rev_int} provide a system which relates to \cite{nissim:al_pdf}, as it applies expert reviewers as a limited labeling resource.
 Their work uses both static and dynamic features to detect malware and uses manual label together with \gls{ml} to improve the overall result.

@@ -1,0 +1,24 @@
+%!TEX root = main.tex
+{\color{red}
+
+\section{Feature and Model Selection}\label{sec:feature_model}
+
+In this subsection we describe our approach to feature selection and linear model choice. Since the main focus of our work is to compare results relatively and not absolutely, we do not emphasize much on this topic.
+
+\subsection{Feature Selection}
+
+Following the work of \cite{miller:rev_int,schultz:data_mining} features based on static imports have shown very promising results in \gls{ml} applications for malware detection.
+
+For the purpose of this work we use static imports as features. Given that Cuckoo sometimes fails in parsing static imports, some reports contain noise which should be removed. To do so we apply a regular expression to filter invalid ASCII and special characters (e.g.\ \texttt{!}, \texttt{\&}, \texttt{*}). Doing so removes imports like \texttt{*invalid*} and \texttt{MSVCRT.dll\textbackslash x90} (where \text{\textbackslash x90} represents a byte with value 90 in hexadecimal).
+
+We select static imports from $\mathcal{D}_{static}^*$, collecting a total number of 9,698 imports, applying the previous criterion we remove 40, obtaining a final number of 9,658 imports.
+
+These discriminate case sensitivity (i.e.\ \texttt{kernel32.dll} is different from \texttt{KERNEL32.dll}), which increases the number of features, but provides more information for the classifier to separate classes. From the 9,658 imports, 8,861 (91.75\%) end with the \texttt{dll} extension, while the other 797 (8.25\%) used different extensions (e.g.\ \texttt{bpl}, \texttt{exe}, \texttt{sys}).
+
+On the topic of features, we close the subsection by describing how imports are converted to a vector of features. We vectorize imports by creating a binary vector where each position corresponds to a specific import. If a given import $i$ is present in a sample, its feature vector $x$ will have the value at that position $x_i$ set to 1. Likewise, if a given import $j$ is not present in a sample, its feature vector $x$ will have the value at that position $x_j$ set to 0.
+
+\subsection{Model Selection}
+
+In this subsection we go over the classifier used to create the model that separates malware from goodware. Our main concerns when choosing a classifier regard the ability to produce a probabilistic output, good scaling for large number of features and samples, and ease of use.
+
+With this in mind, we choose the linear logistic regression model. This model gives the probability of a random variable $X$, being 0 or 1, based on experimental data. For our problem, the random variable $X$ is an unknown sample and the outcome is the probability of being either goodware or malware\cite{friedman2001elements}. By having a probabilistic output we can fine tune the threshold at which a sample is labeled malicious. Due to its popularity, it is also readily available from several libraries.}

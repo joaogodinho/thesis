@@ -1,0 +1,38 @@
+\babel@toc {english}{}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Representation of our $\mathcal {S}_{strict}$, $\mathcal {S}_{loose}$ and $\mathcal {S}_{real}$ scenarios.}}{3}{figure.1.1}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Example of a behavioral report from Malwr.}}{13}{figure.2.1}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces \gls {mist} representation as seen in \cite {rieck:dynamic}}}{18}{figure.2.2}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces AVClass running example.}}{21}{figure.2.3}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Number of monthly submissions.}}{24}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Monthly distributions of submissions.}}{25}{figure.3.2}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Percentage of duplicated submissions per month (based on MD5).}}}{25}{figure.3.2}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Distribution of file types per month.}}}{25}{figure.3.2}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Distribution of duplicated samples.}}{27}{figure.3.3}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces $\textrm {TPR}_v$ vs. $\textrm {FPR}_v$ according to $\mathcal {M}_{acc}^{{dups}}$.}}{28}{figure.3.4}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Distribution of duplicated samples with $\mathcal {P}_{f}=0$.}}{29}{figure.3.5}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces $\textrm {TPR}_v$ vs. $\textrm {FPR}_v$ according to $\mathcal {M}_{acc}^{\mathcal {C}}$.}}{29}{figure.3.6}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces $\textrm {TPR}_v$ vs. $\textrm {FPR}_v$ according to $\mathcal {M}_{acc}^{{dups}}$ (green) and $\mathcal {M}_{acc}^{\mathcal {C}}$ (red).}}{30}{figure.3.7}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Sigmoid function $f(x)=\genfrac {}{}{}0{1}{1+e^{-x}}$}}{34}{figure.4.1}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Cross-validation evaluation example.}}{35}{figure.4.2}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Past-to-Present evaluation example.}}{35}{figure.4.3}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Present-to-Past evaluation example.}}{36}{figure.4.4}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces \textit {Temporal Window} evaluation example.}}{36}{figure.4.5}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Single layer results for static features in laboratory conditions.}}{38}{figure.4.6}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Single layer results for static features in \textit {Past-to-Present}.}}{39}{figure.4.7}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Single layer results for static features in \textit {Present-to-Past}.}}{40}{figure.4.8}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Single layer results for static features in \textit {Temporal Window}.}}{41}{figure.4.9}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Multi layer model representation.}}{44}{figure.5.1}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Category calls boxplot.}}{46}{figure.5.2}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Multi layer results for dynamic features in laboratory conditions.}}{48}{figure.5.3}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Multi layer results for dynamic features in \textit {Past-to-Present}.}}{49}{figure.5.4}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Multi layer results for dynamic features in \textit {Present-to-Past}.}}{50}{figure.5.5}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Multi layer results for dynamic features in \textit {Temporal Window}.}}{50}{figure.5.6}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Malware Detector in early stages.}}{54}{figure.6.1}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces MailScanner process diagram.}}{56}{figure.6.2}
+\addvspace {10\p@ }

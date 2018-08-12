@@ -23,8 +23,14 @@ The idea is to take advantage of Cuckoo~\cite{tool:cuckoo} to implement a web se
 
 To implement this service, we developed a simple web application that receives files from users and then sends them to a Cuckoo instance running on a server.
 We created a custom signature for Cuckoo that takes the analysis results and converts it into features suitable for our model, which is then used to classify the sample.
-The output of the model is then appended as a signature the final report.
+The output of the model is then appended as a signature to the final report.
 After analysis our web application extracts basic information regarding the file, as well as the output of the classifier.
+
+We implemented our web application using Django~\cite{tool:django}.
+The implemented application provides a simple upload form for users to submit their own files.
+Upon submission, Django sends the sample to a Cuckoo instance running locally.
+While Cuckoo is analyzing the sample, users are redirected to the report page, which shows the current state of analysis.
+Upon finishing analysis, the page changes to yield the classifier results.
 
 Figure \ref{fig:malware_detetor} shows the service being tested with a \texttt{petya}\footnote{Symantec - Petya Ransomware, October 27, 2017 [https://www.symantec.com/blogs/threat-intelligence/petya-ransomware-wiper]} sample, using early versions of our $\LR$ model.
 

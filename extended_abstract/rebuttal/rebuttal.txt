@@ -1,0 +1,104 @@
+Strategy
+1. Address all issues of R1. He seems to be on our side and easily convincible
+2. Try to rebut R2. Present clear arguments why he is not correct
+3. R3 is somehow indiferent. Does not seem to be convincible to change his opinion either way.
+
+=========================
+
+We would like to thank the reviewers for their constructive reports on our work and will briefly comment below on the most important raised issues.
+
+
+====> Should we address this?
+R1: The definition of ground-truth datasets is interesting, and I'd like to see these datasets available online.
+<====
+
+====> Anything smart to rebut this claim? Would this be better in dynamic analysis?
+More precisely, the stacking methodology proposed for train a model is not convincingly demonstrated to be superior to its simpler linear regression counterpart, which hardly justifies its use. 
+<====
+
+- Keeping a small set of recent samples vs constant retraining of the model. While the comment from the Reviewer~1 is valid, in our work we were more interested in analysing how much data would be needed to keep a high degree of accuracy. It would not be totally unexpected that to achieve that, the size of the training dataset would constantly increase making this analysis potentially infeasible in few years. What our results show is that, for this particular dataset, the compromise that has to be made in terms of accuracy in order to keep a relatively small training dataset is not significant.....
+And yes, indeed we keep the most recent data as malware tends to explore new features not necessarily detectable by earlier samples
+====> CAN WE RUN AN EXPERIMENT WITH THE PROPOSED SOLUTION BY THE REVIEWER AND REPORT ON THAT? CAN WE REPORT ON THE TIME TAKEN FOR TRAINING?
+<====
+
+
+
+====> Anything smart to say here?
+(2) The discussion of how the set of "reliable" vendors is chosen (Section III.B) is not clear to me. What's the meaning of "we search for the maximum b such that there are exactly 20 vendors above x+b in each graph."? What's "x"? Why is this the rule you use?
+<====
+
+
+
+====> Probably not much to say here
+(1) Key terms and definitions are not properly introduced throughout the paper,
+<====
+As for the organizational aspect mentioned by Reviewer~1, we appreciate these comments amd will be incorporate them in a final version of this paper. Similarly for the images. While we tried to incorporate justifications within the text, some work can be done to improve their readability.
+
+
+
+
+- On the sufficiency of static imports (R2): due to the nature of malware, and the usage of run-time obfuscation techniques, it is conceivable that dynamic analysis significantly outperforms static analysis. In our work, we were interested in analysing how much one could get just by simple analysis of static imports. Our claim is that the simplicity and speed of this analysis is a factor that should be taken into consideration, as the accuracy results show. Of course, combining this with dynamic analysis can only provide better results.
+====> any claim about the time it takes static vs dynamix?
+<====
+
+
+- The differences Pf-Pl (R2): if Pf-Pl>0, it means that the number of malware classifications reduced, which means that, as a community, we are in presence of a False Positive. Some vendors classified a sample as malware and then changed their classification. Symmetrically for Pf-Pl<0. Of course when Pf=Pl, the "positive-vendors in P_first" may be completey disjoint of the "positive-vendors in P_last" but, as a community, the sample did not change its valuation.
+====> Is this ok? do we know how much changed like he says? did this ever happened? what was the maximum of chnages from + to - and - to +? This would destroy this argument.
+
+- Why 5 vendors: In Figure 2 one can see that the trend to change valuations from goodware to malware (green bars) is much bigger than the opposite (red bars). Moreover, if we consider the integral up to -5, we get that that value is <0.05%. This tells us that less than 5 vendors change ther classifications from malware to goodware in 99.5% of the times. This means that if 5 vendors classify a sample at the beginning as malware, then in 99.5% of the cases it will still be classified as malware in the final evaluation. This is why we took this cut-off of 5.
+
+
+====> Anything smart?
+Why is the case (upper or lower) of imported library names is taken as a
+possible feature? It seems that this could only lead to FNs or FPs,
+since it actually has no significance.
+<====
+
+
+
+====> say something about uniform naming
+In the E model, we try to classify not only if a sample is malware,
+but whether it is a Trojan, virus, spyware, ransomware or "other".
+These categories are not well-defined; they are subjective, they
+overlap, their meaning has changed with time, and "other" is
+particularly meaningless. It doesn't seem very worthwhile to try to
+apply machine learning to such loosely defined terms.
+<====
+
+
+====> comment on AUROC
+While AUROC values above 0.9 look impressive, I can't
+understand whether they are significant or not. There is no discussion
+about what this means. Indeed, the discussion and conclusions are more
+like a recap of what has been said before. There seems to be no
+surprising or informative or useful conclusions.
+<====
+
+
+====>
+- I can't understand the meaning of "the main focus of our work
+is to compare results relatively and not absolutely, ..."
+<====
+
+
+- On the choice of NSRL and VirusShare and identification of samples (R3): we used these two sources as the former is a clear source of goodware, and the latter a clear source of malware. This allowed us to cleasly classify some of our samples as good/malware.
+Also, in both these repositories, and on malwr.com, samples are identified by the MD5 hash of their payload. This allowed us to not only validate which samples from malwr.com are good/malware but also which samples have repeated submissions.
+
+- 5.56% decrease corresponds to the integral of the red bars in Figure 2. Justified in an earlier comment.
+
+====> Pg4. do not understand
+With the previous definitions, we can define a vendors’ v classification (according to MDacc ) as: ... -> I am not 100% convinced of this definition. Why is this the best you could give? 
+E.g.,  FT_v is 2 instead of 1 (out of many vendors) why it is still not a false positive? 
+This definition is arbitrary and I would expect a better explanation
+<====
+
+- The purpose of the table on page 5 was to show the size of the datasets.
+
+
+====>
+Section V I would like to have a better and more convincing explanation of why you chose the proposed evaluation metrics (cross-validation, etc.). Comment more also on the results.
+<====
+
+====>
+Section B could you please comment on the time spent for the training and for the validation in your experiments?
+<====

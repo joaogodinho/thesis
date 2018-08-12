@@ -84,7 +84,7 @@ This evaluation methodology is our baseline, hence we define it as our \textit{l
 \medskip
 
 Although the cross-validation methodology enables to measure the generalization capabilities of a model, it does not account for temporal ordering of the samples.
-Since we want to measure the when training samples predate validation, we now define a couple of temporal based validations, based on the concept of cross-validation:
+Since we want to measure when training samples predate validation, we now define a couple of temporal based validations, based on the concept of cross-validation:
 
 \paragraph{\textit{Past-to-Present}:} This validation, depicted in Figure \ref{fig:past_present}, can be resumed as an iterative methodology where the validation set is a fixed percentage of dataset's most recent samples, whereas the training set is a fixed percentage of the dataset's oldest.
 The training set is split into $k$ temporal consistent folds and at each iteration it is extended with more recent folds and scored against the training set, until all folds are used.
@@ -114,7 +114,7 @@ For the purpose of our work, we use the 20\% most recent samples for validation,
 These two validation methodologies give us the ability to account for temporal consistency.
 Moreover, they enable us to compare the importance of older \textit{vs.}\ newer samples to classify recent samples.
 
-\paragraph{\textit{Temporal Window}:} This validation, depicted in Figure \ref{fig:sliding_window}, also splits the dataset into $k$ folds, but takes $w$ temporal consistent and contiguous folds (\ie each fold immediately precedes the next one), using the first $w-1$ folds for training (older samples) and the remaining fold (more recent samples) for validation.
+\paragraph{\textit{Temporal Window}:} This validation, depicted in Figure \ref{fig:sliding_window}, also splits the dataset into $k$ folds, but takes $w$ temporal consistent and contiguous folds (\ie\ each fold immediately precedes the next one), using the first $w-1$ folds for training (older samples) and the remaining fold (more recent samples) for validation.
 By starting with the $w$ first folds of the dataset and sliding one fold on each iteration, we apply a sliding window of size $w$ over the dataset.
 For this last validation methodology, we again split the dataset into 10 folds.
 The sliding window size $w$, is chosen during the results phase, as its choice depends on previous results.
@@ -127,6 +127,8 @@ The sliding window size $w$, is chosen during the results phase, as its choice d
 \end{figure}
 
 \medskip
+
+We measure the \gls{auroc} during each validation's iteration and use the average measurement to discuss the results.
 
 As we have previously described in Section \ref{section:dataset_creation}, we possess 3 different datasets, created from 3 different scenarios.
 With that in mind, all our previously described methodologies: cross-validation, past-to-present and present-to-past; are applied to each of the 3 datasets.
@@ -171,7 +173,7 @@ Having met all the necessary conditions to build a \gls{ml} model: model selecti
 
 Using an Ubuntu Virtual Machine with 16 cores and 16GB of RAM, provided by INOV - Inesc Inovação, and taking advantage of scikit-learn~\cite{tool:sklearn} to train the models, Pandas~\cite{tool:pandas} for data analysis and Jupyter Interactive Notebooks~\cite{tool:jupyter} to interact with the Python scripts, we now detail our logistic regression model results.
 
-We define this our single layer model $\LR$ results, as we are directly taking a set of features (static imports in this case) and outputting the probability of a sample being malware.
+We define this as our single layer model $\LR$ results, as we are directly taking a set of features (static imports in this case) and outputting the probability of a sample being malware.
 
 \medskip
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -221,7 +223,7 @@ fold 1)}
 	\label{fig:pastpresent}
 \end{figure}
 
-When directly comparing the average \gls{auroc} for cross-validation and our \textit{Past-to-Present} validation, we note that for both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ the \gls{auroc} remains identical, while for $\mathcal{S}_{\real}$ the score decreases from 0.75\% to 0.68\%.
+When directly comparing the average \gls{auroc} for cross-validation and our \textit{Past-to-Present} validation, we note that for both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ the \gls{auroc} remains identical, while for $\mathcal{S}_{\real}$ the score decreases from 75\% to 67\%.
 
 For both $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ we note only a slight increase as new folds are added.
 They still relate, as we have previously noted for cross-validation, arguably given their metrics $\Mstrictv$ and $\Mloosev$ are not very different.
@@ -250,6 +252,8 @@ As for $\mathcal{S}_{\real}$, we note a decrease in score from 75\% to 69\%.
 	\label{fig:presentpast}
 \end{figure}
 
+\medskip
+
 The comparison between scenarios is identical to what was observed in cross-validation and \textit{Past-to-Present}: scenarios $\mathcal{S}_{\strict}$ and $\mathcal{S}_{\loose}$ display very similar results, with $\mathcal{S}_{\real}$ dropping behind due to its less reliable labeling metric.
 It is noticeable that using the entire dataset does not bring much improvement to the final results. In fact, for $\mathcal{S}_{\real}$ the score even drops after fold $\#2$.
 
@@ -269,12 +273,14 @@ These results come to reaffirm our argument that we can reduce the size of the t
 	\label{fig:slidingwindow}
 \end{figure}
 
+\medskip
+
 Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from 91\% to 89\% for $\mathcal{S}_{\strict}$, from 90\% to 88\% for $\mathcal{S}_{\loose}$ and from 75\% to 73\% for $\mathcal{S}_{\real}$.
 We should highlight that the results that use temporal consistency should better reflect the reality than standard cross-validation, since we are requiring temporally ordered samples.
 Another important idea that should be stressed is that for cross validation we used a fairly reasonable amount of data for training purposes, whereas in this last case we used a restricted amount of data. This might be a relevant issue in a few year's time. The results obtained are summarized in Table \ref{tab:singlelayer_results}.
 
 \begin{table}[!htb]
-	\renewcommand{\arraystretch}{1.2} % more space between rows
+	\renewcommand{\arraystretch}{1.0} % more space between rows
 	\centering
 	\begin{tabular}{ccccc}
 		\toprule
@@ -289,7 +295,5 @@ Another important idea that should be stressed is that for cross validation we u
 \caption{Single layer results summary.}
 \label{tab:singlelayer_results}
 \end{table}
-
-\medskip
 
 With a better understanding of how the model behaves under different methodologies, we now diverge to how we improved not only the overall results, but also the information provided by the model.

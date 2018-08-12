@@ -1,0 +1,122 @@
+%!TEX root = main.tex
+\color{red}
+
+\section{Data Collection and Labeling-OLD}\label{sec:data_collection}
+
+This section aims at providing a brief overview of the available \textit{corpus} and how it can be used to define data labeling metrics. On top of that, we propose a vendor selection to improve the reliability of data labeling.
+
+\subsection{Data Collection}
+
+The \textit{corpus} used to train and evaluate the current work was obtained from Malwr\cite{tool:malwr}. This service provides free malware analysis by using Cuckoo Sandbox\cite{tool:cuckoo} to analyze files. Alongside the analysis results, Malwr also aggregates antivirus' signatures given by VirusTotal\cite{tool:virustotal} at the time of the analysis.
+
+
+In general, malware detection is not a deterministic task, several nuances make vendors disagree on what is malware. For this reason, we propose to enrich the available information with an additional couple of repositories, namely, VirusShare\cite{tool:virusshare} for malware, and \gls{nsrl}\cite{tool:nsrl} for goodware, enabling us to cross-check VirusTotal's classifications. We observe that for VirusShare there are 105,251 common samples, and for \gls{nsrl} 4,756. On top of that, they share 426 samples. The cross-checking with these repositories will be a key element to increase the reliability of the ground truth, at a later stage.
+
+We now proceed with an initial filtering of the dataset. For the purpose of this work we are interested in reports from samples that provided static information to be used as features, specifically static imports (e.g.\ \gls{dll}), and that are known in VirusTotal (i.e.\ classified), to provide a way to label samples.
+
+We start by discarding vendors that have not seen at least 90\% of \textit{corpus} obtained from Malwr, let $\mathcal{V}_{>0.9}$ denote the remaining vendors. From now on, we only consider the reports classified by some vendor in $\mathcal{V}_{>0.9}$. We refer to the set of classified samples as $\mathcal{D}_{class}$, which contains 292,127 reports.
+
+Our model's features will be obtained from the reports' static imports, so let us denote by $\mathcal{D}_{static}$, $\mathcal{D}_{static} \subseteq \mathcal{D}_{class}$, the classified samples that contain static imports. This dataset contains 287,117 reports.
+
+\subsection{Data Labeling}
+
+We now turn our focus into labeling the reports as goodware or malware. To do so, we use $\mathcal{D}_{class}$ together with VirusShare and \gls{nsrl} information to derive three different metrics to label the reports as benign or malicious, over a set of vendors $\mathcal{V}$.
+
+The first and tightest metric we define, $\mathcal{M}_{strict}^\mathcal{V}$, labels a sample from $\mathcal{D}_{class}$ as:
+
+\begin{itemize}
+	\item \textbf{Malware} if all vendors in $\mathcal{V}$ classify it positively, it belongs to VirusShare repository, and does not belong to \gls{nsrl} repository;
+	\item \textbf{Goodware} if all vendors in $\mathcal{V}$ classify it negatively, it belongs to \gls{nsrl} repository, and does not belong to VirusShare repository.
+\end{itemize}
+
+Obviously this is the most reliable metric, in the sense that it is closely related to the samples' ground truth, leaving little room for disagreement. However, it is very likely that it
+will not be applicable to majority of the samples.
+
+To overcome the strictness of the previous metric, we now define a couple of new metrics that will balance the vendors' agreement on the classification. Indeed, given the reports are classified by multiple antivirus solutions, it is not surprising to see disagreement on whether a sample is malware or not. Due to this, and following a methodology identical to \cite{miller:rev_int}, we analyze duplicated submissions and establish a minimum number of vendors needed to label a sample as malware.
+
+Let us denote by $\mathcal{D}_{dups}$, $\mathcal{D}_{dups} \subseteq \mathcal{D}_{class}$, the samples submitted more than once. These duplicated samples constitute 26.86\% of $\mathcal{D}_{class}$, with a total of 28,996 samples. Figure \ref{fig:distribution_changes} shows the distribution of samples that increase or decrease in positive classifications between the last and the first submissions.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{dist_changes}
+	\caption{Distribution of samples that increase or decrease in the number of positive classifications between last and first submissions.}
+	%\label{fig:distribution_changes}
+\end{figure}
+
+We first note that 40.18\% of the duplicated samples change in classification. From those, 34.55\% increase in classification (i.e.\ more vendors classifying as malware), whereas only 5.63\% decrease in classification (i.e.\ less vendors classifying as malware). Such discrepancy between positive and negative changes suggest a preference for false negatives over false positives, as also noted in \cite{miller:rev_int}.
+
+Following the approach in \cite{miller:rev_int} and \cite{vsrndic2013detection}, in the next scenarios we will require at least 5 positive classifications to label a sample as malware. This threshold is supported by the results presented in Figure \ref{fig:distribution_changes}, where we can see that samples that decrease in 5 or more positive represent 0.45\% of samples.
+
+With regards to goodware labeling, we require that a sample must have zero positive classifications. We further analyze this requirement, as there is a high possibility that a sample labeled as goodware increases to some positive classification, given that 34.55\% of samples from $\mathcal{D}_{dups}$ increase in classification.
+
+We are interested in knowing the possibility of a sample that is labeled as goodware, to become malware according to the previous malware labeling requirement. For this purpose, Figure \ref{fig:distribution_changes_zero} presents the same analysis as Figure \ref{fig:distribution_changes}, but restricted to samples that start with zero positive classifications.
+
+% We first identify that 17.77\% of samples increased from zero to some positive classification. From those, 7.51\% increase from zero to 5 or more (our malware threshold), which indicates that there is some chance of wrongly labeling a malware sample as goodware.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{dist_changes_zero}
+	\caption{Distribution of samples that start with zero classifications and increase in the number of positive classifications to the last submission.}
+	\label{fig:distribution_changes_zero}
+\end{figure}
+
+We verify that 17.77\% of samples increased from zero to some positive classification. From those, 7.51\% increase from zero to 5 or more (our malware threshold), which indicates that it is possible to wrongly label a malware sample as goodware, by solely using this criterion.
+
+Based on the previous analyses, we define an intermediate metric, characterized by not being as strict as $\mathcal{M}_{strict}^\mathcal{V}$, but still trying to overcome the aforementioned vendors' classification inconsistency. Consider this new metric, $\mathcal{M}_{loose}^\mathcal{V}$, which labels a sample from $\mathcal{D}_{class}$ as:
+
+\begin{itemize}
+	\item \textbf{Malware} if at least 5 vendors in $\mathcal{V}$ classify it positively, it belongs to VirusShare repository, and does not belong to \gls{nsrl} repository;
+	\item \textbf{Goodware} if all vendors in $\mathcal{V}$ classify it negatively, it belongs to \gls{nsrl} repository, and does not belong to VirusShare repository.
+\end{itemize}
+
+Although more prone to incorrect labeling, when compared to $\mathcal{M}_{strict}^\mathcal{V}$, metric $\mathcal{M}_{loose}^\mathcal{V}$ encompasses a larger variety of samples, being much closer to reality.
+
+As seen in Figure \ref{fig:distribution_changes}, it is widely accepted that malware detection is imperfect and prone to error. We can argue that although strict metrics provide more reliable labeling, and consequently provide better models and results, they lack the ability to cope with real-world conditions. 
+
+For this reason, we propose a third metric, $\mathcal{M}_{real}^\mathcal{V}$, that solely relies on vendors' classification, hence including their imperfection and uncertainty. It labels a sample from $\mathcal{D}_{class}$ as:
+
+\begin{itemize}
+	\item \textbf{Malware} if at least 5 vendors in $\mathcal{V}$ classify it positively;
+	\item \textbf{Goodware} if all vendors in $\mathcal{V}$ classify it negatively.
+\end{itemize}
+
+This metric is closer to antivirus vendors' reality, and incorporates the underlying classification uncertainty.
+
+%We first note that out of 28,996 samples, 11,651 (40.18\%) change in classification; furthermore, we note that 34.55\% of samples increase in classification (i.e.\ more vendors classifying as malware), while only 5.63\% decrease in classifications (i.e.\ less vendors classifying as malware). This tendency suggests that vendors favor false negatives over false positives, as also noted in \textbf{[quote]}.
+
+% follow the same approach and use 5
+
+%Having an understanding on how vendors tend to change their classification, we choose a minimum threshold of 5 positive classifications to label a sample as malware\textbf{cite}. \textbf{Figure X} shows that samples that decrease in 5 or more positive classifications represent 0.45\% of samples, meaning that the probability of a given sample where 5 or more vendors classify it malware actually turns out to be goodware is lower than 0.45\%. 
+
+%The actual value is lower because our graph does not take into account the starting number of positive classifications, meaning it also accounts for cases where a sample starts with 20 positive classifications and ends with 5.
+
+%To label a sample as goodware, we choose a metric where there must be zero positive classifications in a sample. Although intuitive, this metric may have drawbacks when considering that 34.55\% of samples increase in classification. To better understand how likely it is for a sample with zero classifications to go above the previously defined malware threshold (5 or more), we reproduced \textbf{Figure X} but only taking into account changes for samples that start with zero classifications. The results can be seen in \textbf{Figure X}.
+
+%We first identify that 17.77\% of samples increased from zero to some positive classification. From those, 7.51\% increase from zero to 5 or more (our malware threshold), which indicates that there is some chance of wrongly labeling a malware sample as goodware.
+
+%\todo[inline]{To have more room to improve the reliability of the dataset; enhance the metric with info from VS and NSRL.}
+
+%To minimize the chance of wrongly labeling goodware, and to achieve a better overall ground truth, we applied the knowledge from VirusShare and \gls{nsrl}.
+
+%The applied methodology is straightforward, instead of relying solely on the reports' classification, we also require samples to be present in VirusShare and \gls{nsrl} to be labeled as malware and goodware, respectively. Doing so results in having a 86,503 malware samples and 4,000 goodware samples. It is worth noting that samples both in Virus Share and \gls{nsrl} dataset were discarded, as their actual label is dubious.
+
+%These results gave us a sound metric to label samples as malware or goodware. The next subsection builds on this labeling process to narrow down the total amount of vendors, by measuring their detection and false positive score, based on our metric.
+
+% \todo[inline]{Summarize the 3 metrics}
+
+\subsection{Top Vendors}
+
+Since our metrics are highly dependent on vendor's classification, in this subsection we aim at narrowing down the total amount of vendors, by assessing their \gls{dr} and \gls{fpr} according to our strictest metric $\mathcal{M}_{strict}^{\mathcal{V}_{>0.9}}$.
+
+For each vendor $v$ in $\mathcal{V}_{>0.9}$, we considered the metric $\mathcal{M}_{strict}^{\mathcal{W}}$, over the set of vendors $\mathcal{W} = \mathcal{V}_{>0.9}\setminus \{v\}$ to label the samples as malware and goodware. We calculate $v$'s \gls{dr} as the ratio of $v$'s positive detections over the total malware. Furthermore, we calculate $v$'s \gls{fpr} as the ratio of $v$'s positive detections over the total goodware.
+
+The \gls{dr} and \gls{fpr} for each vendor are depicted in Figure's \ref{fig:dr_fpr} left and right Y axis, respectively.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{dr_fpr}
+	\caption{Calculated \gls{dr} and \gls{fpr} for $\mathcal{M}_{strict}^{\mathcal{V}_{>0.9}}$ metric, ordered by \gls{dr}.}
+	\label{fig:dr_fpr}
+\end{figure}
+
+We proceed with the 20 vendors with highest \gls{dr}. Let $\mathcal{V}^*$, $\mathcal{V}^* \subseteq \mathcal{V}_{>0.9}$, represent the top 20 vendors, and consider this refinement of classified samples, $\mathcal{D}_{class}^* \subseteq \mathcal{D}_{class}$, by filtering according to $\mathcal{V}^*$. Similarly, consider the refined set $\mathcal{D}_{static}^* \subseteq \mathcal{D}_{static}$, the classified samples from $\mathcal{D}_{class}^*$ that contain static imports.

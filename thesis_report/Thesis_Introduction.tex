@@ -26,7 +26,7 @@ Malware can be a piece of code attached to a legitimate program, an independent 
 The reasoning that leads to malware creation varies greatly, some are created to demonstrate some vulnerability or concept and do not cause direct harm to systems, while others are used to steal information or render systems useless.
 The wide variety and quantity of now-a-day systems and the amount of sensitive information they store provide numerous opportunities to illegally make a profit out of subverting legitimate systems.
 
-The amount of malware has shown an exponential increase since the early 2000s, from 1 million in 2006 to over 500 million by the end of 2016~\cite{av-test:report,mcafee:report}. According to a 2007 study by McAfee\footnote{McAfee Study Finds 4 Percent of Search Results Malicious, by Frederick Lane, June 4, 2007 [http:\/\/www.newsfactor.com\/story.xhtml?story\_id=010000CEUEQO]} about 4\% of the query results by major search engines lead to potentially dangerous websites. A more recent study by Norton in 2010\footnote{Symantec Press Release, July 29, 2010 [https://www.symantec.com/en/aa/about/newsroom/press-releases/2010/symantec\_0729\_02]} showed that at least 10\% of top trending search terms returned malicious results. From the contact with malicious software, 1.1 billion identities (\ie\ user's personal information) have been exposed in 2016 alone~\cite{symantec:report}.
+The amount of malware has shown an exponential increase since the early 2000s, from 1 million in 2006 to over 500 million by the end of 2016~\cite{av-test:report,mcafee:report}. According to a 2007 study by McAfee\footnote{McAfee Study Finds 4 Percent of Search Results Malicious, by Frederick Lane, June 4, 2007 [http://www.newsfactor.com/story.xhtml?story\_id=010000CEUEQO]} about 4\% of the query results by major search engines lead to potentially dangerous websites. A more recent study by Norton in 2010\footnote{Symantec Press Release, July 29, 2010 [https://www.symantec.com/en/aa/about/newsroom/press-releases/2010/symantec\_0729\_02]} showed that at least 10\% of top trending search terms returned malicious results. From the contact with malicious software, 1.1 billion identities (\ie\ user's personal information) have been exposed in 2016 alone~\cite{symantec:report}.
 
 To detect malicious software, anti-virus solutions rely on two main methods: \textit{signature-based}, which uses a database of known malware to detect malware and \textit{heuristic-based}, which make use of malicious patterns and sets of rules to detect both known and new malware~\cite{gryaznov:scanners}.
 
@@ -60,6 +60,9 @@ To achieve our \textit{ground-truth} impact objective we made a comparative anal
 	\item \emph{realistic scenario} where we get closer to the reality faced by vendors of malware detection solutions.
 \end{itemize}
 
+By designing these three scenarios, we can better understand how having a smaller and very distinctive dataset compares to a bigger and more uneven dataset, providing a greater understanding of the effects of \textit{ground-truth}.
+
+
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.7\columnwidth]{Figures/dataset_sizes.png}
@@ -74,9 +77,11 @@ To understand the impacts of temporal consistent learning, we perform a comparat
 	\item \emph{real-world conditions} where time is relevant and we analyze the behavior of the classifier with temporal-based methodologies.
 \end{itemize}
 
+This will help us understand if one should take precautions when using classical evaluation methodologies, as these do not take into account time dependency between samples.
+
 We also provide several improvements to the model.
 One of these come under the form of a multi-layer approach, which instead of classifying a sample as malware or goodware, also provides information regarding the type of malware.
-Our other improvement regards providing more information about a sample to the model, in order to obtain higher scores.
+Our other improvement regards providing more information about a sample to the model, by using dynamic information extract during runtime, in order to obtain higher scores.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Thesis Outline}
@@ -87,8 +92,8 @@ We introduce the notion of machine learning and its applications, followed by re
 
 Chapter \ref{chapter:data_collection} describes our initial approach and methodology to help solve the problem of malware detection using \gls{ml}. We detail the data gathering process and how it was analyzed, followed by the labeling process and dataset creation.
 
-Chapter \ref{chapter:static_features} and \ref{chapter:model_improvements} takes the created datasets to build a malware detection model based on both static and dynamic features, as well as how these perform under different validation methodologies.
+Chapter \ref{chapter:static_features} and \ref{chapter:model_improvements} take the created datasets to build a malware detection model based on both static and dynamic features, as well as how these perform under different validation methodologies.
 
-Chapter \ref{chapter:practical_applications} describes how our model is practically implemented both as an online malware detection service and how it was inserted into a corporate email server to analyze attachments.
+% Chapter \ref{chapter:practical_applications} describes how our model is practically implemented both as an online malware detection service and how it was inserted into a email server to analyze attachments.
 
-Chapter \ref{chapter:conclusions} provides some final remarks on our work and contributions, together with possible ideas that may improve the presented work.
+Chapter \ref{chapter:conclusions} provides some final remarks on our work, how our model is practically implemented, contributions and possible ideas that may improve the presented work.

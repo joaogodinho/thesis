@@ -1,10 +1,11 @@
+% !TeX spellcheck = pt_PT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                      %
 %     File: Thesis_Resumo.tex                                          %
 %     Tex Master: Thesis.tex                                           %
 %                                                                      %
-%     Author: Andre C. Marta                                           %
-%     Last modified :  2 Jul 2015                                      %
+%     Author: João C. Godinho                                          %
+%     Last modified :  May 2018                                        %
 %                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -13,9 +14,15 @@
 % Add entry in the table of contents as section
 \addcontentsline{toc}{section}{Resumo}
 
-Inserir o resumo em Portugu\^{e}s aqui com o máximo de 250 palavras e acompanhado de 4 a 6 palavras-chave...
+O uso de técnicas de aprendizagem supervisionada para a detecção de programas maliciosos tem sido cada vez mais utilizada para melhorar métodos clássicos de detecção.
+Este trabalho desenvolveu um modelo para a detecção de programas maliciosos, analisou o impacto da confiabilidade dos dados de treino no resultado final do classificador, e definiu métricas para \textit{verdade absoluta}.
+Para tal, desenvolvemos três cenários para conjuntos de dados, cujo conteúdo varia entre amostras inequivocamente maliciosas e legítimas para amostras mais ambíguas e reais.
+Analisámos cada cenário em condições laboratoriais, onde metodologias padrão de validação cruzada são aplicadas, descartando a importância \textit{temporal} na detecção de programas maliciosos, e também em condições de mundo real, onde a dependência temporal é proposta e aplicada.
+Além disso, modificámos o nosso modelo original de modo a possibilitar a extração de mais informação sobre uma amostra, ao implementar um modelo com multiplas camadas, e de maneira a melhorar os resultados finais, ao usar informação dinâmica sobre a amostras.
+Usámos depois a nossa metodologia baseada na ordem temporal das amostras para reduzir o tamanho dos dados de treino sem comprometer resultados ótimos, concluindo que existe um número ideal de dados de treino, temporalmente consistentes com os dados de validação, tal que o resultado final é ótimo.
+Finalmente, fornecemos aplicações práticas do nosso modelo ao implementar o serviço de detecção de programas maliciosos, que é também inserido num servidor de correio eletrónico para validar anexos.
 
 \vfill
 
-\textbf{\Large Palavras-chave:} palavra-chave1, palavra-chave2,...
+\textbf{\Large Palavras-chave:} Segurança, Aprendizagem Automática, Detecção de Programas Maliciosos, Consistência Temporal, Verdade Absoluta
 

@@ -3,8 +3,8 @@
 %     File: Thesis_Abstract.tex                                        %
 %     Tex Master: Thesis.tex                                           %
 %                                                                      %
-%     Author: Andre C. Marta                                           %
-%     Last modified :  2 Jul 2015                                      %
+%     Author: João C. Godinho                                          %
+%     Last modified :  May 2018                                        %
 %                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -13,9 +13,15 @@
 % Add entry in the table of contents as section
 \addcontentsline{toc}{section}{Abstract}
 
-Insert your abstract here with a maximum of 250 words, followed by 4 to 6 keywords...
+The use of supervised learning techniques for malware detection has been used increasingly to aid classical classification methods. 
+In this work we aim at developing a malware detection model, analyzing the impact of the reliability of the training dataset on the final result of the classifier, and metrics to define the \emph{ground-truth}.
+For this, we propose three datasets' scenarios whose content range from unambiguous malware and goodware samples to more ambiguous and real ones.
+We analyze each scenario in laboratory conditions, where standard cross-validation methodologies are applied, discarding the importance of \emph{time} in malware detection, and also in real-world conditions, where temporal-based dependencies are proposed and applied.
+Furthermore, we modify our original model to both enrich the extractable information, by implementing a multi layer model, and to improve the final results, by using dynamic information about the samples.
+We then use our temporal-based methodologies to reduce the size of the training dataset without compromising optimal results, concluding that there exists an ideal number of necessary training folds, temporally consistent with the validation fold, that maximizes the overall score.
+Finally, we provide practical applications of our model by implementing a malware detection service, which is also used in a email server pipeline to scan attachments.
 
 \vfill
 
-\textbf{\Large Keywords:} keyword1, keyword2,...
+\textbf{\Large Keywords:} Security, Machine Learning, Malware Detection, Temporal Consistency, Ground Truth
 

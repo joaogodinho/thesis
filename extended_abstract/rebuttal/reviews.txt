@@ -1,0 +1,240 @@
+Dear Pedro,
+
+The review response period for CSF 2018 has started, and closes Friday March 16 Anywhere on Earth (i.e., 23:59 March 16 in timezone GMT-12). Until that time, you will have access to the current state of your reviews and have the opportunity to submit a response, if you choose to.
+
+Submission: 84
+Paper: Finding the Truth: Basis for Defining ground truth and its impact in the performance of Malware Classifiers
+Authors: João Godinho, Pedro Adão, Andreia Mordido and Nelson Escravana
+
+Please remember that the goal of the author response is to allow you to clarify any misunderstandings that may be present in the reviews and address any questions the reviews pose. Your response should not provide new research results or reformulate the presentation.
+
+There is no word limit on your response. However, we encourage you to be brief and to the point. Please make it easy for reviewers to connect your response to questions or statements they made in their review. 
+
+The reviews are as submitted by the PC members, without any coordination between them. Thus, there may be inconsistencies. Furthermore, these are not the final versions of the reviews. The reviews may later be updated to take into account discussions among the program committee, and additional reviews may be solicited after the review response period.
+
+The current reviews for your paper are below. To submit your response you should log on to the EasyChair Web page for CSF 2018 and select your submission on the menu.
+
+Thank you again for submitting to CSF!
+
+Regards,
+Stéphanie Delaune and Steve Chong.
+CSF 2018 PC co-chairs
+
+
+
+----------------------- REVIEW 1 ---------------------
+PAPER: 84
+TITLE: Finding the Truth: Basis for Defining ground truth and its impact in the performance of Malware Classifiers
+AUTHORS: João Godinho, Pedro Adão, Andreia Mordido and Nelson Escravana
+
+Overall evaluation: 0 (borderline paper)
+
+----------- Summary of Paper -----------
+Supervised machine-learning methods for creating models for malware classification suffer from sensibility to "ground-truth", i.e., the information contained in the examples of the training sets used to construct such models. There is no perfect way of defining ground truth in general, and in the case of malware classification the problem is aggravated by the lack of a clearcut distinction between malware vs. goodware. 
+
+The paper's first contribution are three different ways of defining ground-truth in a collection of unlabeled examples. The paper builds a dataset with portable executable (PE) samples from Malwr, enriched with metadata from NSRL and VirusShare. Thwaw metadata provide instances in the dataset with a malware/goodware classification from various different vendors. The paper classifies the "reliability" of vendors by comparing each vendor's classifications (in terms of true/false positives/negatives) with each other's, and selecting a set of "reliable" vendors whose predictions will be further considered. The information provided by these reliable vendors is, then, used to convert the basic dataset into three different versions of ground-truth. A "strict verison"  containing only "uncontroversial" examples of malware/goodware among reliable vendors; a "real version" containing a greater collection of "controversial" examples (in which more vendors disagree on the classification!
+ of the example); and a "loose version" is a middle ground between the previous two. These three constructed dataset can, then, be used to train and validate ML models for malware detection. 
+
+The second contribution of the paper is a two-layer classifier for malware in which the first layer predicts a probable class of the malware (trojan, virus, etc.), and the second combines the predictions of the first layer into a final classification.
+
+The third contribution is an analysis of how the accuracy of ML models vary according to whether or not the training of the model takes into consideration time relations among samples in the dataset. More precisely, the paper considers that a test instance can only be classified using training instances collected previously in time. The paper proposes 3 methods for temporal-based validation---past-to-present, present-to-past, and sliding-window---, and compares the various temporal-based validations with a traditional (temporal-insensitive) cross-fold validation.
+
+Finally, the fourth contribution of the paper uses the results of the analysis of accuracy of temporal-based validations to verify whether, and in what cases, the training data-set can be reduced without a significant reduction in the accuracy of the ML model obtained.
+
+The paper's main conclusions are the following. First, their proposed two-layer classifier performs (marginally) better than a more traditional linear-regression classifier, at least for the tested cases of temporal-insensitive cross-fold validation. Second, the accuracy (measured using AUROC) obtained using the strict dataset is similar to that obtained using the loose one for all experiments performed, and both are much superior to that obtained using the real dataset. Third, time-based validations present, as expected, less accuracy than time-insensitive cross-validation. Fourth, using all instances ever observed for training does not provide significantly superior accuracy than just using a smaller set of recently observed instances.
+
+----------- Overall evaluation -----------
+The problem of sensitivity to ground truth in ML models extends beyond malware detection, and it is a challenging problem. The paper addresses this problem in a systematic way, proposing three methods of defining ground truth, and evaluating their accuracy. It also proposes (mostly) reasonable ways of taking temporal-relations in consideration during the validation of the ML model. The paper is well-written and easy to follow, and the experiments seem soundly performed. The definition of ground-truth datasets is interesting, and I'd like to see these datasets available online.
+
+However, I find some contributions of this paper perhaps a little too modest for CSF. More precisely, the stacking methodology proposed for train a model is not convincingly demonstrated to be superior to its simpler linear regression counterpart, which hardly justifies its use. Moreover, the argument that a reduction of the training dataset does not compromise optimal results can only be defended for the experiments performed in the paper, which **always keep the most recent examples for training**. This means that all that can be said is that a small training set can be used as long as it is as recent as possible, which could be interpreted to suggest that a constant retraining of the model might be necessary (see the end of this review for a suggestion for a new temporal-validation process that could fix this problem). 
+
+Beyond the comments above, I have the following main concerns about the paper.
+
+(1) Key terms and definitions are not properly introduced throughout the paper, which makes its reading harder for a non-specialist in machine learning (which is, I suspect, a great majority of the CSF community). For instance, "ground-truth" (i.e., the information contained in the examples of the training sets used to construct ML models) is never defined, "temporal consistency" is used throughout the paper, but only defined in page 6 (and even so, loosely defined), the idea behind "temporal consistency" and "time-based" is not properly explained until much later the terms are introduced in the paper, and "concept drift" is not mentioned until the related work section. In particular, the introduction does not do as a good job as it could in letting the reader know what's coming ahead, since such key terms and expressions are not defined.
+
+(2) The discussion of how the set of "reliable" vendors is chosen (Section III.B) is not clear to me. What's the meaning of "we search for the maximum b such that there are exactly 20 vendors above x+b in each graph."? What's "x"? Why is this the rule you use?
+
+(3) Regarding temporal-based validations, the conclusion that "we can reduce the size of the training set, without losing any significant score" could be properly qualified. You didn't arbitrarily reduce the training set, but you always kept the most recent instances in the training set. A more fair statement about what the current paper shows seems to be that you can reduce the size of the training set, as long as you always keep in the training set the most recent instances.
+
+(4) I am not convinced that the experiments performed support the conclusion that the two-layer classifier proposed (\Epsilon) is significantly better than the more traditional linear regression model. Citing this as a contribution, using only the evidence presented in the paper, seems as a bit of a stretch.
+
+Finally, I have a suggestion for a new type of temporal-based validation, in which the first two timely-ordered folds would be fixed as the training set, and a 1-fold validation set would slide to the right, in a total of 8 different experiments. (E.g., train with 0 and 1 and test on 2. Then train on 0 and 1 and test on 3. Then train on 0 and 1 and test on 4. Until train on 0 and 1 and test on 9). This would simulate the effect of "concept drift", i.e., what is the impact on accuracy when the knowledge used for training "ages". This experiment could possibly better support the claim that small sets can be used for training, and, more strongly, that the training does not need to be constantly redone.
+
+For the reasons exposed above I believe this paper is not an optimal fit for CSF this year.
+
+Minor comments:
+
+Page 2
+
+- "Srndic" seems to be misspelled (either here or in the bibliography)
+- "older then" -> "older than"
+- "non-deterministic task" -> the use of this expression seems odd here, since "non-determinism" usually has a precise meaning in many fields of computer science
+- "temporal consistency and ground truth influences" -> "temporal consistency and ground truth influence"
+
+Page 3
+
+- "static and dynamic analysis" -> "static and dynamic analyses" (plural)
+- "divided in three sets" -> "divided into three sets"
+
+Page 4
+
+- In equations (1) and (2), "TP" is not defined (true positives).
+- Figure 3 (as all others) has barely readable labels.
+- "as we use it to label the dataset" -> "as we use them to label the dataset"
+- It seems more precise to say that 5 is an **approximate** upper bound for samples that decrease from 5 or more to zero classifications, since 0.46% of them don't.
+- Also, it seems more precise to say that TP_v, TN_v, FP_v and FN_v are approximations of true/false positive/negative rates, since not all instances receive a label and hence the true and false positives computed are not accurate figures.
+
+Page 5
+
+- "ocus into" -> "focus to"
+- The first two bullets on top of the right-hand column are unecessary, as the following mathematical definitions of malware_loose and goodware_loose are self-contained.
+- "In this subsection" -> "In this section"
+
+Page 6
+
+- It seems to me that increasing the number of features by allowing for case-sensitive fields adds no relevant information.
+- "simplest model LR," -> "simplest model, LR"
+- "two different models LR and \Espsilon," -> "two different models, LR and \Espsilon,"
+- "S_real, applies" -> "S_real applies" (same for S_loose and S_strict in the bullet list of Section V.A)
+
+
+Page 10
+
+- "dependencies between." -> "dependencies between them."
+- "pronounce" -> "pronounced"
+
+----------- Questions regarding the rebuttal phase -----------
+I would encourage the authors to respond, to the extent it is possible given the space constraints in the rebuttal, the main concerns from (1) to (8) raised in my review above.
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 84
+TITLE: Finding the Truth: Basis for Defining ground truth and its impact in the performance of Malware Classifiers
+AUTHORS: João Godinho, Pedro Adão, Andreia Mordido and Nelson Escravana
+
+Overall evaluation: -2 (reject)
+
+----------- Summary of Paper -----------
+SUMMARY
+
+The paper uses supervised machine learning to define a function that
+classifies software binaries according to whether AV vendors consider
+them malware or not.
+
+----------- Overall evaluation -----------
+REVIEW
+
+It is interesting to use ML in security research. However, I have some
+concerns about the soundness of the methodology, and the usefulness of
+the conclusions.
+
+Soundness of the methodology:
+=============================
+
+Why should the static imports of a binary be sufficient to indicate
+whether it is malware or not?
+
+I can't understand why P_f > P_l means false positive, P_f < P_l means
+false negative. This needs to be justified. The claim that P_f = P_l
+means that the vendors are confident is certainly false. For example,
+P_f = P_l could be true even if half the vendors initially thought the
+sample was malware, and then changed their mind and thought it was
+goodware, and the other half did exactly the opposite. In this case,
+we could not say the vendors are confident.
+
+Later, FN_v is defined to be the case if v classifies a sample
+negatively and at least 5 other vendors in V classify it
+positively. Why 5? Doesn't this depend on the size of V? Anyway, the
+fact that a juror is in the minority doesn't mean she is wrong.
+
+Why is the case (upper or lower) of imported library names is taken as a
+possible feature? It seems that this could only lead to FNs or FPs,
+since it actually has no significance.
+
+In the E model, we try to classify not only if a sample is malware,
+but whether it is a Trojan, virus, spyware, ransomware or "other".
+These categories are not well-defined; they are subjective, they
+overlap, their meaning has changed with time, and "other" is
+particularly meaningless. It doesn't seem very worthwhile to try to
+apply machine learning to such loosely defined terms.
+
+Results: 
+========
+
+While AUROC values above 0.9 look impressive, I can't
+understand whether they are significant or not. There is no discussion
+about what this means. Indeed, the discussion and conclusions are more
+like a recap of what has been said before. There seems to be no
+surprising or informative or useful conclusions.
+
+
+Other comments:
+==============
+
+- I can't understand the meaning of "the main focus of our work
+is to compare results relatively and not absolutely, ..."
+
+- The sentence "For our problem, the random variable X is an unknown
+sample and the outcome is the probability of being goodware or
+malware" is sloppy.  To correct it, note that:
+  * X is not a sample; rather, X represents whether the sample is malware/goodware.
+  * The outcome is not a probability; rather, the outcome is a classification.
+
+- The text in all the figures is illegible.
+
+----------- Questions regarding the rebuttal phase -----------
+Why should one be able to predict malware based on the static imports?
+
+How could one explain the significance of this work to non-ML experts (e.g., to AV vendors)?
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 84
+TITLE: Finding the Truth: Basis for Defining ground truth and its impact in the performance of Malware Classifiers
+AUTHORS: João Godinho, Pedro Adão, Andreia Mordido and Nelson Escravana
+
+Overall evaluation: 0 (borderline paper)
+
+----------- Summary of Paper -----------
+In this paper the authors discuss about the application of supervised learning techniques to the detection of malware. In particular, they concentrate on the reliability of the training dataset for the final result. They consider three different scenarios (that they call strict, loose and realistic), and different methodologies to train the classifier. They also evaluate how much the training dataset can be reduced without compromising the results.
+
+----------- Overall evaluation -----------
+Strengths
+-----
+-The paper studies an interesting problem and tries to show that the proposed approach is applicable in practice.
+
+
+Weaknesses
+——————
+
+-The paper lacks of some formalization. I  could not really grasp why some assumptions and design choices were made and there is no formal proof of why this method works (there are however some experimental results). 
+
+-Many of the figures are not readable even if you increase the size of the images. 
+
+Detailed comments
+
+Please improve the quality of all the Figures. Fig2, Fig 3, Fig 4, Fig5, Fig6, Fig 14 are not readable and thus it is hard to extract the results that you wrote in the text.
+
+
+
+Introduction perform arguably -> performs arguably
+
+  a strict scenario where only very well- characterized samples are considered, .... detection solutions.  -> be more precise, it is too vague
+
+page 3 section A why did you choose the  National Software Reference Library (NSRL) and VirusShare.com? Better justify it
+
+With regards to duplicated submissions, there are 27,710 samples submitted more than once, -> How did you find them? Please comment
+
+Figure2 shows the frequency...  5.56% decrease. -> not readable from the Figure, please explain better
+
+page 4 Figure 3 plots each vendors’ DR ... -> not readable from the picture
+
+With the previous definitions, we can define a vendors’ v classification (according to MDacc ) as: ... -> I am not 100% convinced of this definition. Why is this the best you could give? 
+E.g.,  FT_v is 2 instead of 1 (out of many vendors) why it is still not a false positive? 
+This definition is arbitrary and I would expect a better explanation
+
+page 5 comment the table over section IV
+
+Section V I would like to have a better and more convincing explanation of why you chose the proposed evaluation metrics (cross-validation, etc.). Comment more also on the results.
+
+Section B could you please comment on the time spent for the training and for the validation in your experiments?
+
+------------------------------------------------------

@@ -1,0 +1,26 @@
+%!TEX root = main.tex
+
+\section{Related Work}\label{sec:related}
+
+We use this section to present prior work that closely relates to the topic of our research and our areas of contribution. Specifically, detecting malicious software by training supervised models on static information, and validation methodologies that resemble real-world conditions.
+
+Shabtai et al.\cite{shabtai:survey} provide a survey directed
+at the application of \gls{ml} classifiers to detect malware from static
+features. Their work concerns the design and evaluation of such systems. Our contributions are inspired by the concern of how to correctly evaluate \gls{ml} classifiers, regarding size, reliability of labeling metrics and chronological evaluation.
+
+In the topic of methodologies that resemble real-world conditions, Srndi\'c et al.\cite{vsrndic2013detection}
+train and validate their malicious PDF detector under laboratory and real-world conditions. Laboratory conditions consist on applying regular cross-validation, whereas real-world conditions validate a newer dataset with a model created from outdated data (i.e.\ older then the validation), and also validate the model when the validation set spans one week and the training is gathered in the previous 4 weeks. They show that laboratory conditions inflate the results, when compared to real-world conditions.
+
+Miller et al.\cite{miller:rev_int} also introduce sample temporal consistency. They show the impact of performance measurement technique on a dataset containing 1.1 million samples, when using cross-validation and temporally consistent samples. As noted by others, regular cross-validation showed inflated results when compared to temporally consistent samples.
+
+Our work enhances these methodologies by analyzing the performance variation when the distance between the training and validation set increases and decreases, as well as analysis on how reducing the size of the training without compromising the results.
+
+Kolter et al.\cite{kolter:learning} learn to detect malicious executables in a dataset with under 4,000 samples, obtained from reliable sources, and evaluate their model under standard cross-validation and by gathering newer malware samples to validate for new and unseen samples. They show how the model provides optimal results under cross-validation, but for the unseen samples lower scores are obtained. Our work considers these results to compare how reliability affects performance.
+
+Sebastián, M. et al.\cite{sebastian2016avclass} develop \textit{AVClass}, a tool that given a set of antivirus vendors, outputs the most likely family name. They test their tool under 10 datasets, totaling 8.9 M samples, with results showing an F1 measure up to 93.9 on labeled datasets. The tool takes as input the labels as seen in VirusTotal, tokenizes the labels, replaces known aliases and general names (e.g.\ win32, trojan, generic), ending with possible family names. These remaining names are counted and the most frequent one is given as family name. Our work takes advantage of this tool, not to label malware families, but minimal modifications, to label more general malware classes (e.g.\ trojan, virus).
+
+Deo, A. et al.~\cite{deo2016prescience} focus over the problem of \gls{ml} models becoming antiquated over time, given how malware evolves. This problem is seen as concept drift, where the performance of a model over time diminishes, as the statistical properties of malware (i.e.\ features) change over time. They study how probabilistic predictors can help minimize the aforementioned problem, by indicating when retraining of a given model is necessary. 
+
+Jordaney, R. et al.~\cite{jordaney2017transcend} also study the problem of concept drift in malware classification models, focusing on providing metrics, based on statistical comparison of samples, to detect when should a model be retrained. 
+
+Both ~\cite{deo2016prescience} and ~\cite{jordaney2017transcend} are on the subject of our work, regarding the problem of concept drift, but differ on the study-case. In our work we acknowledge the concept but focus on its relative effects and how one can balance the size of needed training data vs. validation data, when maintaining a temporal consistent dataset. Whereas their work provide indicators for when should a model be retrained when the problem of concept drift becomes significant.

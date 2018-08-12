@@ -1,0 +1,224 @@
+%!TEX root = main.tex
+\color{red}
+\section{Evaluation and Results}\label{sec:eval_results}
+
+In this section we aim at doing a comparative analysis on three different scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, built on top of the previously defined metrics. This comparison is done using standard cross-validation methodologies and a proposed temporal-based methodology. We further provide an analysis on how to reduce the size of the training set, without compromising the final results.
+
+\subsection{Evaluation}
+
+The three scenarios that we will focus on will rely on metrics $\mathcal{M}_{strict}^\mathcal{V^*}$, $\mathcal{M}_{loose}^\mathcal{V^*}$ and $\mathcal{M}_{real}^\mathcal{V^*}$, over the dataset $\mathcal{D}_{class}^*$:
+
+\begin{itemize}
+	\item Strict Scenario $\mathcal{S}_{strict}$, labels as malware samples that: all vendors in $\mathcal{V^*}$ classify positively, belong to VirusShare repository, and do not belong to \gls{nsrl} repository; labels as goodware samples that: all vendors in $\mathcal{V^*}$ classify negatively, belong to \gls{nsrl}, and do not belong to VirusShare repository. This scenario contains 1,361 malware samples and 4,000 goodware samples.
+	\item Loose Scenario $\mathcal{S}_{loose}$, labels as malware samples that: at least 5 vendors in $\mathcal{V^*}$ classify positively, belong to VirusShare repository, and do not belong to \gls{nsrl} repository; labels as goodware samples that: all vendors in $\mathcal{V^*}$ classify negatively, belong to \gls{nsrl}, and do not belong to VirusShare repository. This scenario encloses 85,503 malware samples and 4,000 goodware samples.
+	\item Real Scenario $\mathcal{S}_{real}$, labels as malware samples that: at least 5 vendors in $\mathcal{V^*}$ classify positively; labels as goodware samples that: all vendors in $\mathcal{V^*}$ classify negatively. This scenario contains 186,444 malware samples and 49,783 goodware samples.
+\end{itemize}
+
+\paragraph{Cross validation}
+To gain a better insight on how the model generalizes our scenarios, we apply a k-fold cross-validation, with $k=10$. This methodology splits the dataset into $k$ subsets (i.e.\ folds), selects a single fold for validation and uses the remaining $k-1$ folds as training. This process is repeated $k$ times, ensuring every fold is used for validation and training.
+
+Although the cross-validation methodology enables to measure the generalization capabilities of a model, it does not account for temporal ordering of the samples. Since we want to measure the score when training samples pre-date validation samples, we now define a couple of temporal consistent validations.
+
+\paragraph{Temporal consistent validation}
+The first temporal consistent validation, which we designate as \textit{Past-to-Present} validation, can be resumed as an iterative methodology where the validation set is fixed with the most recent samples, and the training set with the oldest. At each iteration the training set is extended with more recent samples and scored against the validation, until all samples are used.
+
+The seconds temporal consistent validation, which we designate as \textit{Present-to-Past} validation, is the opposite of \textit{Past-to-Present} with regards to the starting position of the training set. Again the validation is fixed the most recent samples, but now the training set starts with the temporally closest samples to the validation set. At each iteration the training set is extended, this time with older samples and scored against the validation, until all samples are used.
+
+\textit{Past-to-Present} and \textit{Present-to-Past} validations both require two parameters, specifically the size of the validation set, and how the increments to the training set are made. For our evaluation, we use the 20\% most recent samples as validation, and split the remaining 80\% into 10 folds, hence the validation is done 10 times, with each iteration increasing the training size by one fold.
+
+These two validation methodologies give us the ability to account for temporal consistency. Moreover, they enable us to compare the importance of older \textit{vs} newer samples to classify recent samples.
+
+We designate the third and last temporal consistent validation as \textit{Temporal Window}. This validation methodology is inspired on regular cross-validation, in the sense it splits the dataset into folds, but changes how the folds are used. Specifically it takes $n$  temporal consistent and followed folds (i.e.\ each fold immediately precedes the next one), using the last fold (more recent samples) as validation and the previous folds as training (older samples). By starting with the $n$ first folds and sliding one fold on each iteration, we apply a sliding window of size $n$ over the dataset.
+
+For this last validation methodology, we again split the dataset into 10 folds. The sliding window size, $n$, is chosen during the results phase, as its choice depends on previous results.
+
+The different scenarios will be compared by plotting their \glsreset{roc}\gls{roc} curve and measuring the \glsreset{auroc}\gls{auroc}. The \gls{roc} plots the True Positive Rate (or \gls{dr}) against the \gls{fpr} at different thresholds, which are the most relevant metrics when dealing malware detection.
+
+We measure the \gls{auroc} during each validation's iteration and use the average measurement to discuss the results.
+
+\subsection{Results}
+
+We implement our experiments in Python, by using Jupyter Interactive Notebooks\cite{tool:jupyter} to facilitate data visualization. We use scikit-learn\cite{tool:sklearn} for \gls{ml}, and Pandas\cite{tool:pandas} for data analysis. Our experiments were conducted on an Ubuntu Virtual Machine with 16 cores and 16GB of RAM, in order to minimize training and validation times.
+
+We now focus on applying the evaluation methodologies to our scenarios. This enables us to compare the different conditions, and consequently results, that affect malware detection.
+
+We start with what we determine as \textit{laboratory conditions}, ideal conditions for the problem of malware detection. These are met when we apply the strict metrics $\mathcal{M}_{strict}^V$, to the dataset $\mathcal{D}_{class}^*$, obtaining scenario $\mathcal{S}_{strict}$.
+
+Under these conditions, the model provides the best results, with an \gls{auroc} of 0.97, as shown in Figure \ref{fig:roc_xval}. We argue that such high values are easily attained from factors like a small and reliable dataset, and the use of cross-validation, which mixes samples and ignores possible dependencies between.
+
+To understand how reliability influences the model's result, we use scenarios $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, which are less reliable and include more samples.
+
+Under these more relaxed, \textit{real-world} conditions, the model's results unsurprisingly decrease to an \gls{auroc} of 0.95 for $\mathcal{S}_{loose}$ and 0.77 for $\mathcal{S}_{real}$, as shown in Figure \ref{fig:roc_xval}.
+
+From $\mathcal{S}_{strict}$ to $\mathcal{S}_{loose}$, the only change is the amount of malware labeled samples, which significantly increase. The difference is interesting, as although the number of malware labeled samples increase significantly, the results are not that affected. This suggests that although the reliability for malware decreases, its impact is not as noticeable as expected. This might also suggest that vendors do converge on their definition of malware, under our $\mathcal{M}_{loose}$ metric.
+
+When looking at the changes from $\mathcal{S}_{loose}$ to $\mathcal{S}_{real}$, not only the amount of malware labeled samples increase, but also the number of goodware labeled samples, both by a significant amount. The way this impacts the results is pretty significant, as we observe a high decrease in the \gls{auroc}, from 0.95 to 0.77. The metric $\mathcal{M}_{real}$ that labels malware and goodware for this scenario $\mathcal{S}_{real}$ disregards the cross-check from outside repositories, which in turn degrade the reliability significantly, as well as increase the dataset size notably. We attribute the result's degradation mainly to the unreliability of goodware labeling, not only because we have previously seen that increase in malware does not significantly impact results, but also due to the tendency for false negatives in vendors, which in turn lead us to incorrectly label goodware under samples in $\mathcal{D}_{class}^*$.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_xval}
+	\caption{Cross-Validation \gls{roc} and \gls{auroc} for our three scenarios.}
+	\label{fig:roc_xval}
+\end{figure}
+
+The results we described show how moving from \textit{laboratory conditions} to more \textit{real-world conditions} degrade the model's performance. We now focus on using our previously defined temporal consistency methodologies to further converge into a real-world scenario.
+
+We start by applying our \textit{Past-to-Present} validation to the three scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$. As previously defined, this validation starts with an older set of training samples and iteratively adds newer samples, validating each iteration on a fixed set of the most recent samples. Since our interest is to measure performance variance over time, we plot in Figure \ref{fig:roc_tc_1} the \gls{auroc} at every iteration (i.e.\ fold), for each of out three scenarios.
+
+When directly comparing the average \gls{auroc} for cross-validation and our \textit{Past-to-Present} validation, we note a decrease from 0.97 to 0.94 for $\mathcal{S}_{strict}$, 0.95 to 0.93 for $\mathcal{S}_{loose}$, and 0.77 to 0.72 for $\mathcal{S}_{real}$. This decrease is intuitive to the methodology, as we are forcing temporal consistency between samples.
+
+When looking at results from $\mathcal{S}_{strict}$ and $\mathcal{S}_{loose}$, we see they closely relate. This relation has already been noticed on the previous cross-validation results, as the their metrics $\mathcal{M}_{strict}$ and $\mathcal{M}_{loose}$ are not very different. As for $\mathcal{S}_{real}$, the degradation is higher, as the reliability of the metric $\mathcal{M}_{real}$ goes down.
+
+Our main observation for this validation methodology is how there is a slight tendency for \gls{auroc} to increase, as we move forward in time, close to the validation set.
+
+When looking at $\mathcal{S}_{strict}$, we note that from the initial fold 0 to fold 3, the \gls{auroc} increases by 0.02, without going significantly further down, from that fold forward. This observation can be seen in Figure \ref{fig:roc_tc_strict_1}. Similarly, looking at $\mathcal{S}_{loose}$, we note it holds the \gls{auroc} up until fold 7, after which it there is a slight increase, although not very noticeable, Figure \ref{fig:roc_tc_loose_1} shows more clearly the change in scores. As for $\mathcal{S}_{real}$, we see a fluctuation down from the initial folds, followed by a steady increase until the last fold. Figure \ref{fig:roc_tc_real_1} shows the actual fluctuation values.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_all_1}
+	\caption{\gls{auroc} for each iteration of the \textit{Past-to-Present} evaluation. Folds order consists with temporal order (i.e.\ fold 0 contains older samples than fold 1)}
+	\label{fig:roc_tc_1}
+\end{figure}
+
+From these observations, we argue about the possibility that with fixed validation set of the most recent samples, a model benefits by using samples temporally closer to validation. Our next result, which uses our \textit{Present-to-Past} validation methodology will further help analyze the aforementioned detail. The \textit{Present-to-Past} validation enhance the previous results under real-world conditions. This methodology starts by fixing the validation set to the most recent samples, but with the training set starting at the temporally closest samples to validation. At each iteration, older samples are added to the training set and validated on the fixed, most recent, samples.
+
+By applying this methodology to the three scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, we plot Figure \ref{fig:roc_tc_2}, where the X axis increases as older samples are added to the training set (e.g.\ fold 0 contains newer samples than fold 1), hence measuring the performance variance over time. Similarly to the previous observation, the average \gls{auroc} suffers a decrease when compared to cross-validation. For $\mathcal{S}_{strict}$ we note a change from 0.97 to 0.94, for $\mathcal{S}_{loose}$ the decrease is from 0.95 to 0.94, and for $\mathcal{S}_{real}$ from 0.77 to 0.75.
+
+%From these observations, we argue about the possibility that with fixed validation set of the most recent samples, a model benefits by using samples temporally closer to validation. Our next result, which uses our \textit{Present-to-Past} validation methodology will further help analyze the aforementioned detail.
+
+%The \textit{Present-to-Past} validation enhance the previous results under real-world conditions. This methodology starts by fixing the validation set to the most recent samples, but with the training set starting at the temporally closest samples to validation. At each iteration, older samples are added to the training set and validated on the fixed, most recent samples.
+
+%By applying this methodology to the three scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, we plot Figure \ref{fig:roc_tc_2}, where the X axis increases as older samples are added to the training set (e.g.\ fold 0 contains newer samples than fold 1), hence measuring the performance variance over time.
+
+%Similarly to the previous observation, the average \gls{auroc} suffers a decrease when compared to cross-validation. For $\mathcal{S}_{strict}$ we note a change from 0.97 to 0.XX, for $\mathcal{S}_{loose}$ the decrease is from 0.95 to 0.XX, and for $\mathcal{S}_{real}$ from 0.77 to 0.XX.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_tc_all_2}
+	\caption{\gls{auroc} for each iteration of the \textit{Present-to-Past} evaluation. Folds order is the inverse of temporal order (i.e.\ fold 0 contains newer samples than fold 1)}
+	\label{fig:roc_tc_2}
+\end{figure}
+
+The comparison between scenarios is identical to what was observed in cross-validation and \textit{Past-to-Present}: scenarios $\mathcal{S}_{strict}$ and $\mathcal{S}_{loose}$ are display very similar results, with $\mathcal{S}_{real}$ dropping behind due to its less reliable labeling metric.
+
+Compared to the \textit{Past-to-Present} validation, the average \gls{auroc} increases slightly. Furthermore, we note that the score maxes out at early folds, specifically between fold 0 to fold 4.
+
+For scenario $\mathcal{S}_{strict}$, there is a slight increase of 0.02 between fold 0 and fold 4, maximum out from there on. For $\mathcal{S}_{loose}$ there is barely any change throughout folds. In scenario $\mathcal{S}_{real}$ the increase in early folds is very small, but what we note is that the older samples weight down the score, with maximum values between fold 1 and fold 4, from fold 5 and onward, the score decreases significantly. The concrete values for each fold for $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$ can be observed in Figure \ref{fig:roc_tc_strict_2}, \ref{fig:roc_tc_loose_2}, \ref{fig:roc_tc_real_2}, respectively.
+
+%With these results, our observation that samples closer to the validation set benefit the model becomes more convincing. In fact, we argue that there should be an ideal number of necessary training folds, temporally consistent with the validation fold (i.e.\ any fold from training predates validation), needed to maximum the overall score.
+
+%Our final results test if indeed we can reduce the training size to some number of folds $n$, which predate the validation fold. We choose $n = 3$, for we have seen the scores either do not improve (for $\mathcal{S}_{strict}$ and $\mathcal{S}_{loose}$) or actually go down (for $\mathcal{S}_{real}$) with higher folds, and apply the final \textit{Temporal Window} validation, which consists in a sliding window of size 4 (3 training folds, 1 validation) to the scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$.
+
+%As presented in Figure \ref{fig:roc_sliding_window}, for the scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, we obtain \gls{auroc} values of 0.95, 0.91 and 0.74, respectively.
+
+With these results, our observation that samples closer to the validation set benefit the model becomes more convincing. In fact, we argue that there should be an ideal number of necessary training folds, temporally consistent with the validation fold (i.e.\ any fold from training predates validation), needed to maximize the overall score. For a validation set composed by 10\% of the total dataset, the preceding 30\% should stand for training.
+
+Finally, we analyse how does such reduced training set behaves in our scenarios; for this purpose, we define a sliding window that moves forward in time through each scenario for training and validation. We propose a reduction on the training size to $n=3$ folds predating the validation fold. We chose $n = 3$, since we have seen the scores either do not improve (for $\mathcal{S}_{strict}$ and $\mathcal{S}_{loose}$) or actually go down (for $\mathcal{S}_{real}$) with higher folds. In summary, we have selected 30\% of each dataset (read, scenario) for training purposes and the next 10\% for validation (3 training folds, 1 validation fold), then started moving the window forward in time (1 fold at a time) and obtained the results: as presented in Figure \ref{fig:roc_sliding_window}, for the scenarios $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$, we obtain \gls{auroc} values of 0.95, 0.91 and 0.74, respectively. These results come to reaffirm our argument that we can reduce the size of the training set, without losing any significant score.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\columnwidth]{roc_sliding_window}
+	\caption{\gls{roc} and \gls{auroc} for our three scenarios, under the \textit{Temporal Window} methodology.}
+	\label{fig:roc_sliding_window}
+\end{figure}
+
+Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from 0.97 to 0.95 for $\mathcal{S}_{strict}$, from 0.95 to 0.91 for $\mathcal{S}_{loose}$ and from 0.77 to 0.74 for $\mathcal{S}_{real}$. An expected result, as we are enforcing temporal validation. We should highlight that these results should be much closer to reality, since we are requiring temporal consistency and also a reasonable amount of data for training purposes (which might be a relevant issue in a few year's time).
+
+%%%%
+
+%Comparing these results with the baseline cross-validation, we note a decrease for each scenario, specifically a decrease from 0.97 to 0.95 for $\mathcal{S}_{strict}$, from 0.95 to 0.91 for $\mathcal{S}_{loose}$ and from 0.77 to 0.74 for $\mathcal{S}_{real}$. An expected result, as we are enforcing temporal validation.
+
+%When doing the comparison to the average \gls{auroc} from \textit{Past-to-Present} and \textit{Present-to-Past}, the \textit{Temporal Window} averages either hold similar scores or are actually better, specifically when compared to \textit{Past-to-Present} validation.
+
+%These results come to reaffirm our argument that we can reduce the size of the training set, without losing any significant score.
+
+%\todo[inline]{tabela de todos os resultados finais}
+
+%\todo[inline]{modelo do strict, validado no real vs modelo real validado no real}
+
+% We start with baseline results, that take all three scenarios, $\mathcal{S}_{strict}$, $\mathcal{S}_{loose}$ and $\mathcal{S}_{real}$
+
+%\todo[inline]{Cross-validation para os 3 datasets}
+%\todo[inline]{Referir como o resultado é optimo para strict}
+
+%ROC/AUROC c/ x-validation, p/ 3 datasets, discussion (0.96; optimo em strict dataset, validar depois com loose e real)
+
+% ROC/AUROC c/ tc validation, p/ 3 datasets, discussion
+
+
+
+%discussion entre c/ e s/ TC, comprova perda, mais p/ real, pq é menos reliable
+
+%passado mais recente mais relevante, verificar isso com sliding window
+%
+%ROC/AUROC c/ tc sliding window, p/ 3 datasets, discussion - possibilidade de descardar dados sem perder resultados.
+%
+%discussion - resumo dos resultados anteriores
+%
+%future work - usar nomes do malware, usar mais features, maximizar resultadosb
+%
+%\todo[inline]{}
+
+%\subsection{Classifier Implementation}\label{sub_sec:classifier_implementation}
+
+%In this subsection we go over the classifier used to create the model that separates malware from goodware. We chose \textit{Logistic Regression} linear classifier for this task, as it deals well with high number of samples and features, but also enables a better understand on what the model is learning, given it assigns weights to each feature.
+
+%\todo[inline]{elaborar isto, ate q ponto?}
+
+%\subsection{Evaluation and Results}\label{sub_sec:results}
+
+%We now put together all the previous subsections to describe evaluation and results. This subsection is hence divided into evaluation, where we describe how our results are measured and why they are measured that way, and results, where we discuss the outcome of our work.
+
+%Our evaluation is based on measuring the \gls{dr} and \gls{fpr}. This metric allows us to directly compare our model to vendors' results, as well as plotting a \gls{roc} curve, which measures the \gls{dr} and \gls{fpr} ate different thresholds. To obtain the overall score we measure the \gls{auroc} curve, that varies between 0 and 1, indicating 0.0 \gls{dr} and 1.0 \gls{fpr} and 1.0 \gls{dr} and 0.0 \gls{fpr}, respectively.
+
+%We evaluated our work by creating different datasets based on the available samples. By using different datasets we compare how the balance of malware/goodware influences the final results. We cross-validated each dataset using k-fold (with $k=10$) and plot its \gls{roc} curve. Furthermore, we apply a validation where we maintain temporal consistency of samples, meaning the training set always predates the validation set. Comparing the curves with and without temporal consistency gives us a better approximation on how models behave under laboratory \textit{vs} real world conditions.
+
+% The used datasets were created by applying the different metrics described in \ref{sub_sec:data_labeling}. In practice we used 3 datasets:
+
+% \subsubsection{\gls{tts}} This dataset is the most fine-grained, and smallest. The malware samples are those where every top vendor classifies as malware, are in the VirusShare set and are not in the \gls{nsrl} set. As for goodware samples, these must all be classified as clean, are in the \gls{nsrl} and are not in the VirusShare set. Numbers wise, this dataset contains 1,361 malware samples and 4,000 goodware samples.
+
+% \subsubsection{\gls{tgs}} This dataset is less strict than the previous, differing only by applying the minimum threshold necessary to label a sample as malware (at least 5 malware classifications). In terms of size, this dataset contains 86,503 malware samples and 4,000 goodware samples.
+
+% \subsubsection{\gls{tbs}} This dataset ignores the VirusShare and \gls{nsrl} sets, meaning a sample is labeled as malware if it has at least 5 top vendors classifying it as malware, and labels a sample as goodware if all top vendors classify it as clean. Since it is less strict dataset, it contains 186,444 malware samples and 49,783 goodware samples.
+
+% \todo[inline]{talvez criar dataset 4 e 5 de fixar malware bom vs fixar goodware bom}
+
+%For temporal consistency validation we sorted the dataset by date and removed the last 20\% of samples for validation. We split the remaining 80\% into 10 temporal consistent folds (i.e.\ samples from fold 0 predate samples from fold 1), we then measure the \gls{roc} curve after applying the algorithms presented in \textbf{Algorithms X}, which provide an incremental validation approach.
+
+%\todo[inline]{algoritmo com old to new, começar do fold 0, ir juntando folds novos}
+%\todo[inline]{algoritmo com new to old, começar do fold 9, ir juntando folds velhos}
+
+%This validation provides insight on the dependency between newer and older samples, enabling to understand how recent (and how large) the training set needs to be in order to maximize the validation score.
+
+%Following the previous temporal consistency validation, we apply another approach to temporal consistency. Specifically we split the dataset again into 10 temporal consistent folds, and apply a sliding window over the folds, maintaining the training set older than the validation set.
+
+%\todo[inline]{se calhar separar resultados numa subseccao propria}
+%\todo[inline]{onde introduzir arquitectura, sklearn e etc}
+
+%We now present the results of our evaluation, starting by applying the cross-validation for all the datasets, serving as a baseline for \textit{laboratory conditions}.
+
+%For \gls{tts} we obtain an average \gls{auroc} of 0.96, going down to 0.94 for \gls{tgs} and even further down to 0.77 for \gls{tbs}, as seen in \textbf{Figure X}.
+
+%For each dataset we used the exact same methodology to derive a model, varying only the amount of samples. This size increase between datasets, and consequently score decrease, is due to relaxing the labeling methodology, meaning less accurate ground truth which in turn includes samples that are harder for the model to separate.
+
+%Our experiments showed how a reliable model can be obtained when the dataset is built in a way that facilitates separation, even without much work in feature selection and classifier optimization. The limitation is how a good dataset does not represent real world samples, which in turn are much harder to separate, as seen in the results for \gls{tbs}.
+
+%To better approximate \textit{real-world conditions}, our next experiments go over temporal consistency when validating the model. We applied the algorithms described in \textbf{Algorithms X} to the 3 datasets.
+
+%When applying \textbf{Algorithm x.1}, we observed a \gls{auroc} variation from 0.92 to 0.93 for \gls{tts} and \gls{tgs}, where \gls{tbs} varies between 0.69 to 0.74, as seen in \textbf{Figure X.1}.
+
+%Again, the same methodology was applied to all datasets, but by incrementing the training set size with newer samples on every fold, we noticed the tendency is for the \gls{auroc} to increase. We only note that for the first two folds in \gls{tbs} the score is maximum, although it goes down with the third fold and follows the same incrementing pattern as the other sets.
+
+%When applying \textbf{Algorithm x.2}, we observed a \gls{auroc} variation from 0.92 to 0.93 for \glossary{tts} and \gls{tgs}, identical to the previous experiment, but for \gls{tbs} the variation was between 0.72 and 0.76, as observed in \textbf{Figure X.2}.
+
+%With the same methodology for all datasets, but now the training set using older samples as it grows in size, we note that increasing the training with older samples does not improve the score for \gls{tts} and \gls{tgs}, even more, for \gls{tbs} we note the score decreases as we use older samples.
+
+%Comparing results from both temporal consistent validation algorithms, we are led to believe they describe inverse patterns. This fact reinforces the intuition that newer samples are more related to the a close past, rather than a distant one.
+
+%By identifying that with the 3 closest folds to the validation we achieve a maximum or near maximum score, we use this knowledge to apply the last experiment on temporal consistency. We apply the sliding window with 3 folds for training and the forth for validation, incrementing one fold on each iteration.
+
+%By looking at the \gls{auroc}, we note that for \gls{tts} we got an average score of 0.94, for \gls{tgs} the average was 0.88 and for \gls{tbs} 0.74, as depicted in \textbf{Figure X}. For all but \gls{tgs} sets we got scores that are up to par with the scores when using a larger training size. We can argue that using smaller training sets, but close in time to the validation is more beneficial than using a larger dataset that includes samples further away in time.
+
+%To summarize the results, we showed that some conditions to optimize a malware classification model's score exist (i.e.\ laboratory conditions), such as choosing samples that are further apart, by enforcing a stricter labeling method, and using validations techniques that are ideal for independent and identically distributed samples, like k-fold cross-validation.
+
+%When labeling conditions are less strict, the overall scores decrease, as shown by the three different datasets; furthermore, when a time-wise dependency between samples is taken into account, the overall score is negatively impacted, when compared to a normal cross-validation. Nonetheless we showed that it is possible to obtain good results on temporal consistency, without having to take into account the whole past, only the recent past.
